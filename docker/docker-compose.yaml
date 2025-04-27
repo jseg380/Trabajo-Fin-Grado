@@ -1,0 +1,61 @@
+version: '3.9'
+
+services:
+  # Node.js server
+  backend:
+    image: node:22.14.0-bookworm
+    container_name: tfg-backend
+    restart: no
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+      # - /app/node_modules   # Anonymous volume, having root permissions issues
+    ports:
+      - '5000:5000'
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/mydatabase
+    depends_on:
+      - mongo
+    command: ['npm', 'run', 'dev']
+
+  # MongoDB
+  mongo:
+    image: mongo:7.0.17-jammy
+    container_name: tfg-mongo
+    restart: no
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - '27017:27017'
+
+  # Web based MongoDB interface
+  mongo-express:
+    image: mongo-express:latest
+    container_name: tfg-mongo-express
+    restart: no
+    working_dir: /app
+    volumes:
+      - ./mongo-express-config.js:/app/config.js
+    ports:
+      - '8081:8081'
+    environment:
+      - ME_CONFIG_MONGODB_URL=mongodb://mongo:27017/mydatabase
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin
+    depends_on:
+      - mongo
+
+  # Web frontend
+  frontend:
+    image: node:22.14.0-bookworm
+    container_name: tfg-frontend
+    restart: no
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - '3000:3000'
+    command: ['npm', 'run', 'dev']
+
+volumes:
+  mongo_data:

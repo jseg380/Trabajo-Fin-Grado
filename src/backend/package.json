@@ -1,0 +1,17 @@
+{
+  "name": "tfg-backend",
+  "version": "1.0.0",
+  "description": "Vehicle management application backend",
+  "main": "index.js",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}

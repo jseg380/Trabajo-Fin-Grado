@@ -1,0 +1,63 @@
+\newgeometry{top=2.5cm, bottom=2.5cm, left=3cm, right=3cm}
+\begin{titlepage}
+
+  \newlength{\centeroffset}
+  \setlength{\centeroffset}{-0.5\oddsidemargin}
+  \addtolength{\centeroffset}{0.5\evensidemargin}
+  \thispagestyle{empty}
+
+  \noindent\hspace*{\centeroffset}
+  % Upper half: University name, thesis statement, degree, title, subtitle
+  \begin{minipage}{\textwidth}
+    \centering
+
+    % University emblem
+    \includegraphics[width=0.9\textwidth]{images/ugr-full.png} \\[1em]
+
+    % Thesis statement
+    \textsc{\Large TRABAJO FIN DE GRADO} \\[0.2cm]
+    % Degree
+    \textsc{GRADO EN INGENIERÍA INFORMÁTICA} \\[1cm]
+
+    % Title
+    {\Huge\bfseries Título} \\
+
+    \noindent\rule[-1ex]{\textwidth}{2pt} \\[3.5ex]
+
+    % Subtitle
+    {\large\bfseries Subtítulo}
+  \end{minipage}
+
+  \vspace{2.5cm}
+  \noindent\hspace*{\centeroffset}
+
+  % Lower half: Authors, faculty emblem and name, date
+  \begin{minipage}{\textwidth}
+    \centering
+
+    % Author
+    \textbf{Author} \\[0.1em]
+    \textnormal{Juan Manuel Segura Duarte} \\[2.5ex]
+
+    % Tutor
+    \textbf{Thesis supervisor} \\[0.1em]
+    \textnormal{Rosa Ana Montes Soldado} \\[2cm]
+
+    % Faculty (university-specific) logo
+    \begin{tabular}{>{\raggedleft\arraybackslash}p{0.48\textwidth} | >{\raggedright\arraybackslash}p{0.48\textwidth}}
+        \adjincludegraphics[valign=c, height=1.0cm]{images/etsiit-horizontal-grises.png}
+        &
+        \adjincludegraphics[valign=c, height=0.9cm]{images/gh-repo-qr-code.png}
+    \end{tabular} \\[0.8cm]
+
+    % Faculty name
+    \textsc{Escuela Técnica Superior de Ingenierías Informática y de Telecomunicación} \\
+
+    \textbf{---} \\
+
+    % Date of publication
+    \textnormal{Granada, Julio de 2025}
+  \end{minipage}
+
+\end{titlepage}
+\restoregeometry
