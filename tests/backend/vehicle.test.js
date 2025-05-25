@@ -1,5 +1,6 @@
-const request = require('supertest');
-const app = require('../../src/backend/index'); // This will fail initially!
+import request from 'supertest';
+import app from '../../src/backend/index.js';
+import { describe, it } from '@jest/globals';
 
 describe('Vehicle API', () => {
   it('should return 404 for non-existent routes', async () => {

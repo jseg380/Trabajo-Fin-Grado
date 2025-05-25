@@ -1,13 +1,16 @@
 {
   "private": true,
-  "devDependencies": {
-    "jest": "^29.7.0"
-  },
+  "name": "tfg-backend",
+  "version": "1.0.0",
+  "description": "Vehicle management application backend",
   "scripts": {
-    "test:backend": "jest --config tests/backend/jest.config.js",
-    "test:frontend": "jest --config tests/frontend/jest.config.js",
-    "test:integration": "jest --config tests/integration/jest.config.js",
+    "test:backend": "cd ./tests/backend && npm run test",
+    "test:frontend": "cd ./tests/frontend && npm run test",
+    "test:integration": "cd ./tests/integration && npm run test",
     "test": "npm run test:backend && npm run test:frontend && npm run test:integration",
     "prepare": "ln -fs ../../.githooks/commit-msg .git/hooks/commit-msg"
-  }
+  },
+  "keywords": [],
+  "author": "Juan Manuel Segura",
+  "license": "GPL-3.0-only"
 }
