@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Define the regular expression for a conventional commit message
+conventional_commit_regex='^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)($[a-zA-Z0-9_.-]+$)?(!)?: .+$'
+
+# Get the commit message file from the first argument
+commit_msg_file="$1"
+
+# Read the commit message
+message=$(cat "$commit_msg_file")
+
+# Check if the message matches the regex
+if ! [[ $message =~ $conventional_commit_regex ]]; then
+    echo "Cannot commit: the commit message does not comply with conventional commits standards."
+    echo "Please use the format: <type>(<scope>): <subject>"
+    exit 1
+fi
+
+exit 0
