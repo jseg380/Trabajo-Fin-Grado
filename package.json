@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "description": "Vehicle management application backend",
   "scripts": {
+    "start:backend": "cd ./src/backend && npm run start",
+    "start:frontend": "cd ./src/frontend && npm run start",
+    "start": "npm run start:backend && npm run start:frontend",
     "test:backend": "cd ./tests/backend && npm run test",
     "test:frontend": "cd ./tests/frontend && npm run test",
     "test:integration": "cd ./tests/integration && npm run test",
