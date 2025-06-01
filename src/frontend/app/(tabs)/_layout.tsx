@@ -1,9 +1,46 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text } from 'react-native';
-import { TAB_CONFIG } from './tabsConfig';
-import type { TabRoutes } from './tabsConfig';
-import type { TabConfig } from './tabsConfig.types';
+import ProfileButton from '@/components/ProfileButton';
+
+// Type for individual tab configuration
+type TabConfig = {
+  title: string;
+  iconName: React.ComponentProps<typeof Ionicons>['name']; // Icon names
+  headerTitle: string;
+};
+
+// Type for the complete tabs config
+type TabsConfig = Record<string, TabConfig>;
+
+
+const TAB_CONFIG = {
+  home: {
+    title: 'Home',
+    iconName: 'home',
+    headerTitle: 'Home'
+  },
+  vehicles: {
+    title: 'Vehicles',
+    iconName: 'car',
+    headerTitle: 'Vehicles'
+  },
+  routes: {
+    title: 'Routes',
+    iconName: 'map',
+    headerTitle: 'Routes'
+  },
+  stats: {
+    title: 'Stats',
+    iconName: 'stats-chart',
+    headerTitle: 'Statistics'
+  }
+} as const satisfies TabsConfig;
+
+// Equivalent to:
+// type TabRoutes = "home" | "vehicles" | "routes" | ...;
+type TabRoutes = keyof typeof TAB_CONFIG
+
 
 export default function TabsLayout() {
   return (
