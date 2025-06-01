@@ -8,8 +8,7 @@ services:
     restart: no
     working_dir: /app
     volumes:
-      - ./backend:/app
-      # - /app/node_modules   # Anonymous volume, having root permissions issues
+      - ../src/backend:/app
     ports:
       - '5000:5000'
     environment:
@@ -24,7 +23,7 @@ services:
     container_name: tfg-mongo
     restart: no
     volumes:
-      - mongo_data:/data/db
+      - ../mongo_data:/data/db
     ports:
       - '27017:27017'
 
@@ -35,7 +34,7 @@ services:
     restart: no
     working_dir: /app
     volumes:
-      - ./mongo-express-config.js:/app/config.js
+      - ../config/mongo-express-config.js:/app/config.js
     ports:
       - '8081:8081'
     environment:
@@ -52,10 +51,7 @@ services:
     restart: no
     working_dir: /app
     volumes:
-      - ./frontend:/app
+      - ../src/frontend:/app
     ports:
       - '3000:3000'
     command: ['npm', 'run', 'dev']
-
-volumes:
-  mongo_data:
