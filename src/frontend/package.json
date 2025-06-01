@@ -5,6 +5,7 @@
   "description": "Vehicle management application frontend",
   "scripts": {
     "start": "expo start",
+    "dev": "npm run start",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
