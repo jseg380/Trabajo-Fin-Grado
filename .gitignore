@@ -357,3 +357,6 @@ TSWLatexianTemp*
 .env.production.local
 .env.local
 
+
+# MongoDB
+mongo_data
