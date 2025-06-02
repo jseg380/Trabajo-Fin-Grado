@@ -11,7 +11,7 @@
     "web": "expo start --web --port 3000",
     "lint": "expo lint",
     "reset-project": "node ./scripts/reset-project.js",
-    "check-translations": "node ./localization/checkTranslations.js"
+    "check-translations": "node ./localization/checkTranslations.mjs"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
