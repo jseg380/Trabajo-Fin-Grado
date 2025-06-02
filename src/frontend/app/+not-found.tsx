@@ -1,48 +1,12 @@
-// import { View, StyleSheet } from 'react-native';
-// import { Link, Stack, router } from 'expo-router';
-
-// export default function NotFoundScreen() {
-//   return (
-//     <>
-//       <Stack.Screen options={{ title: 'Oops! Not Found' }} />
-//       <View style={styles.container}>
-//         <Link
-//           href='/'
-//           style={styles.button}
-//           onPress={(e) => {
-//             e.preventDefault();
-//             router.replace('/');
-//           }}
-//         >
-//           Go back to Home screen!
-//         </Link>
-//       </View>
-//     </>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#25292e',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-
-//   button: {
-//     fontSize: 20,
-//     textDecorationLine: 'underline',
-//     color: '#fff',
-//   },
-// });
 import { View, Text, StyleSheet } from 'react-native';
 import { Link, router } from 'expo-router';
+import { t } from '@/localization/languageService';
 
 export default function NotFoundScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Oops! Not found</Text>
-      <Text style={styles.subtitle}>Error 404 - Page Not Found</Text>
+      <Text style={styles.title}>{t('pages.not-found.content.title')}</Text>
+      <Text style={styles.subtitle}>{t('pages.not-found.content.description')}</Text>
       <Link
         href='/'
         style={styles.button}
@@ -51,7 +15,7 @@ export default function NotFoundScreen() {
           router.replace('/');
         }}
       >
-        Go to home screen
+        {t('pages.not-found.content.back')}
       </Link>
     </View>
   );

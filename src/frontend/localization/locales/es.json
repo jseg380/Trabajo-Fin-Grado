@@ -1,0 +1,24 @@
+{
+  "intro": {
+    "welcome": "Bienvenid@"
+  },
+  "settings": {
+    "theme": {
+      "dark": "Modo oscuro",
+      "light": "Modo claro"
+    }
+  },
+  "profile": {
+    "title": "Perfil"
+  },
+  "pages": {
+    "not-found": {
+      "title": "Página no encontrada",
+      "content": {
+        "title": "¡Vaya! No se ha encontrado la página",
+        "description": "La página que buscas no existe.",
+        "back": "Volver a la página de inicio"
+      }
+    }
+  }
+}
