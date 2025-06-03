@@ -1,7 +1,9 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import ProfileButton from '@/components/ProfileButton';
+import '@/localization';
+import { useTranslation } from 'react-i18next';
 
 // Type for individual tab configuration
 type TabConfig = {
@@ -16,25 +18,25 @@ type TabsConfig = Record<string, TabConfig>;
 
 const TAB_CONFIG = {
   home: {
-    title: 'Home',
+    title: 'pages.home.title',
     iconName: 'home',
-    headerTitle: 'Home'
+    headerTitle: 'pages.home.header-title'
   },
   vehicles: {
-    title: 'Vehicles',
+    title: 'pages.vehicles.title',
     iconName: 'car',
-    headerTitle: 'Vehicles'
+    headerTitle: 'pages.vehicles.header-title'
   },
   routes: {
-    title: 'Routes',
+    title: 'pages.routes.title',
     iconName: 'map',
-    headerTitle: 'Routes'
+    headerTitle: 'pages.routes.header-title'
   },
   stats: {
-    title: 'Stats',
+    title: 'pages.statistics.title',
     iconName: 'stats-chart',
-    headerTitle: 'Statistics'
-  }
+    headerTitle: 'pages.statistics.header-title'
+  },
 } as const satisfies TabsConfig;
 
 // Equivalent to:
@@ -43,6 +45,8 @@ type TabRoutes = keyof typeof TAB_CONFIG
 
 
 export default function TabsLayout() {
+  const { t, i18n } = useTranslation();
+
   return (
     <Tabs
       screenOptions={{
@@ -50,6 +54,8 @@ export default function TabsLayout() {
         headerRight: () => {
           return (
             <>
+              <Button title="English" onPress={() => i18n.changeLanguage('en-UK')} />
+              <Button title="Spanish" onPress={() => i18n.changeLanguage('es-ES')} />
               {ProfileButton()}
             </>
           );
@@ -62,7 +68,7 @@ export default function TabsLayout() {
             key={name}
             name={`${name}/index`}
             options={{
-              title: config.title,
+              title: t(config.title),
               tabBarIcon: ({ color }) => (
                 <Ionicons name={config.iconName} size={24} color={color} />
               ),
@@ -75,7 +81,7 @@ export default function TabsLayout() {
                     style={{ marginRight: 8 }} 
                   />
                   <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
-                    {config.headerTitle}
+                    {t(config.headerTitle)}
                   </Text>
                 </View>
               )

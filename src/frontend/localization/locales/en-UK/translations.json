@@ -19,6 +19,26 @@
         "description": "The page you are looking for does not exist.",
         "back": "Go back to home"
       }
+    },
+    "home": {
+      "title": "Home",
+      "header-title": "Home"
+    },
+    "vehicles": {
+      "title": "Vehicles",
+      "header-title": "Vehicles"
+    },
+    "routes": {
+      "title": "Routes",
+      "header-title": "Routes"
+    },
+    "statistics": {
+      "title": "Stats",
+      "header-title": "Statistics"
+    },
+    "settings": {
+      "title": "Settings",
+      "header-title": "Settings"
     }
   }
 }

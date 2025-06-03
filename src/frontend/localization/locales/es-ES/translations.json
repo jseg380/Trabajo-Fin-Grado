@@ -19,6 +19,26 @@
         "description": "La página que buscas no existe.",
         "back": "Volver a la página de inicio"
       }
+    },
+    "home": {
+      "title": "Inicio",
+      "header-title": "Inicio"
+    },
+    "vehicles": {
+      "title": "Vehículos",
+      "header-title": "Vehículos"
+    },
+    "routes": {
+      "title": "Rutas",
+      "header-title": "Rutas"
+    },
+    "statistics": {
+      "title": "Estadísticas",
+      "header-title": "Estadísticas"
+    },
+    "settings": {
+      "title": "Ajustes",
+      "header-title": "Ajustes"
     }
   }
 }

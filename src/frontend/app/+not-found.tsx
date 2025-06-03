@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { Link, router } from 'expo-router';
-import { t } from '@/localization/languageService';
+import { useTranslation } from 'react-i18next';
 
 export default function NotFoundScreen() {
+  const { t, i18n } = useTranslation();
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{t('pages.not-found.content.title')}</Text>

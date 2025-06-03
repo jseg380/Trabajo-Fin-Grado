@@ -1,8 +1,10 @@
 import { Stack } from 'expo-router';
-import { t, setLanguage } from '@/localization/languageService';
+import '@/localization';
+import { useTranslation } from 'react-i18next';
 
 export default function RootLayout() {
-  setLanguage('en');
+  const { t, i18n } = useTranslation();
+
   return (
     <Stack>
       <Stack.Screen
