@@ -37,6 +37,11 @@ const TAB_CONFIG = {
     iconName: 'stats-chart',
     headerTitle: 'pages.statistics.header-title'
   },
+  settings: {
+    title: 'pages.settings.title',
+    iconName: 'settings',
+    headerTitle: 'pages.settings.header-title'
+  },
 } as const satisfies TabsConfig;
 
 // Equivalent to:

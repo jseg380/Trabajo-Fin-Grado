@@ -1,0 +1,32 @@
+import { Text, View, StyleSheet } from 'react-native';
+import { Link } from 'expo-router';
+
+export default function Index() {
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Text style={{ color: 'black' }}>INSIDE SETTINGS!!!!</Text>
+      <Link
+        href='/home'
+        style={styles.button}
+      >
+        Go to home screen
+      </Link>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  button: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#007AFF',
+    color: '#fff',
+    borderRadius: 5,
+  },
+});
