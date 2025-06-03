@@ -47,6 +47,13 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#ff00ff',
+        headerRight: () => {
+          return (
+            <>
+              {ProfileButton()}
+            </>
+          );
+        }
       }}
     >
       {(Object.entries(TAB_CONFIG) as Array<[TabRoutes, TabConfig]>).map(
