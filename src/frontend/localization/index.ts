@@ -5,14 +5,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import translationEn from './locales/en-UK/translations.json';
 import translationEs from './locales/es-ES/translations.json';
 
-const resources = {
+const resources: I18nResources = {
   'en-UK': { translation: translationEn },
   en: { translation: translationEn },
   'es-ES': { translation: translationEs },
   es: { translation: translationEs },
 };
 
-const LANGUAGE_KEY = '@app_language';
+export const LANGUAGE_KEY = '@app_language';
 
 const initI18n = async () => {
   // During Expo building process with Metro bundler this module will be 

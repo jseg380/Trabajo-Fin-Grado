@@ -1,25 +1,32 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { Link, router } from 'expo-router';
+import { Link, Stack, router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 export default function NotFoundScreen() {
   const { t, i18n } = useTranslation();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{t('pages.not-found.content.title')}</Text>
-      <Text style={styles.subtitle}>{t('pages.not-found.content.description')}</Text>
-      <Link
-        href='/'
-        style={styles.button}
-        onPress={(e) => {
-          e.preventDefault();
-          router.replace('/');
+    <>
+      <Stack.Screen
+        options={{
+          title: t('pages.not-found.title'),
         }}
-      >
-        {t('pages.not-found.content.back')}
-      </Link>
-    </View>
+      />
+      <View style={styles.container}>
+        <Text style={styles.title}>{t('pages.not-found.content.title')}</Text>
+        <Text style={styles.subtitle}>{t('pages.not-found.content.description')}</Text>
+        <Link
+          href='/'
+          style={styles.button}
+          onPress={(e) => {
+            e.preventDefault();
+            router.replace('/');
+          }}
+        >
+          {t('pages.not-found.content.back')}
+        </Link>
+      </View>
+    </>
   );
 }
 

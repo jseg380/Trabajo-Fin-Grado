@@ -1,4 +1,8 @@
 {
+  "language": {
+    "meta": "language",
+    "select": "select the language"
+  },
   "intro": {
     "welcome": "Welcome"
   },

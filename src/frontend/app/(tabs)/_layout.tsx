@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 import ProfileButton from '@/components/ProfileButton';
 import '@/localization';
 import { useTranslation } from 'react-i18next';
@@ -50,21 +50,13 @@ type TabRoutes = keyof typeof TAB_CONFIG
 
 
 export default function TabsLayout() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#ff00ff',
-        headerRight: () => {
-          return (
-            <>
-              <Button title="English" onPress={() => i18n.changeLanguage('en-UK')} />
-              <Button title="Spanish" onPress={() => i18n.changeLanguage('es-ES')} />
-              {ProfileButton()}
-            </>
-          );
-        }
+        headerRight: () => ProfileButton()
       }}
     >
       {(Object.entries(TAB_CONFIG) as Array<[TabRoutes, TabConfig]>).map(
