@@ -43,6 +43,15 @@
     "settings": {
       "title": "Settings",
       "header-title": "Settings"
+    },
+    "profile": {
+      "title": "Profile",
+      "header-title": "My profile"
     }
+  },
+  "stats": {
+    "distanceTraveled": "Distance traveled",
+    "co2Saved": "CO2 saved",
+    "totalVehicles": "Total vehicles"
   }
 }

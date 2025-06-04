@@ -43,6 +43,15 @@
     "settings": {
       "title": "Ajustes",
       "header-title": "Ajustes"
+    },
+    "profile": {
+      "title": "Perfil",
+      "header-title": "Mi perfil"
     }
+  },
+  "stats": {
+    "distanceTraveled": "Distancia recorrida",
+    "co2Saved": "CO2 ahorrado",
+    "totalVehicles": "Vehículos"
   }
 }
