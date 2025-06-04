@@ -4,6 +4,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LANGUAGE_KEY } from '@/localization';
+import { Stack, useLocalSearchParams } from 'expo-router';
 
 type LanguageOption = {
   [key: string]: string;
@@ -18,6 +19,7 @@ export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [selectedLanguageLabel, setSelectedLanguageLabel] = useState<string | null>(null);
+  const { user: username } = useLocalSearchParams();
 
   const handleLanguageChange = async (label: string, value: string) => {
     setSelectedLanguageLabel(label);
@@ -27,30 +29,37 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{t('language.meta')}</Text>
+    <>
+      <Stack.Screen
+        options={{
+          title: t('pages.settings.title') + ': ' + username,
+        }}
+      />
+      <View style={styles.container}>
+        <Text style={styles.title}>{t('language.meta')}</Text>
 
-      <View style={styles.menuContainer}>
-        <Menu
-          visible={isMenuVisible}
-          onDismiss={() => setIsMenuVisible(false)}
-          anchor={
-            <Button onPress={() => setIsMenuVisible(true)}>
-              {selectedLanguageLabel || t('language.select')}
-            </Button>
-          }>
-          {Object.entries(languageOptions).map(([label, value], index) => (
-            <React.Fragment key={value}>
-              <Menu.Item
-                onPress={() => handleLanguageChange(label, value)}
-                title={label}
-              />
-              {index < Object.keys(languageOptions).length - 1 && <Divider />}
-            </React.Fragment>
-          ))}
-        </Menu>
+        <View style={styles.menuContainer}>
+          <Menu
+            visible={isMenuVisible}
+            onDismiss={() => setIsMenuVisible(false)}
+            anchor={
+              <Button onPress={() => setIsMenuVisible(true)}>
+                {selectedLanguageLabel || t('language.select')}
+              </Button>
+            }>
+            {Object.entries(languageOptions).map(([label, value], index) => (
+              <React.Fragment key={value}>
+                <Menu.Item
+                  onPress={() => handleLanguageChange(label, value)}
+                  title={label}
+                />
+                {index < Object.keys(languageOptions).length - 1 && <Divider />}
+              </React.Fragment>
+            ))}
+          </Menu>
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 

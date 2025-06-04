@@ -2,7 +2,6 @@ import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text } from 'react-native';
 import ProfileButton from '@/components/ProfileButton';
-import '@/localization';
 import { useTranslation } from 'react-i18next';
 
 // Type for individual tab configuration
@@ -36,11 +35,6 @@ const TAB_CONFIG = {
     title: 'pages.statistics.title',
     iconName: 'stats-chart',
     headerTitle: 'pages.statistics.header-title'
-  },
-  settings: {
-    title: 'pages.settings.title',
-    iconName: 'settings',
-    headerTitle: 'pages.settings.header-title'
   },
 } as const satisfies TabsConfig;
 
