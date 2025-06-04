@@ -3,7 +3,7 @@ import { Link, Stack, router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 export default function NotFoundScreen() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <>
