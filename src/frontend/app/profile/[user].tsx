@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } fr
 import { Link, useLocalSearchParams, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
+import TitleSetter from '@/components/TitleSetter';
 
 interface UserStats {
   distanceTraveled: number;
@@ -75,6 +76,8 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
+      <TitleSetter title={t('pages.profile.title')} />
+
       <View style={styles.header}>
         <Text style={styles.title}>{t('pages.profile.header-title')}</Text>
         <Link

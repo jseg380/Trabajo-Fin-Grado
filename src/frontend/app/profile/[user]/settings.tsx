@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LANGUAGE_KEY } from '@/localization';
 import { Stack, useLocalSearchParams } from 'expo-router';
+import TitleSetter from '@/components/TitleSetter';
 
 type LanguageOption = {
   [key: string]: string;
@@ -29,37 +30,35 @@ export default function SettingsScreen() {
   };
 
   return (
-    <>
+    <View style={styles.container}>
       <Stack.Screen
         options={{
           title: t('pages.settings.title') + ': ' + username,
         }}
       />
-      <View style={styles.container}>
-        <Text style={styles.title}>{t('language.meta')}</Text>
+      <TitleSetter title={t('pages.settings.title')} />
+      <Text style={styles.title}>{t('language.meta')}</Text>
 
-        <View style={styles.menuContainer}>
-          <Menu
-            visible={isMenuVisible}
-            onDismiss={() => setIsMenuVisible(false)}
-            anchor={
-              <Button onPress={() => setIsMenuVisible(true)}>
-                {selectedLanguageLabel || t('language.select')}
-              </Button>
-            }>
-            {Object.entries(languageOptions).map(([label, value], index) => (
-              <React.Fragment key={value}>
-                <Menu.Item
-                  onPress={() => handleLanguageChange(label, value)}
-                  title={label}
-                />
-                {index < Object.keys(languageOptions).length - 1 && <Divider />}
-              </React.Fragment>
-            ))}
-          </Menu>
-        </View>
+      <View style={styles.menuContainer}>
+        <Menu
+          visible={isMenuVisible}
+          onDismiss={() => setIsMenuVisible(false)}
+          anchor={
+            <Button onPress={() => setIsMenuVisible(true)}>{selectedLanguageLabel || t('language.select')}</Button>
+          }
+        >
+          {Object.entries(languageOptions).map(([label, value], index) => (
+            <React.Fragment key={value}>
+              <Menu.Item
+                onPress={() => handleLanguageChange(label, value)}
+                title={label}
+              />
+              {index < Object.keys(languageOptions).length - 1 && <Divider />}
+            </React.Fragment>
+          ))}
+        </Menu>
       </View>
-    </>
+    </View>
   );
 }
 

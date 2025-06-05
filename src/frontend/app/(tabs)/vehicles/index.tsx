@@ -1,7 +1,11 @@
 import { Text, View, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
+import TitleSetter from '@/components/TitleSetter';
+import { useTranslation } from 'react-i18next';
 
 export default function Index() {
+  const { t } = useTranslation();
+
   return (
     <View
       style={{
@@ -10,6 +14,7 @@ export default function Index() {
         alignItems: 'center',
       }}
     >
+      <TitleSetter title={t('pages.vehicles.title')} />
       <Text style={{ color: 'red' }}>INSIDE VEHICLES</Text>
       <Link
         href='/home'
