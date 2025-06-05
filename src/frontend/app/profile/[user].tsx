@@ -11,7 +11,6 @@ interface UserStats {
   totalVehicles: number;
 }
 
-
 interface UserData {
   username: string;
   name: string;
@@ -23,9 +22,10 @@ interface UserData {
 }
 
 export default function ProfileScreen() {
+  const { user: username } = useLocalSearchParams();
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { user: username } = useLocalSearchParams();
+  const profileUri = new URL(`/api/users/${username}`, API_URL).href;
 
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -35,10 +35,8 @@ export default function ProfileScreen() {
     navigation.setOptions({ title: t('pages.profile.title') });
 
     if (username) {
-      navigation.setOptions({ title: t('pages.profile.title') });
-
       // Fetch from Express backend
-      fetch(`http://192.168.1.110:5000/api/users/${username}`)
+      fetch(profileUri)
         .then((res) => {
           if (!res.ok) throw new Error(`User not found: ${res.status}`);
           return res.json();
@@ -57,11 +55,13 @@ export default function ProfileScreen() {
     }
   }, [username]);
 
-
   if (loading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#000" />
+        <ActivityIndicator
+          size='large'
+          color='#000'
+        />
       </View>
     );
   }
