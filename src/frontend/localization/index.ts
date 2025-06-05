@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import translationEn from './locales/en-UK/translations.json';
 import translationEs from './locales/es-ES/translations.json';
 
-const resources: I18nResources = {
+const resources = {
   'en-UK': { translation: translationEn },
   en: { translation: translationEn },
   'es-ES': { translation: translationEs },
@@ -15,7 +15,7 @@ const resources: I18nResources = {
 export const LANGUAGE_KEY = '@app_language';
 
 const initI18n = async () => {
-  // During Expo building process with Metro bundler this module will be 
+  // During Expo building process with Metro bundler this module will be
   // imported and thus initialized. At that moment window is undefined, causing
   // i18n call to this function fail, with the error being caught in the catch
   // phase
@@ -85,6 +85,6 @@ const initI18n = async () => {
   }
 };
 
-initI18n();
+export const i18nInitPromise = initI18n();
 
 export default i18n;
