@@ -4,6 +4,7 @@ import { Link, useLocalSearchParams, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import TitleSetter from '@/components/TitleSetter';
+import { API_URL } from '@/constants/config';
 
 interface UserStats {
   distanceTraveled: number;
