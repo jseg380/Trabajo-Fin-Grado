@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { Link, Stack, useNavigation, useRouter } from 'expo-router';
+import { Link, Stack, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import TitleSetter from '@/components/TitleSetter';
 import { HeaderBackButton } from '@react-navigation/elements';
@@ -9,17 +9,14 @@ function NotFoundScreen() {
   const { t } = useTranslation();
   const router = useRouter();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => <HeaderBackButton onPress={() => router.navigate('/')} />,
-    });
-  }, [navigation]);
-
   return (
     <View style={styles.container}>
       <Stack.Screen
         options={{
           title: t('pages.not-found.title'),
+          headerLeft: () => {
+            return <HeaderBackButton onPress={() => router.replace('/')} />;
+          },
         }}
       />
       <TitleSetter title={t('pages.not-found.title')} />
