@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import { ActivityIndicator, PaperProvider } from 'react-native-paper';
 import TitleSetter from '@/components/TitleSetter';
 import { useEffect, useState } from 'react';
+import { AuthProvider } from '@/context/AuthContext';
 import { i18nInitPromise } from '@/localization';
 import '@/localization';
 
@@ -32,16 +33,21 @@ export default function RootLayout() {
   }
 
   return (
-    <PaperProvider>
-      {/* Fallback title */}
-      <TitleSetter />
-      <Stack>
-        <Stack.Screen
-          name='(tabs)'
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name='+not-found' />
-      </Stack>
-    </PaperProvider>
+    <AuthProvider>
+      <PaperProvider>
+        {/* Fallback title */}
+        <TitleSetter />
+        <Stack>
+          <Stack.Screen
+            name='(tabs)'
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name='+not-found' />
+          <Stack.Screen name='(auth)/login' />
+          <Stack.Screen name='(auth)/register' />
+          {/* <Stack.Screen name='profile/[user]' /> */}
+        </Stack>
+      </PaperProvider>
+    </AuthProvider>
   );
 }
