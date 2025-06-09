@@ -1,30 +1,49 @@
 import express from 'express';
 import cors from 'cors';
-
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 import connectDB from './config/db.js';
-import userRoutes from './routes/userRoutes.js';
+
+// Load environment variables
+dotenv.config();
 
 // Connect DB
 connectDB();
 
 const app = express();
 
-// Parse JSON request bodies
-app.use(express.json());
-
 // CORS configuration
 app.use(cors({ origin: '*', methods: ['GET', 'POST'] }));
+
+app.use(cookieParser());
+
+// Parse JSON request bodies
+app.use(express.json());
 
 // Serve static files
 app.use(express.static('public'));
 
 // Routes
-app.use('/api/users', userRoutes);
+import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import initRoutes from './routes/initRoutes.js';
 
-// Fallback
+app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api', initRoutes);
+
+
+
+// Fallback route for undefined API endpoints
 app.use((req, res) => {
   res.status(404).json({ error: 'API endpoint not found' });
 });
+
+// Set JWT secret
+if (!process.env.JWT_SECRET) {
+  console.error('JWT_SECRET environment variable not set!');
+  process.exit(1);
+}
 
 // Launch
 const PORT = process.env.PORT || 5000;

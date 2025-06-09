@@ -1,5 +1,8 @@
+import { withAuth } from '@/utils/withAuth';
 import { Redirect } from 'expo-router';
 
-export default function Index() {
+function Index() {
   return <Redirect href='/home' />;
 }
+
+export default withAuth(Index);

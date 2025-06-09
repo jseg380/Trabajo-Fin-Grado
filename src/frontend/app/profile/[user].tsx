@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { Link, useLocalSearchParams, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import TitleSetter from '@/components/TitleSetter';
 import { API_URL } from '@/constants/config';
+import { withAuth } from '@/utils/withAuth';
 
 interface UserStats {
   distanceTraveled: number;
@@ -22,7 +24,7 @@ interface UserData {
   stats: UserStats;
 }
 
-export default function ProfileScreen() {
+function ProfileScreen() {
   const { user: username } = useLocalSearchParams();
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -250,3 +252,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+
+export default withAuth(ProfileScreen);

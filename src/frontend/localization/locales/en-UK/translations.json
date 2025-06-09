@@ -47,6 +47,14 @@
     "profile": {
       "title": "Profile",
       "header-title": "My profile"
+    },
+    "login": {
+      "title": "Login",
+      "header-title": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "login-button": "Login",
+      "register-link": "Don't have an account? Register"
     }
   },
   "stats": {

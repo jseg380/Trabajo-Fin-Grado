@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LANGUAGE_KEY } from '@/localization';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import TitleSetter from '@/components/TitleSetter';
+import { withAuth } from '@/utils/withAuth';
 
 type LanguageOption = {
   [key: string]: string;
@@ -16,7 +17,7 @@ const languageOptions: LanguageOption = {
   'English (United Kingdom)': 'en-UK',
 };
 
-export default function SettingsScreen() {
+function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [selectedLanguageLabel, setSelectedLanguageLabel] = useState<string | null>(null);
@@ -75,3 +76,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 });
+
+
+export default withAuth(SettingsScreen);

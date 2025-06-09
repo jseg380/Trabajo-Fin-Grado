@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { View, Text } from 'react-native';
 import ProfileButton from '@/components/ProfileButton';
 import { useTranslation } from 'react-i18next';
+import { withAuth } from '@/utils/withAuth';
 
 // Type for individual tab configuration
 type TabConfig = {
@@ -43,7 +44,7 @@ const TAB_CONFIG = {
 type TabRoutes = keyof typeof TAB_CONFIG
 
 
-export default function TabsLayout() {
+function TabsLayout() {
   const { t } = useTranslation();
 
   return (
@@ -83,3 +84,6 @@ export default function TabsLayout() {
     </Tabs>
   );
 }
+
+
+export default withAuth(TabsLayout);

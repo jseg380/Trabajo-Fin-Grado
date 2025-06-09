@@ -2,13 +2,11 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Link, Stack, useNavigation, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import TitleSetter from '@/components/TitleSetter';
-import { useLayoutEffect } from 'react';
 import { HeaderBackButton } from '@react-navigation/elements';
-import { ActivityIndicator } from 'react-native-paper';
+import { withAuth } from '@/utils/withAuth';
 
-export default function NotFoundScreen() {
+function NotFoundScreen() {
   const { t } = useTranslation();
-  const navigation = useNavigation();
   const router = useRouter();
 
   useLayoutEffect(() => {
@@ -64,3 +62,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
+
+
+export default withAuth(NotFoundScreen);
