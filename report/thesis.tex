@@ -27,6 +27,7 @@
 \usepackage{titlesec, blindtext, color}
 \usepackage[Lenny]{fncychap}
 \usepackage[table,xcdraw]{xcolor}
+\usepackage[style=indexgroup]{glossaries}
 
 \hypersetup{
 	colorlinks=true,	% False: boxed links; true: colored links
@@ -50,6 +51,8 @@
 \titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
 \setcounter{secnumdepth}{4}
 
+% Glossary entries
+\input{prefaces/glossary}
 
 \begin{document}
 
@@ -64,9 +67,8 @@
 	% \newpage
 	% \tableofcontents
 
-	% % Índice de imágenes y tablas
-	% \newpage
-	% \listoffigures
+    % Apply empty style to ALL frontmatter pages (TOC, LOF, LOT, etc.)
+    \frontmatter
 
 	% % Si hay suficientes se incluirá dicho índice
 	% \listoftables 
@@ -92,15 +94,12 @@
 	% % 4. Análisis de seguridad
 	% \input{secciones/05_analisis}
 
-	% % Desarrollo bajo sprints: 
-	% % 	1. Permitir registros y login de usuarios
-	% % 	2. Desarrollo del sistema de incidencias
-	% % 	3. Desarrollo del sistema de denuncias administrativas y accidentes
-	% % 	4. Desarrollo del sistema de croquis
-	% %   5. Instalación de la aplicación de manera automática
-	% \input{secciones/06_implementacion}
+    % Glossary
+    \glsaddall[types={main}]         % Add all entries, no matter if they have a corresponding \gls
+    \printglossary[nonumberlist]
 
-	% % Presupuesto
+    % Restore normal style for main content
+    \mainmatter
 
 	% % Conclusiones
 	% \input{secciones/07_conclusiones}
