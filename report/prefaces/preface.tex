@@ -1,0 +1,208 @@
+% License
+\newgeometry{top=2.5cm, bottom=2.5cm, left=3cm, right=3cm}
+\thispagestyle{empty}
+\vspace*{\fill}
+
+\begin{figure}[H]
+    \includegraphics[width=2cm]{images/by-nc-sa.png} Juan Manuel Segura Duarte, 2025
+\end{figure}
+
+\copyright 2025 by Juan Manuel Segura Duarte, supervised by Rosa Ana Montes Soldado:
+
+``\textit{Design and development of a sustainability-focused app for optimizing personal vehicle usage}'' \\
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0).
+
+\begin{tcolorbox}[
+    colback=white,
+    boxrule=0.5pt,
+    fontupper=\scriptsize,
+    before upper={\parindent0pt\setlength{\parskip}{2pt}}, % Reduced paragraph spacing
+    after upper={\vspace{-3mm}}, % Reduce space after box content
+    width=\textwidth,
+    top=7pt,
+    bottom=7pt,
+    left=4pt,
+    right=4pt,
+]
+\section*{\scriptsize\bfseries You are free to:}
+\vspace{-\baselineskip} % Removes one line of vertical space
+\begin{itemize}[itemsep=1pt,topsep=2pt,leftmargin=18pt,partopsep=0pt]
+    \item \textbf{Share} — copy and redistribute the material in any medium or format
+    \item \textbf{Adapt} — remix, transform, and build upon the material
+\end{itemize}
+
+The licensor cannot revoke these freedoms as long as you follow the license terms.
+
+\vspace{-4mm} % Reduce space between sections
+\section*{\scriptsize\bfseries Under the following terms:}
+\vspace{-\baselineskip} % Removes one line of vertical space
+\begin{itemize}[itemsep=1pt,topsep=2pt,leftmargin=18pt,partopsep=0pt]
+    \item \textbf{Attribution} — You must give \href{https://creativecommons.org/licenses/by/3.0/#ref-appropriate-credit}{appropriate credit}, provide a link to the license, and \href{https://creativecommons.org/licenses/by/3.0/#ref-indicate-changes}{indicate if changes were made}. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+    \item \textbf{NonCommercial} — You may not use the material for commercial purposes.
+    \item \textbf{ShareAlike} — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
+    \item \textbf{No additional restrictions} — You may not apply legal terms or \href{https://creativecommons.org/licenses/by/3.0/#ref-technological-measures}{technological measures} that legally restrict others from doing anything the license permits.
+\end{itemize}
+
+\vspace{-4mm} % Reduce space between sections
+\section*{\scriptsize\bfseries Notices:}
+\vspace{-\baselineskip} % Removes one line of vertical space
+\begin{itemize}[itemsep=1pt,leftmargin=18pt,partopsep=0pt]
+    \item You do not have to comply with the license for elements of the material in the public domain or where your use is permitted by an applicable \href{https://creativecommons.org/licenses/by/3.0/#ref-exception-or-limitation}{exception or limitation}.
+    \item No warranties are given. The license may not give you all of the permissions necessary for your intended use. For example, other rights such as \href{https://creativecommons.org/licenses/by/3.0/#ref-publicity-privacy-or-moral-rights}{publicity, privacy, or moral rights} may limit how you use the material.
+\end{itemize}
+\end{tcolorbox}
+\restoregeometry
+
+% Empty page
+\clearpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+
+% Empty page
+\clearpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+
+% Abstract in English
+\thispagestyle{empty}
+\begin{center}
+    {\large\bfseries Design and development of a sustainability-focused app for optimizing personal vehicle usage}
+\end{center}
+\begin{center}
+    Juan Manuel Segura Duarte
+\end{center}
+
+\begin{flushleft}
+    \textbf{Keywords:}
+\end{flushleft}
+
+\begin{flushleft}
+    \textbf{Abstract:}
+\end{flushleft}
+
+
+This project presents the design and development of \textit{AlDiaCAR}, a cross-platform mobile and web application aimed at promoting sustainable and conscious private vehicle use within households. The application is designed to support families or shared-living environments where multiple drivers manage one or more vehicles, offering tools to coordinate usage, track maintenance, and encourage environmentally-aware decisions.
+
+\textit{AlDiaCAR} provides three core functionalities: (1) vehicle maintenance tracking with smart reminders based on real usage data, (2) driver profiling and usage history to support informed coordination, and (3) a recommendation system that suggests the most sustainable vehicle for a given route based on estimated emissions and current vehicle conditions. To further engage users, the application incorporates gamification and statistical feedback, fostering eco-responsible habits.
+
+\textgap
+
+The system architecture is built with Expo, a React Native framework, for the frontend and Express.js, a Node.js framework, for the backend, supported by a NoSQL database, MongoDB, for flexible, scalable data management. The project follows modular design principles to ensure extensibility and potential integration with external APIs.
+
+\textgap
+
+This report documents the design rationale, development process, and future directions of the application, which aligns with the broader goals of sustainable software and green computing initiatives.
+
+
+% Empty page
+\clearpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+
+% Abstract in Spanish
+\thispagestyle{empty}
+\begin{center}
+    {\large\bfseries Diseño y desarrollo de una aplicación para la optimización del uso del vehículo privado con enfoque en sostenibilidad}
+\end{center}
+\begin{center}
+    Juan Manuel Segura Duarte
+\end{center}
+
+\begin{flushleft}
+    \textbf{Palabras clave:}
+\end{flushleft}
+
+\begin{flushleft}
+    \textbf{Resumen:}
+\end{flushleft}
+
+Este proyecto presenta el diseño y desarrollo de \textit{AlDiaCAR}, una aplicación multiplataforma (web y móvil) orientada a fomentar un uso sostenible y consciente del vehículo privado dentro del entorno familiar. La aplicación está diseñada para apoyar a familias o entornos de convivencia compartida donde varios conductores gestionan uno o más vehículos, ofreciendo herramientas para coordinar su uso, realizar un seguimiento del mantenimiento y fomentar decisiones respetuosas con el medio ambiente.
+
+\textgap
+
+\textit{AlDiaCAR} ofrece tres funcionalidades principales: (1) seguimiento del mantenimiento del vehículo con recordatorios inteligentes basados en datos reales de uso, (2) perfiles de conductor e historial de uso para facilitar una coordinación informada, y (3) un sistema de recomendaciones que sugiere el vehículo más sostenible para una ruta determinada en función de las emisiones estimadas y del estado actual del vehículo. Para implicar aún más a los usuarios, la aplicación incorpora elementos de gamificación y retroalimentación estadística que fomentan hábitos ecológicos y responsables.
+
+\textgap
+
+La arquitectura del sistema se ha desarrollado con Expo, un framework de React Native, para el frontend y Express.js, un framework de Node.js, para el backend, utilizando una base de datos NoSQL, MongoDB, como sistema de almacenamiento de datos flexible y escalable. El proyecto sigue principios de diseño modular para garantizar su extensibilidad y la posible integración con APIs externas.
+
+\textgap
+
+% Empty page
+\clearpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+\thispagestyle{empty}
+
+\begin{flushleft}
+    Professor \textbf{Rosa Ana Montes Soldado}, University of Granada
+\end{flushleft}
+
+
+\textgap
+
+To Whom It May Concern:
+
+\textgap
+
+I hereby certify that the thesis entitled ``\textit{Design and development of a sustainability-focused app for optimizing personal vehicle usage}'' has been prepared under my supervision by Juan Manuel Segura Duarte and authorize its defense before the designated examination committee.
+
+\textgap
+
+For the record, this document is issued and signed in Granada, June 2025.
+
+\vspace{1cm}
+
+Thesis Advisor:
+
+\vspace{5cm}
+
+\noindent Rosa Ana Montes Soldado
+
+
+
+
+% Empty page
+\clearpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+\thispagestyle{empty}
+
+\begin{center}
+    \large\bfseries \textit{Acknowledgements}
+\end{center}
+
+I would like to take this opportunity to express my heartfelt gratitude to all those who have supported me throughout my journey in completing this thesis.
+
+\textgap
+
+First and foremost, I would like to thank my family for their unwavering love and encouragement. Your belief in my abilities has been a constant source of motivation, and I am forever grateful for your sacrifices and support.
+
+\textgap
+
+I am also grateful to my friends and peers who have stood by me during this challenging process. Your camaraderie, late-night study sessions, and shared laughter have made this journey not only bearable but also enjoyable. Thank you for being my sounding board and for always believing in me.
+
+\textgap
+
+Additionally, I would like to acknowledge the faculty and staff of the University of Granada for providing a nurturing academic environment. Your dedication to teaching and mentorship has profoundly impacted my educational experience.
+
+\textgap
+
+This thesis is not just a reflection of my efforts but a testament to the collective support of all those around me. Thank you for being part of this journey.
+
+% Empty page
+\clearpage
+\thispagestyle{empty}
+\mbox{}
+\newpage

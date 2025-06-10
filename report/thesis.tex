@@ -5,18 +5,18 @@
 % License: CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
-\documentclass[12pt, a4paper]{book}
+\documentclass[12pt, a4paper, oneside]{book}
 
-\usepackage[utf8]{inputenc}
+\usepackage[utf8]{inputenc}             % Document encoding
 \usepackage[T1]{fontenc}                % Use 8-bit encoding that has 256 glyphs
-\usepackage[spanish, es-tabla]{babel}   % TODO: ""Adjust"" Selecciona el español para palabras introducidas automáticamente, p.ej. "septiembre" en la fecha y especifica que se use la palabra Tabla en vez de Cuadro
-\usepackage{fourier}                    % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel}             % Support English
+\usepackage{fourier}                    % Adobe Utopia font for the document
 \usepackage{listings}                   % Code formatting
 \usepackage{url}                        % URLs and hyperlinks
 \usepackage{graphics, graphicx, float}  % Image positioning
 \usepackage{cite}                       % Include cites from the bibliography.bib file
 \usepackage{fancyhdr}                   % Custom headers and footers
+\usepackage{enumitem}                   % For compact itemize
 \usepackage{enumerate}
 \usepackage{hyperref}
 \usepackage{graphicx}
@@ -27,26 +27,29 @@
 \usepackage{titlesec, blindtext, color}
 \usepackage[Lenny]{fncychap}
 \usepackage[table,xcdraw]{xcolor}
+\usepackage[most]{tcolorbox}
 \usepackage[style=indexgroup]{glossaries}
 
 \hypersetup{
 	colorlinks=true,	% False: boxed links; true: colored links
-	linkcolor=black,	% Color of internal links
+	linkcolor=violet,	% Color of internal links
 	urlcolor=cyan		% color of external links
 }
 \renewcommand{\familydefault}{\sfdefault}
 \pagestyle{fancyplain}                  % Makes all pages in the document conform to the custom headers and footers
-\fancyhead[L]{}                         % Empty left header
-\fancyhead[C]{}                         % Empty center header
-\fancyhead[R]{Me Llamo Así}             % My name
-\fancyfoot[L]{}                         % Empty left footer
-\fancyfoot[C]{}                         % Empty center footer
+\fancyhead[L]{}                         % Left header
+\fancyhead[C]{}                         % Center header
+\fancyhead[R]{Juan Manuel Segura Duarte}% Right header
+\fancyfoot[L]{}                         % Left footer
+\fancyfoot[C]{}                         % Center footer
 \fancyfoot[R]{\thepage}                 % Page numbering for right footer
-% \renewcommand{\headrulewidth}{0pt}      % Remove header underlines
-% \renewcommand{\footrulewidth}{0pt}      % Remove footer underlines
-\setlength{\headheight}{13.6pt}         % Customize the height of the header
+\renewcommand{\headrulewidth}{0pt}      % Remove header underlines
+\renewcommand{\footrulewidth}{0pt}      % Remove footer underlines
+\setlength{\headheight}{15pt}           % Customize the height of the header
 
+\newcommand{\textgap}{\vspace{1em}}
 \definecolor{gray75}{gray}{0.75}
+\definecolor{licensetitle}{RGB}{30,70,120}
 \newcommand{\hsp}{\hspace{20pt}}
 \titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
 \setcounter{secnumdepth}{4}
@@ -54,45 +57,31 @@
 % Glossary entries
 \input{prefaces/glossary}
 
+
+% Document
 \begin{document}
-
-    \input{prefaces/title-page.tex}
-	% % Plantilla portada UGR
-	% \input{portada/portada}
-
-	% % Plantilla prefacio UGR
-	% \input{prefacios/prefacio}
-
-	% % Índice de contenidos
-	% \newpage
-	% \tableofcontents
 
     % Apply empty style to ALL frontmatter pages (TOC, LOF, LOT, etc.)
     \frontmatter
+    % \pagestyle{empty}  % All frontmatter pages will be empty
 
-	% % Si hay suficientes se incluirá dicho índice
-	% \listoftables 
-	% \newpage
+    % Title page
+    \input{prefaces/title-page}
 
-	% Introduction
-	\input{chapters/introduction}
+    % Preface
+    \input{prefaces/preface}
 
-	% % Descripción del problema y hasta donde se llega
-	% \input{secciones/02_descripcion}
+    % Index
+    \newpage
+    \tableofcontents
 
-	% % Estado del arte
-	% % 	1. Crítica al estado del arte
-	% % 	2. Propuesta
-	% \input{secciones/03_estado_del_arte}
-	% 
-	% \input{secciones/04_planificacion}
+    % Image index
+    \newpage
+    \listoffigures
 
-	% % Análisis del problema
-	% % 1. Análisis de requisitos
-	% % 2. Análisis de las soluciones
-	% % 3. Solucion propuesta
-	% % 4. Análisis de seguridad
-	% \input{secciones/05_analisis}
+    % % Table index
+    % \newpage
+    % \listoftables 
 
     % Glossary
     \glsaddall[types={main}]         % Add all entries, no matter if they have a corresponding \gls
@@ -101,13 +90,13 @@
     % Restore normal style for main content
     \mainmatter
 
-	% % Conclusiones
-	% \input{secciones/07_conclusiones}
+    % Chapter: Introduction
+    \input{chapters/introduction}
 
-	% % Trabajos futuros
 
-	\newpage
-	\bibliography{bibliography}
-	\bibliographystyle{plain}
+    % Bibliography
+    \newpage
+    \bibliography{bibliography}
+    \bibliographystyle{plain}
 	
 \end{document}
