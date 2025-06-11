@@ -25,15 +25,15 @@
 \usepackage{booktabs}
 \usepackage{titlesec, blindtext, color}
 \usepackage[Lenny]{fncychap}
-\usepackage[table,xcdraw]{xcolor}
+\usepackage[table,xcdraw,x11names]{xcolor}
 \usepackage[most]{tcolorbox}
 \usepackage[style=indexgroup]{glossaries}
 \usepackage{etoolbox}                   % For patching commands
 
 \hypersetup{
-	colorlinks=true,	% False: boxed links; true: colored links
-	linkcolor=violet,	% Color of internal links
-	urlcolor=cyan		% color of external links
+	colorlinks=true,	  % False: boxed links; true: colored links
+	linkcolor=SteelBlue1, % Color of internal links
+	urlcolor=RoyalBlue3   % color of external links
 }
 \renewcommand{\familydefault}{\sfdefault}
 \setlength{\headheight}{15pt}           % Customize the height of the header
@@ -51,7 +51,7 @@
     \fancyhf{} % Clear all header and footer fields
     \renewcommand{\headrulewidth}{0pt} % No header rule
     \renewcommand{\footrulewidth}{0.4pt}
-    \fancyhead[R]{Juan Manuel Segura Duarte}
+    \fancyfoot[L]{Juan Manuel Segura Duarte}
     \fancyfoot[R]{\thepage}
 }
 
@@ -88,9 +88,9 @@
     \newpage
     \listoffigures
 
-    % % Table index
-    % \newpage
-    % \listoftables 
+    % Table index
+    \newpage
+    \listoftables 
 
     % Glossary
     \glsaddall[types={main}]         % Add all entries, no matter if they have a corresponding \gls
@@ -103,13 +103,15 @@
     % Chapters {{{
 
     \pagestyle{mainmatterstyle}  % All frontmatter pages will be empty
-    % \patchcmd{\chapter}{plain}{frontmatterstyle}{}{} % First page of chapters with same style as the rest
 
     % Introduction
     \input{chapters/introduction}
 
     % Background and related work
     \input{chapters/background}
+
+    % System design
+    \input{chapters/system-design}
 
     % }}}
 
