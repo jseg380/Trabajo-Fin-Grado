@@ -27,10 +27,12 @@ app.use(express.static('public'));
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import initRoutes from './routes/initRoutes.js';
+import vehicleRoutes from './routes/vehicleRoutes.js';
 
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', initRoutes);
+app.use('/api/vehicles', vehicleRoutes);
 
 
 
