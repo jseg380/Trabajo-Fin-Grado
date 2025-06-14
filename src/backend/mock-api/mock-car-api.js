@@ -1792,9 +1792,7 @@ app.get('/api/makes/:make/models', (req, res) => {
   const makeName = req.params.make.toLowerCase();
 
   // Find the make_id from the make name
-  const makeEntry = makes.find(
-    (m) => m.make.toLowerCase() === makeName
-  );
+  const makeEntry = makes.find((m) => m.make.toLowerCase() === makeName);
 
   if (!makeEntry) {
     return res.status(404).json({ error: `Make "${req.params.make}" not found` });
@@ -1814,29 +1812,47 @@ app.get('/api/makes/:make/models', (req, res) => {
  *          Accepts query params: ?make=Toyota&model=Corolla&year=2021
  */
 app.get('/api/specs', (req, res) => {
-  const { make, model, year } = req.query;
+  const { make, model, year, fuelType } = req.query;
 
-  console.log(`[Mock API] Received spec request for: ${year} ${make} ${model}`);
+  console.log(`[Mock API] Received spec request for: ${year} ${make} ${model} ${fuelType}`);
 
   // Simple logic to return mock data based on the model
-  let specs = {
-    emissionFactor: 145, // A default generic value
-    fuelType: 'Gasoline',
-    source: 'Generic Database Entry',
-  };
+  let specs = {};
+  if (fuelType === 'diesel') {
+    specs = {
+      emissionFactor: 125, // A default generic value
+      fuelType: 'Gasoline',
+      source: 'Generic Database Entry',
+    };
+  } else {
+    specs = {
+      emissionFactor: 145, // A default generic value
+      fuelType: 'Gasoline',
+      source: 'Generic Database Entry',
+    };
+  }
 
-  if (model && model.toLowerCase().includes('corolla')) {
-    specs = { emissionFactor: 112, fuelType: 'Gasoline', source: 'OEM Data' };
-  } else if (model && model.toLowerCase().includes('golf')) {
-    specs = { emissionFactor: 125, fuelType: 'Diesel', source: 'OEM Data' };
-  } else if (model && model.toLowerCase().includes('model 3')) {
-    specs = { emissionFactor: 0, fuelType: 'Electric', source: 'OEM Data' };
+  // More specific logic
+  if (model && model.toLowerCase().includes('golf')) {
+    if (fuelType === 'diesel') {
+      specs = { emissionFactor: 125, source: 'OEM Diesel Data' };
+    } else {
+      specs = { emissionFactor: 135, source: 'OEM Gasoline Data' };
+    }
+  } else if (model && model.toLowerCase().includes('corolla')) {
+    if (fuelType === 'hybrid') {
+      specs = { emissionFactor: 98, source: 'OEM Hybrid Data' };
+    } else {
+      specs = { emissionFactor: 112, source: 'OEM Gasoline Data' };
+    }
+  } else if (fuelType === 'electric') {
+    specs = { emissionFactor: 0, source: 'EV Database' };
   }
 
   // Simulate a network delay to feel more realistic
   setTimeout(() => {
     res.json(specs);
-  }, 1200);
+  }, 800);
 });
 
 // --- Start Server ---
