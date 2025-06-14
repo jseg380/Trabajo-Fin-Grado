@@ -46,7 +46,8 @@
     },
     "profile": {
       "title": "Profile",
-      "header-title": "My profile"
+      "header-title": "My profile",
+      "logout-button": "Logout"
     },
     "login": {
       "title": "Login",
@@ -55,6 +56,15 @@
       "password": "Password",
       "login-button": "Login",
       "register-link": "Don't have an account? Register"
+    },
+    "register": {
+      "title": "Register",
+      "header-title": "Create an account",
+      "username": "Username",
+      "email": "Email",
+      "password": "Password",
+      "register-button": "Register",
+      "login-link": "Already have an account? Login"
     }
   },
   "stats": {

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Button } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { Link, useLocalSearchParams, useNavigation } from 'expo-router';
+import { Link, router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import TitleSetter from '@/components/TitleSetter';
 import { API_URL } from '@/constants/config';
 import { withAuth } from '@/utils/withAuth';
+import { useAuth } from '@/context/AuthContext';
+import axios from 'axios';
 
 interface UserStats {
   distanceTraveled: number;
@@ -25,11 +27,10 @@ interface UserData {
 }
 
 function ProfileScreen() {
-  const { user: username } = useLocalSearchParams();
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const profileUri = new URL(`/api/users/${username}`, API_URL).href;
 
+  const { logout, user: authUser } = useAuth();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,26 +38,27 @@ function ProfileScreen() {
   useEffect(() => {
     navigation.setOptions({ title: t('pages.profile.title') });
 
-    if (username) {
-      // Fetch from Express backend
-      fetch(profileUri)
-        .then((res) => {
-          if (!res.ok) throw new Error(`User not found: ${res.status}`);
-          return res.json();
-        })
-        .then((data: UserData) => {
-          console.log('User data loaded:', data);
-          setUserData(data);
-        })
-        .catch((err) => {
-          console.warn(err);
-          setError('Unable to load user');
-        })
-        .finally(() => {
-          setLoading(false);
+    const fetchProfile = async () => {
+      if (!authUser) {
+        setLoading(false);
+        return;
+      }
+      try {
+        // We use axios to automatically handle cookies via withCredentials
+        const response = await axios.get(new URL('users/profile', API_URL).href, {
+          withCredentials: true,
         });
-    }
-  }, [username]);
+        setUserData(response.data);
+      } catch (err) {
+        console.warn(err);
+        setError('Unable to load user profile');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [authUser]); // Re-fetch if the authUser object changes
 
   if (loading) {
     return (
@@ -77,6 +79,14 @@ function ProfileScreen() {
     );
   }
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TitleSetter title={t('pages.profile.title')} />
@@ -84,7 +94,7 @@ function ProfileScreen() {
       <View style={styles.header}>
         <Text style={styles.title}>{t('pages.profile.header-title')}</Text>
         <Link
-          href={`/profile/${username}/settings`}
+          href='/profile/settings'
           asChild
         >
           <TouchableOpacity>
@@ -103,7 +113,7 @@ function ProfileScreen() {
           source={{ uri: userData.avatarUrl }}
           style={styles.avatar}
         />
-        <Text style={styles.name}>{username}</Text>
+        <Text style={styles.name}>{userData.name}</Text>
         <Text style={styles.email}>{userData.email}</Text>
         <Text style={styles.joinDate}>{userData.joinDate}</Text>
       </View>
@@ -130,6 +140,7 @@ function ProfileScreen() {
           label={t('stats.totalVehicles')}
         />
       </View>
+      <Button title={t('pages.profile.logout-button')} onPress={handleLogout} />
     </View>
   );
 }
@@ -197,11 +208,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 18,
     width: '100%',
-    // justifyContent: 'space-around',
-    // width: '100%',
-    // paddingVertical: 12,
-    // borderTopWidth: 1,
-    // borderTopColor: '#eee',
   },
   statItem: {
     alignItems: 'center',

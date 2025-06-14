@@ -46,7 +46,8 @@
     },
     "profile": {
       "title": "Perfil",
-      "header-title": "Mi perfil"
+      "header-title": "Mi perfil",
+      "logout-button": "Cerrar sesión"
     },
     "login": {
       "title": "Inicio de sesión",
@@ -55,6 +56,15 @@
       "password": "Contraseña",
       "login-button": "Iniciar sesión",
       "register-link": "¿No tienes una cuenta? Regístrate"
+    },
+    "register": {
+      "title": "Registro",
+      "header-title": "Crear cuenta",
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "register-button": "Registrarse",
+      "login-link": "¿Ya tienes una cuenta? Inicia sesión"
     }
   },
   "stats": {

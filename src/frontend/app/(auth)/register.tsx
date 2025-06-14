@@ -5,7 +5,7 @@ import { useState } from 'react';
 import TitleSetter from '@/components/TitleSetter';
 import { useTranslation } from 'react-i18next';
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,7 +32,7 @@ export default function LoginScreen() {
       <TitleSetter title={t('pages.register.title')} />
       <Text style={styles.title}>{t('pages.register.header-title')}</Text>
       
-      {error && <Text style={styles.error}>{error}</Text>}
+      {error ? <Text style={styles.error}>{error}</Text> : null}
 
       <TextInput
         style={styles.input}
@@ -60,7 +60,7 @@ export default function LoginScreen() {
         secureTextEntry
       />
       
-      <Button title={t('pages.login.register-button')} onPress={handleRegister} />
+      <Button title={t('pages.register.register-button')} onPress={handleRegister} />
       
       <Link
         href='/(auth)/login'
@@ -70,7 +70,7 @@ export default function LoginScreen() {
         }}
         asChild
       >
-        <Text style={styles.link}>{t('pages.login.login-link')}</Text>
+        <Text style={styles.link}>{t('pages.register.login-link')}</Text>
       </Link>
     </View>
   );

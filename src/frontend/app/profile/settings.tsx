@@ -4,7 +4,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LANGUAGE_KEY } from '@/localization';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, } from 'expo-router';
 import TitleSetter from '@/components/TitleSetter';
 import { withAuth } from '@/utils/withAuth';
 
@@ -21,7 +21,6 @@ function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [selectedLanguageLabel, setSelectedLanguageLabel] = useState<string | null>(null);
-  const { user: username } = useLocalSearchParams();
 
   const handleLanguageChange = async (label: string, value: string) => {
     setSelectedLanguageLabel(label);
@@ -34,7 +33,7 @@ function SettingsScreen() {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: t('pages.settings.title') + ': ' + username,
+          title: t('pages.settings.title'),
         }}
       />
       <TitleSetter title={t('pages.settings.title')} />

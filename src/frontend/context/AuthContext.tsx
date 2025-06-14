@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const checkLoginStatus = async () => {
       try {
         // Check if user is logged in
-        const response = await axios.get(new URL('/auth/profile', API_URL).href, {
+        const response = await axios.get(new URL('auth/profile', API_URL).href, {
           withCredentials: true
         });
         setUser(response.data);
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await axios.post(new URL('/auth/login', API_URL).href, {
+    const response = await axios.post(new URL('auth/login', API_URL).href, {
       email,
       password
     }, {
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const register = async (name: string, email: string, password: string) => {
-    const response = await axios.post(new URL('/auth/register', API_URL).href, {
+    const response = await axios.post(new URL('auth/register', API_URL).href, {
       name,
       email,
       password
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = async () => {
-    await axios.post(new URL('/auth/logout', API_URL).href, {}, {
+    await axios.post(new URL('auth/logout', API_URL).href, {}, {
       withCredentials: true
     });
     setUser(null);

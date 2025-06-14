@@ -31,7 +31,7 @@ export default function LoginScreen() {
       <TitleSetter title={t('pages.login.title')} />
       <Text style={styles.title}>{t('pages.login.header-title')}</Text>
       
-      {error && <Text style={styles.error}>{error}</Text>}
+      {error ? <Text style={styles.error}>{error}</Text> : null}
       
       <TextInput
         style={styles.input}

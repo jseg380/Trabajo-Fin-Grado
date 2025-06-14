@@ -38,14 +38,22 @@ export default function RootLayout() {
         {/* Fallback title */}
         <TitleSetter />
         <Stack>
+          {/* Main app with tabs, header managed by the Tabs layout */}
           <Stack.Screen
             name='(tabs)'
             options={{ headerShown: false }}
           />
-          <Stack.Screen name='+not-found' />
+
+          {/* Auth screens */}
           <Stack.Screen name='(auth)/login' />
           <Stack.Screen name='(auth)/register' />
-          {/* <Stack.Screen name='profile/[user]' /> */}
+
+          {/* Profile screens */}
+          <Stack.Screen name='profile/index' />
+          <Stack.Screen name='profile/settings' />
+
+          {/* Fallback screen */}
+          <Stack.Screen name='+not-found' />
         </Stack>
       </PaperProvider>
     </AuthProvider>

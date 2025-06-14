@@ -1,14 +1,26 @@
 import { Pressable, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
-import { API_URL } from '@/constants/config';
+import { BACKEND_URL } from '@/constants/config';
+import { useAuth } from '@/context/AuthContext';
 
 export default function ProfileButton() {
-  const imageUri = new URL('/images/generic-avatar-2.png', API_URL).href;
+  const { user } = useAuth();
+
+  // If there's no user logged in, don't render the button at all.
+  // The withAuth HOC should prevent this, but it's good practice.
+  if (!user) {
+    return null; 
+  }
+
+  // Use the user's avatar from the context.
+  // The 'avatarUrl' should be constructed on the backend and sent on login.
+  // If it's not available on login, construct it here.
+  const imageUri = user.avatarUrl || new URL(user.avatar, BACKEND_URL).href;
 
   return (
     <Link
-      href='/profile/developer'
+      href='/profile'
       asChild
     >
       <Pressable style={{ marginRight: 15 }}>

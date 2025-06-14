@@ -1,4 +1,5 @@
-export const API_URL = new URL('http://192.168.1.110:5000/api/');
+export const BACKEND_URL = new URL('http://192.168.1.110:5000');
+export const API_URL = new URL('/api/', BACKEND_URL);
 // Trailing slash is important for URL construction, otherwise it will replace
 // the last segment of the path when appending new paths.
 
