@@ -13,7 +13,28 @@ connectDB();
 const app = express();
 
 // CORS configuration
-app.use(cors({ origin: '*', methods: ['GET', 'POST'] }));
+// 1. Exact origins of the frontend that are allowed to connect.
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://192.168.1.110:3000'
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  // 2. Enable credentials (cookies) to be sent and received.
+  credentials: true, 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 
 app.use(cookieParser());
 
@@ -33,8 +54,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', initRoutes);
 app.use('/api/vehicles', vehicleRoutes);
-
-
 
 // Fallback route for undefined API endpoints
 app.use((req, res) => {

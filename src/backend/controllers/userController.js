@@ -1,43 +1,32 @@
-// This mock stays here until replaced with MongoDB queries
-const users = {
-  developer: {
-    username: 'developer',
-    name: 'Developer User',
-    email: 'dev@example.com',
-    avatar: 'images/generic-avatar.png',
-    joinDate: 'January 2025',
-    stats: {
-      distanceTraveled: 2300,
-      co2Saved: 142,
-      totalVehicles: 87,
-    },
-  },
-  alice: {
-    username: 'alice',
-    name: 'Alice User',
-    email: 'alice@example.com',
-    avatar: 'images/generic-avatar-2.png',
-    joinDate: 'February 2023',
-    stats: {
-      distanceTraveled: 682943,
-      co2Saved: 3249329,
-      totalVehicles: 2,
-    },
-  },
-};
+import User from '../models/User.js';
 
-export const getUserByUsername = (req, res) => {
-  const { username } = req.params;
-  const user = users[username.toLowerCase()];
+// @desc    Get logged-in user profile
+// @route   GET /api/users/profile
+export const getUserProfile = async (req, res) => {
+  try {
+    // The 'protect' middleware adds the user ID to the request object.
+    const user = await User.findById(req.user);
 
-  if (!user) {
-    return res.status(404).json({ error: 'User not found' });
+    if (user) {
+      // Construct the full avatar URL
+      const PORT = process.env.PORT || 5000;
+      // Note: In production, you'd use your actual domain, not req.hostname.
+      const baseUrl = `${req.protocol}://${req.hostname}:${PORT}`;
+      const avatarUrl = new URL(user.avatar, baseUrl).href;
+
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar, // The relative path
+        avatarUrl: avatarUrl, // The full URL for the frontend
+        stats: user.stats,
+        joinDate: user.createdAt, // Send the real join date
+      });
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Server error: ' + error.message });
   }
-
-  // Attach full URL to avatar
-  const PORT = process.env.PORT || 5000;
-  const baseUrl = `http://${req.hostname}:${PORT}`;
-  user.avatarUrl = `${baseUrl}/${user.avatar.replace(/^\/+/, '')}`;
-
-  res.json(user);
 };

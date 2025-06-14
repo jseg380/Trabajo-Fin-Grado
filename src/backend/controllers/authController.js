@@ -1,6 +1,16 @@
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 
+// --- DEFINE COOKIE OPTIONS IN ONE PLACE ---
+const cookieOptions = {
+  httpOnly: true,
+  // sameSite must be 'none' for production to allow cross-site cookies
+  // 'lax' is better for development with local servers
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  // secure must be true in production to send cookies only over HTTPS
+  secure: process.env.NODE_ENV === 'production',
+};
+
 // Generate JWT token
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, {
@@ -20,15 +30,11 @@ export const registerUser = async (req, res) => {
     }
 
     const user = await User.create({ name, email, password });
-
-    // Create token
     const token = generateToken(user._id);
 
-    // Set HTTP-only cookie
+    // Set the cookie using the new options
     res.cookie('jwt', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      ...cookieOptions,
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
@@ -36,6 +42,7 @@ export const registerUser = async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar, // Send avatar on register too
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -47,21 +54,17 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email }).select('+password');
 
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Create token
     const token = generateToken(user._id);
 
-    // Set HTTP-only cookie
+    // Set the cookie using the new options
     res.cookie('jwt', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      ...cookieOptions,
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
@@ -69,6 +72,7 @@ export const loginUser = async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -78,25 +82,10 @@ export const loginUser = async (req, res) => {
 // @desc    Logout user
 // @route   POST /api/auth/logout
 export const logoutUser = (req, res) => {
+  // Clear the cookie using the same options
   res.cookie('jwt', '', {
-    httpOnly: true,
+    ...cookieOptions,
     expires: new Date(0),
   });
   res.status(200).json({ message: 'Logged out successfully' });
-};
-
-// @desc    Get user profile
-// @route   GET /api/auth/profile
-export const getUserProfile = async (req, res) => {
-  try {
-    const user = await User.findById(req.user).select('-password');
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    res.json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
 };

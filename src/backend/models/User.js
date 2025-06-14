@@ -20,11 +20,14 @@ const UserSchema = new mongoose.Schema(
       required: true,
       select: false, // Never return password in queries
     },
-    avatar: String,
+    avatar: {
+      type: String,
+      default: 'images/generic-avatar.png',
+    },
     stats: {
-      distanceTraveled: Number,
-      co2Saved: Number,
-      totalVehicles: Number,
+      distanceTraveled: { type: Number, default: 0 },
+      co2Saved: { type: Number, default: 0 },
+      totalVehicles: { type: Number, default: 0 },
     },
   },
   {

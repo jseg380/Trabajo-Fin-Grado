@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 export const protect = async (req, res, next) => {
+  console.log('protect middleware called');
   try {
     const token = req.cookies.jwt;
 
