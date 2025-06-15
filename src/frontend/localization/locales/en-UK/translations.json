@@ -1,19 +1,13 @@
 {
-  "language": {
-    "meta": "language",
-    "select": "select the language"
-  },
-  "intro": {
-    "welcome": "Welcome"
-  },
   "settings": {
     "theme": {
       "dark": "Dark mode",
       "light": "Light mode"
+    },
+    "language": {
+      "meta": "Language",
+      "select": "Select the language"
     }
-  },
-  "profile": {
-    "title": "My profile"
   },
   "pages": {
     "not-found": {
@@ -24,9 +18,26 @@
         "back": "Go back to home"
       }
     },
-    "home": {
+    "maintenance": {
       "title": "Home",
-      "header-title": "Home"
+      "header-title": "Home",
+      "subtitle": "Maintenance alerts",
+      "tasks": {
+        "ITV": "ITV Inspection",
+        "Brakes": "Brake check",
+        "Tires": "Tire replacement"
+      },
+      "details": {
+        "upcoming_days_one": "Due in {{count}} day",
+        "upcoming_days_other": "Due in {{count}} days",
+        "upcoming_km": "{{count}} km remaining",
+        "overdue_days_one": "Overdue by {{count}} day",
+        "overdue_days_other": "Overdue by {{count}} days",
+        "overdue_km": "Overdue by {{count}} km",
+        "due_today": "Due today"
+      },
+      "all_clear": "All clear!",
+      "no_tasks": "No maintenance tasks are due soon."
     },
     "vehicles": {
       "title": "Vehicles",

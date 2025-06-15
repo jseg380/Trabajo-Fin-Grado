@@ -18,9 +18,9 @@ type TabsConfig = Record<string, TabConfig>;
 
 const TAB_CONFIG = {
   home: {
-    title: 'pages.home.title',
+    title: 'pages.maintenance.title',
     iconName: 'home',
-    headerTitle: 'pages.home.header-title'
+    headerTitle: 'pages.maintenance.header-title'
   },
   vehicles: {
     title: 'pages.vehicles.title',
@@ -42,6 +42,14 @@ const TAB_CONFIG = {
 // Equivalent to:
 // type TabRoutes = "home" | "vehicles" | "routes" | ...;
 type TabRoutes = keyof typeof TAB_CONFIG
+
+// Pages not to be included in the tab bar
+const HIDDEN_PAGES = [
+  'vehicles/add',   // Add vehicle page
+  'vehicles/[vehicleId]/edit',  // Edit vehicle page
+  // 'routes/add',     // Add route page
+  // 'routes/edit'     // Edit route page
+];
 
 
 function TabsLayout() {
@@ -81,6 +89,20 @@ function TabsLayout() {
           />
         )
       )}
+
+      {/* <Tabs.Screen */}
+      {/*   name="vehicles/add" */}
+      {/*   options={{ */}
+      {/*     href: null, // hides it from the tab bar */}
+      {/*   }} */}
+      {/* /> */}
+      {HIDDEN_PAGES.map((name) => (
+        <Tabs.Screen
+          key={name}
+          name={name}
+          options={{ href: null }}
+        />
+      ))}
     </Tabs>
   );
 }

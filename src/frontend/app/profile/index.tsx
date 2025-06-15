@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Button } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { Link, router, useNavigation } from 'expo-router';
+import { Link, Stack, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import TitleSetter from '@/components/TitleSetter';
+import TitleSetterWebPage from '@/components/TitleSetter';
 import { API_URL } from '@/constants/config';
 import { withAuth } from '@/utils/withAuth';
 import { useAuth } from '@/context/AuthContext';
 import axios from 'axios';
-
-interface UserStats {
-  distanceTraveled: number;
-  co2Saved: number;
-  totalVehicles: number;
-}
+import CustomHeaderBackButton from '@/components/CustomHeaderBackButton';
 
 interface UserData {
   username: string;
@@ -23,7 +18,6 @@ interface UserData {
   avatar: any;
   avatarUrl: string;
   joinDate: string;
-  stats: UserStats;
 }
 
 function ProfileScreen() {
@@ -89,7 +83,12 @@ function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <TitleSetter title={t('pages.profile.title')} />
+      <Stack.Screen
+        options={{
+          headerLeft: () => <CustomHeaderBackButton route='/' />,
+        }}
+      />
+      <TitleSetterWebPage title={t('pages.profile.title')} />
 
       <View style={styles.header}>
         <Text style={styles.title}>{t('pages.profile.header-title')}</Text>
@@ -118,38 +117,10 @@ function ProfileScreen() {
         <Text style={styles.joinDate}>{userData.joinDate}</Text>
       </View>
 
-      {/* Action Buttons */}
-      {/* <View style={styles.actions}> */}
-      {/*   <TouchableOpacity style={styles.editButton}> */}
-      {/*     <Text style={styles.editButtonText}>Edit Profile</Text> */}
-      {/*   </TouchableOpacity> */}
-      {/* </View> */}
-
-      {/* Stats Row */}
-      <View style={styles.statsContainer}>
-        <StatItem
-          value={userData.stats.distanceTraveled}
-          label={t('stats.distanceTraveled')}
-        />
-        <StatItem
-          value={userData.stats.co2Saved}
-          label={t('stats.co2Saved')}
-        />
-        <StatItem
-          value={userData.stats.totalVehicles}
-          label={t('stats.totalVehicles')}
-        />
-      </View>
-      <Button title={t('pages.profile.logout-button')} onPress={handleLogout} />
-    </View>
-  );
-}
-
-function StatItem({ value, label }: { value: number; label: string }) {
-  return (
-    <View style={styles.statItem}>
-      <Text style={styles.statValue}>{value}</Text>
-      <Text style={styles.statLabel}>{label}</Text>
+      <Button
+        title={t('pages.profile.logout-button')}
+        onPress={handleLogout}
+      />
     </View>
   );
 }
@@ -258,6 +229,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
 
 export default withAuth(ProfileScreen);

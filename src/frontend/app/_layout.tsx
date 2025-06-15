@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { Stack } from 'expo-router';
 import { ActivityIndicator, PaperProvider } from 'react-native-paper';
-import TitleSetter from '@/components/TitleSetter';
+import TitleSetterWebPage from '@/components/TitleSetter';
 import { useEffect, useState } from 'react';
 import { AuthProvider } from '@/context/AuthContext';
 import { i18nInitPromise } from '@/localization';
@@ -36,7 +36,7 @@ export default function RootLayout() {
     <AuthProvider>
       <PaperProvider>
         {/* Fallback title */}
-        <TitleSetter />
+        <TitleSetterWebPage />
         <Stack>
           {/* Main app with tabs, header managed by the Tabs layout */}
           <Stack.Screen

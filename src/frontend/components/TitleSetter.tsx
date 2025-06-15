@@ -5,7 +5,7 @@ interface TitleSetterProps {
   title?: string;
 }
 
-export default function TitleSetter({ title }: TitleSetterProps) {
+export default function TitleSetterWebPage({ title }: TitleSetterProps) {
   useEffect(() => {
     // Return early if it's not a web platform
     if (Platform.OS !== 'web') return;

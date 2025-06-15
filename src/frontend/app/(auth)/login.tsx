@@ -2,7 +2,7 @@ import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
 import { useAuth } from '@/context/AuthContext';
 import { Link, router, Stack } from 'expo-router';
 import { useState } from 'react';
-import TitleSetter from '@/components/TitleSetter';
+import TitleSetterWebPage from '@/components/TitleSetter';
 import { useTranslation } from 'react-i18next';
 
 export default function LoginScreen() {
@@ -26,9 +26,10 @@ export default function LoginScreen() {
       <Stack.Screen
         options={{
           title: t('pages.login.title'),
+          headerLeft: () => null, // Hide the back button
         }}
       />
-      <TitleSetter title={t('pages.login.title')} />
+      <TitleSetterWebPage title={t('pages.login.title')} />
       <Text style={styles.title}>{t('pages.login.header-title')}</Text>
       
       {error ? <Text style={styles.error}>{error}</Text> : null}
