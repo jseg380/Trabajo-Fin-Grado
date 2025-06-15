@@ -9,9 +9,9 @@ export const initializeDB = async (req, res) => {
 
   try {
     console.log('[INIT] Clearing old test data...');
-    // Clear old data to ensure a clean slate
     await User.deleteMany({ email: 'test@example.com' });
-    // This will cascade and clear related vehicles/trips if hooks are added, but for now we do it manually.
+    // Note: In a real app with cascading deletes, this would be enough.
+    // For now, we manually clear trips later.
 
     console.log('[INIT] Creating test user...');
     const user = await User.create({
@@ -19,83 +19,110 @@ export const initializeDB = async (req, res) => {
       email: 'test@example.com',
       password: 'testPassword',
     });
-
-    console.log('[INIT] Creating sample vehicles...');
-    const vehicle1 = await Vehicle.create({
-      make: 'Toyota',
-      model: 'Corolla',
-      year: 2020,
-      owner: user._id,
-      emissions: 60,
-      fuelType: 'hybrid',
-      upcomingMaintenance: {
-        tires: { date: new Date('2027-01-15'), distance: 15000 },
-        brakes: { distance: 13000 },
-        oilChange: { distance: 30000 },
-        itv: new Date('2025-07-25'), // Upcoming
-      },
-    });
-
-    const vehicle2 = await Vehicle.create({
-      make: 'Volkswagen',
-      model: 'Golf',
-      year: 2021,
-      owner: user._id,
-      emissions: 130,
-      fuelType: 'diesel',
-      upcomingMaintenance: {
-        tires: { date: new Date('2029-01-15'), distance: 19000 },
-        brakes: { distance: 18000 },
-        oilChange: { distance: 30000 },
-        itv: new Date('2025-04-25'),  // Overdue
-      },
-    });
-
-    const vehicle3 = await Vehicle.create({
-      make: 'SEAT',
-      model: 'Ibiza',
-      year: 2018,
-      owner: user._id,
-      emissions: 110,
-      fuelType: 'gasoline',
-      upcomingMaintenance: {
-        tires: { date: new Date('2029-01-15'), distance: 19000 },
-        brakes: { distance: 18000 },
-        oilChange: { distance: 30000 },
-        itv: new Date('2026-02-25'),  // Too far in the future
-      },
-    });
     
-    const vehicles = [vehicle1, vehicle2, vehicle3];
+    // --- DYNAMIC DATE & DISTANCE SETUP ---
+    const today = new Date();
+
+    // Helper to create dates relative to today
+    const daysFromNow = (days) => {
+      const date = new Date();
+      date.setDate(today.getDate() + days);
+      return date;
+    };
     
-    console.log('[INIT] Seeding trips...');
+    console.log('[INIT] Creating dynamically seeded vehicles...');
+
+    const vehicleData = [
+      // 1. The "Problem Child" - Multiple alerts, including an overdue distance
+      {
+        make: 'Ford',
+        model: 'Focus',
+        year: 2017,
+        owner: user._id,
+        emissions: 125,
+        fuelType: 'gasoline',
+        upcomingMaintenance: {
+          tires: { date: daysFromNow(-20), distance: 2500 },  // STATUS: Overdue by date, Upcoming by km
+          brakes: { distance: -150 },                         // STATUS: Overdue by km
+          oilChange: { distance: 1000 },                      // STATUS: Upcoming by km
+          itv: daysFromNow(30),                               // STATUS: Upcoming by date
+        },
+      },
+      // 2. The "Well Maintained" Car - No alerts should be triggered
+      {
+        make: 'Honda',
+        model: 'Civic',
+        year: 2022,
+        owner: user._id,
+        emissions: 90,
+        fuelType: 'hybrid',
+        upcomingMaintenance: {
+          tires: { date: daysFromNow(300), distance: 30000 },
+          brakes: { distance: 40000 },
+          oilChange: { distance: 15000 },
+          itv: daysFromNow(700),
+        },
+      },
+      // 3. The "ITV Overdue" Car
+      {
+        make: 'Volkswagen',
+        model: 'Golf',
+        year: 2019,
+        owner: user._id,
+        emissions: 130,
+        fuelType: 'diesel',
+        upcomingMaintenance: {
+          tires: { date: daysFromNow(180), distance: 25000 },
+          brakes: { distance: 22000 },
+          oilChange: { distance: 8000 },
+          itv: daysFromNow(-100), // STATUS: Overdue by 100 days
+        },
+      },
+       // 4. The "Tires Upcoming" Car
+       {
+        make: 'Toyota',
+        model: 'RAV4',
+        year: 2021,
+        owner: user._id,
+        emissions: 105,
+        fuelType: 'hybrid',
+        upcomingMaintenance: {
+          tires: { date: daysFromNow(45), distance: 40000 }, // STATUS: Upcoming by date
+          brakes: { distance: 15000 },
+          oilChange: { distance: 12000 },
+          itv: daysFromNow(400),
+        },
+      },
+    ];
+
+    const vehicles = await Vehicle.create(vehicleData);
+
+    console.log('[INIT] Seeding trips for created vehicles...');
     await Trip.deleteMany({ driver: user._id });
 
     const tripsData = [
-      { vehicleId: vehicles[0]._id, distance: 15, date: new Date('2025-06-10') },
-      { vehicleId: vehicles[0]._id, distance: 50, date: new Date('2025-06-11') },
-      { vehicleId: vehicles[1]._id, distance: 120, date: new Date('2025-06-10') },
-      { vehicleId: vehicles[1]._id, distance: 25, date: new Date('2025-06-13') },
+      { vehicleIndex: 0, distance: 150 }, // Ford Focus
+      { vehicleIndex: 1, distance: 25 },  // Honda Civic
+      { vehicleIndex: 2, distance: 88 },  // VW Golf
+      { vehicleIndex: 0, distance: 30 },  // Ford Focus
+      { vehicleIndex: 3, distance: 120 }, // Toyota RAV4
     ];
 
     const finalTrips = tripsData.map(trip => {
-      const vehicleData = vehicles.find(v => v._id.equals(trip.vehicleId));
+      const vehicle = vehicles[trip.vehicleIndex];
       return {
         driver: user._id,
-        vehicle: trip.vehicleId,
+        vehicle: vehicle._id,
         distance: trip.distance,
-        date: trip.date,
-        calculatedEmissions: trip.distance * (vehicleData.emissions || 150),
-        locations: { // Keep the GeoJSON structure for future use
-          start: { type: 'Point', coordinates: [0,0] },
-          end: { type: 'Point', coordinates: [0,0] },
-        },
+        date: new Date(),
+        calculatedEmissions: trip.distance * (vehicle.emissions || 150),
+        locations: { start: { type: 'Point', coordinates: [0,0] }, end: { type: 'Point', coordinates: [0,0] } },
       };
     });
 
     await Trip.insertMany(finalTrips);
     console.log('[INIT] Database initialization successful.');
-    res.status(201).json({ message: 'Database initialized successfully' });
+    res.status(201).json({ message: 'Database initialized with dynamically-set maintenance dates.' });
 
   } catch (error) {
     console.error('[INIT] Initialization error:', error);

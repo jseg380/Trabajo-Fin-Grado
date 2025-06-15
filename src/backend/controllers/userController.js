@@ -30,3 +30,37 @@ export const getUserProfile = async (req, res) => {
     res.status(500).json({ error: 'Server error: ' + error.message });
   }
 };
+
+// @desc    Update user avatar
+// @route   PUT /api/users/profile/avatar
+export const updateUserAvatar = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Please upload a file.' });
+    }
+
+    const user = await User.findById(req.user);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    // Path will be relative to the 'public' folder
+    const avatarPath = `uploads/avatars/${req.file.filename}`;
+    user.avatar = avatarPath;
+    await user.save();
+
+    // Construct the full URL to send back to the frontend
+    const PORT = process.env.PORT || 5000;
+    const baseUrl = `${req.protocol}://${req.hostname}:${PORT}`;
+    const avatarUrl = new URL(user.avatar, baseUrl).href;
+
+    res.json({
+      message: 'Avatar updated successfully',
+      avatar: user.avatar, // relative path
+      avatarUrl: avatarUrl, // full path
+    });
+
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

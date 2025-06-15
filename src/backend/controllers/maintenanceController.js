@@ -5,7 +5,7 @@ const MAINTENANCE_CHECKS = [
   // Date-based checks
   {
     key: 'itv',
-    taskType: 'ITV',
+    taskType: 'itv',
     unit: 'days',
     threshold: 90, // Alert if within 90 days
     // This function safely gets the value from the schema, handling nested paths
@@ -13,7 +13,7 @@ const MAINTENANCE_CHECKS = [
   },
   {
     key: 'tires_date', // A unique key for this specific check
-    taskType: 'Tires',
+    taskType: 'tires',
     unit: 'days',
     threshold: 60, // Alert if within 60 days
     getValue: (maintenance) => maintenance?.tires?.date,
@@ -21,21 +21,21 @@ const MAINTENANCE_CHECKS = [
   // Distance-based checks
   {
     key: 'tires_dist',
-    taskType: 'Tires',
+    taskType: 'tires',
     unit: 'km',
     threshold: 5000, // Alert if less than 5000km remaining
     getValue: (maintenance) => maintenance?.tires?.distance,
   },
   {
     key: 'brakes',
-    taskType: 'Brakes',
+    taskType: 'brakes',
     unit: 'km',
     threshold: 2000,
     getValue: (maintenance) => maintenance?.brakes?.distance,
   },
   {
     key: 'oilChange',
-    taskType: 'OilChange',
+    taskType: 'oilchange',
     unit: 'km',
     threshold: 1500,
     getValue: (maintenance) => maintenance?.oilChange?.distance,
