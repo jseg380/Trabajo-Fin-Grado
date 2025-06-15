@@ -107,5 +107,12 @@
     "distanceTraveled": "Distancia recorrida",
     "co2Saved": "CO2 ahorrado",
     "totalVehicles": "Vehículos"
+  },
+  "achievements": {
+    "title": "Logros",
+    "FIRST_VEHICLE": "Primer vehículo añadido",
+    "FIRST_TRIP": "Primer viaje registrado",
+    "DIST_1000": "Guerrero de la carretera (1.000 km)",
+    "DIST_10000": "Trotamundos (10.000 km)"
   }
 }

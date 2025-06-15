@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { API_URL } from '@/constants/config';
 import { withAuth } from '@/utils/withAuth';
+import { showConfirmationAlert, showInfoAlert } from '@/utils/CrossPlatformAlert';
 
 interface Recommendation {
   _id: string;
@@ -12,16 +13,18 @@ interface Recommendation {
   totalEmissions: number;
 }
 
-function RecommendationItem({ item, isBest }: { item: Recommendation; isBest: boolean }) {
+function RecommendationItem({ item, isBest, onSelect }: { item: Recommendation; isBest: boolean; onSelect: () => void }) {
   return (
-    <View style={[styles.card, isBest && styles.bestCard]}>
-      {isBest && <View style={styles.badge}><Text style={styles.badgeText}>Best Choice</Text></View>}
-      <Ionicons name='map-outline' size={40} color={isBest ? '#2e7d32' : '#333'} />
-      <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{item.make} {item.model}</Text>
-        <Text style={styles.cardSubtitle}>Estimated Emissions: {item.totalEmissions.toFixed(0)} gCO₂</Text>
+    <TouchableOpacity onPress={onSelect} style={[styles.card, isBest && styles.bestCard]}>
+      <View style={[styles.card, isBest && styles.bestCard]}>
+        {isBest && <View style={styles.badge}><Text style={styles.badgeText}>Best Choice</Text></View>}
+        <Ionicons name='map-outline' size={40} color={isBest ? '#2e7d32' : '#333'} />
+        <View style={styles.cardContent}>
+          <Text style={styles.cardTitle}>{item.make} {item.model}</Text>
+          <Text style={styles.cardSubtitle}>Estimated Emissions: {item.totalEmissions.toFixed(0)} gCO₂</Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -30,6 +33,7 @@ function RoutesScreen() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isLogging, setIsLogging] = useState(false);
 
   const handleGetRecommendation = async () => {
     if (!distance) {
@@ -53,6 +57,29 @@ function RoutesScreen() {
     }
   };
 
+  const handleSelectTrip = async (vehicle: Recommendation) => {
+    const confirmed = await showConfirmationAlert(
+      'Log Trip',
+      `Do you want to log a ${distance} km trip with the ${vehicle.make} ${vehicle.model}? This will update your vehicle's maintenance data.`,
+      'Log Trip'
+    );
+    if (!confirmed) return;
+
+    setIsLogging(true);
+    try {
+      const response = await axios.post(
+        new URL('trips/log', API_URL).href,
+        { vehicleId: vehicle._id, distance: parseFloat(distance) },
+        { withCredentials: true }
+      );
+      showInfoAlert('Success', response.data.message);
+    } catch (err) {
+      showInfoAlert('Error', 'Could not log trip.');
+    } finally {
+      setIsLogging(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
@@ -69,11 +96,11 @@ function RoutesScreen() {
 
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
       
-      {loading && <ActivityIndicator size="large" style={{ marginTop: 20 }} />}
+      {loading ? <ActivityIndicator size='large' style={{ marginTop: 20 }} /> : null}
 
       <FlatList
         data={recommendations}
-        renderItem={({ item, index }) => <RecommendationItem item={item} isBest={index === 0} />}
+        renderItem={({ item, index }) => <RecommendationItem item={item} isBest={index === 0} onSelect={() => handleSelectTrip(item)} />}
         keyExtractor={(item) => item._id}
         style={{ width: '100%' }}
         contentContainerStyle={{ padding: 20 }}

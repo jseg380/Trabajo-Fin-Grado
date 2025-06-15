@@ -40,7 +40,7 @@ const TAB_CONFIG = {
 } as const satisfies TabsConfig;
 
 // Equivalent to:
-// type TabRoutes = "home" | "vehicles" | "routes" | ...;
+// type TabRoutes = 'home' | 'vehicles' | 'routes' | ...;
 type TabRoutes = keyof typeof TAB_CONFIG
 
 // Pages not to be included in the tab bar
@@ -77,7 +77,7 @@ function TabsLayout() {
                   <Ionicons 
                     name={config.iconName} 
                     size={20} 
-                    color="black" 
+                    color='black'
                     style={{ marginRight: 8 }} 
                   />
                   <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
@@ -90,12 +90,6 @@ function TabsLayout() {
         )
       )}
 
-      {/* <Tabs.Screen */}
-      {/*   name="vehicles/add" */}
-      {/*   options={{ */}
-      {/*     href: null, // hides it from the tab bar */}
-      {/*   }} */}
-      {/* /> */}
       {HIDDEN_PAGES.map((name) => (
         <Tabs.Screen
           key={name}

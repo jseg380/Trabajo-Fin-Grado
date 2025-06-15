@@ -8,7 +8,7 @@ import { withAuth } from '@/utils/withAuth';
 import { showInfoAlert } from '@/utils/CrossPlatformAlert';
 
 // --- This function simulates a call to an external API ---
-// In a real app, this would be a fetch call to a service like "Auto-data"
+// In a real app, this would be a fetch call to a service like 'Auto-data'
 const fetchExternalVehicleSpecs = async (make: string, model: string, year: string, fuelType: string) => {
   const params = new URLSearchParams({ make, model, year, fuelType });
   const response = await axios.get(`${SPECS_API_URL}/specs?${params.toString()}`);

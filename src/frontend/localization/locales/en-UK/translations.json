@@ -107,5 +107,12 @@
     "distanceTraveled": "Distance traveled",
     "co2Saved": "CO2 saved",
     "totalVehicles": "Total vehicles"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "FIRST_VEHICLE": "First vehicle added",
+    "FIRST_TRIP": "First trip logged",
+    "DIST_1000": "Road warrior (1,000 km)",
+    "DIST_10000": "Globe trotter (10,000 km)"
   }
 }
