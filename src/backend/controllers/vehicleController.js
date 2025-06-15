@@ -5,6 +5,9 @@ import User from '../models/User.js';
 // @route   POST /api/vehicles
 export const createVehicle = async (req, res) => {
   try {
+    // First, check how many vehicles the user has *before* adding the new one.
+    const vehicleCount = await Vehicle.countDocuments({ owner: req.user });
+
     const { make, model, year, fuelType, emissionFactor } = req.body;
     const vehicle = new Vehicle({
       make: make,
@@ -12,10 +15,18 @@ export const createVehicle = async (req, res) => {
       year: year,
       fuelType: fuelType,
       emissions: emissionFactor,
-      owner: req.user, // From protect middleware
+      owner: req.user,
     });
-
     const createdVehicle = await vehicle.save();
+    
+    if (vehicleCount === 0) {
+      // Find the user and add the achievement if they don't have it
+      await User.findByIdAndUpdate(
+        req.user,
+        { $addToSet: { achievements: 'FIRST_VEHICLE' } }
+      );
+    }
+
     res.status(201).json(createdVehicle);
   } catch (error) {
     res.status(400).json({ error: 'Vehicle creation failed: ' + error.message });

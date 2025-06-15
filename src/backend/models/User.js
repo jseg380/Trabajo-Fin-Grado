@@ -29,6 +29,11 @@ const UserSchema = new mongoose.Schema(
       co2Saved: { type: Number, default: 0 },
       totalVehicles: { type: Number, default: 0 },
     },
+    // A simple array to store unique achievement keys
+    achievements: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,

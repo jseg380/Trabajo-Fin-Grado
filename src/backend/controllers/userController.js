@@ -22,6 +22,7 @@ export const getUserProfile = async (req, res) => {
         avatarUrl: avatarUrl, // The full URL for the frontend
         stats: user.stats,
         joinDate: user.createdAt, // Send the real join date
+        achievements: user.achievements,
       });
     } else {
       res.status(404).json({ error: 'User not found' });

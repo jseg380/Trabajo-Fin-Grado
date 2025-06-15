@@ -18,6 +18,7 @@ export const initializeDB = async (req, res) => {
       name: 'Test User',
       email: 'test@example.com',
       password: 'testPassword',
+      achievements: ['FIRST_VEHICLE', 'FIRST_TRIP'],
     });
     
     // --- DYNAMIC DATE & DISTANCE SETUP ---
