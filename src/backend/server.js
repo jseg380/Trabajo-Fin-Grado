@@ -49,11 +49,19 @@ import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import initRoutes from './routes/initRoutes.js';
 import vehicleRoutes from './routes/vehicleRoutes.js';
+import tripRoutes from './routes/tripRoutes.js';
+import recommendationRoutes from './routes/recommendationRoutes.js';
+import statsRoutes from './routes/statsRoutes.js';
+import maintenanceRoutes from './routes/maintenanceRoutes.js';
 
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', initRoutes);
 app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/trips', tripRoutes);
+app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/stats', statsRoutes);
+app.use('/api/maintenance', maintenanceRoutes);
 
 // Fallback route for undefined API endpoints
 app.use((req, res) => {

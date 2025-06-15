@@ -1807,6 +1807,19 @@ app.get('/api/makes/:make/models', (req, res) => {
 });
 
 /**
+ * @route   GET /api/makes/:make/models
+ * @desc    Get all models for a specific make (by make name, not ID)
+ */
+app.get('/api/makes/:makeId/models', (req, res) => {
+  const makeId = req.params.makeId;
+
+  // Filter models by make_id
+  const filteredModels = models.filter((model) => model.make_id === makeId);
+
+  res.json(filteredModels);
+});
+
+/**
  * @route   GET /api/specs
  * @desc    Simulates fetching technical specs like emissions.
  *          Accepts query params: ?make=Toyota&model=Corolla&year=2021
@@ -1815,6 +1828,10 @@ app.get('/api/specs', (req, res) => {
   const { make, model, year, fuelType } = req.query;
 
   console.log(`[Mock API] Received spec request for: ${year} ${make} ${model} ${fuelType}`);
+
+  if (!make || !model || !year || !fuelType) {
+    return res.status(400).json({ error: 'Missing required query parameters: make, model, year, fuelType' });
+  }
 
   // Simple logic to return mock data based on the model
   let specs = {};
@@ -1853,6 +1870,11 @@ app.get('/api/specs', (req, res) => {
   setTimeout(() => {
     res.json(specs);
   }, 800);
+});
+
+// Fallback route for undefined API endpoints
+app.use((req, res) => {
+  res.status(404).json({ error: `Car Specs API endpoint ${req.originalUrl} not found` });
 });
 
 // --- Start Server ---

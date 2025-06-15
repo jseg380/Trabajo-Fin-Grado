@@ -7,11 +7,11 @@ export const createVehicle = async (req, res) => {
   try {
     const { make, model, year, fuelType, emissionFactor } = req.body;
     const vehicle = new Vehicle({
-      make,
-      model,
-      year,
-      fuelType,
-      emissionFactor,
+      make: make,
+      model: model,
+      year: year,
+      fuelType: fuelType,
+      emissions: emissionFactor,
       owner: req.user, // From protect middleware
     });
 
@@ -31,6 +31,57 @@ export const getUserVehicles = async (req, res) => {
       return res.status(404).json({ error: 'No vehicles found' });
     }
     res.json(vehicles);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error: ' + error.message });
+  }
+};
+
+// @desc    Update a vehicle
+// @route   PUT /api/vehicles/:id
+export const updateVehicle = async (req, res) => {
+  try {
+    const vehicle = await Vehicle.findById(req.params.id);
+
+    if (!vehicle) {
+      return res.status(404).json({ error: 'Vehicle not found' });
+    }
+
+    // Ensure the user owns the vehicle
+    if (vehicle.owner.toString() !== req.user) {
+      return res.status(401).json({ error: 'User not authorized' });
+    }
+
+    // Update fields from request body
+    vehicle.make = req.body.make || vehicle.make;
+    vehicle.model = req.body.model || vehicle.model;
+    vehicle.year = req.body.year || vehicle.year;
+    vehicle.fuelType = req.body.fuelType || vehicle.fuelType;
+    vehicle.emissions = req.body.emissions || vehicle.emissions;
+
+    const updatedVehicle = await vehicle.save();
+    res.json(updatedVehicle);
+  } catch (error) {
+    res.status(400).json({ error: 'Vehicle update failed: ' + error.message });
+  }
+};
+
+// @desc    Delete a vehicle
+// @route   DELETE /api/vehicles/:id
+export const deleteVehicle = async (req, res) => {
+  try {
+    const vehicle = await Vehicle.findById(req.params.id);
+
+    if (!vehicle) {
+      return res.status(404).json({ error: 'Vehicle not found' });
+    }
+
+    // Ensure the user owns the vehicle
+    if (vehicle.owner.toString() !== req.user) {
+      return res.status(401).json({ error: 'User not authorized' });
+    }
+
+    await vehicle.deleteOne();
+    res.json({ message: 'Vehicle removed' });
   } catch (error) {
     res.status(500).json({ error: 'Server error: ' + error.message });
   }
