@@ -7,6 +7,23 @@
     "language": {
       "meta": "Idioma",
       "select": "Selecciona el idioma"
+    },
+    "profile_picture": {
+      "meta": "Foto de perfil",
+      "change_button": "Cambiar foto"
+    },
+    "units": {
+      "meta": "Unidades de medida",
+      "distance_select": "Seleccionar unidades de distancia",
+      "fuel_select": "Seleccionar unidades de consumo"
+    },
+    "alerts": {
+      "permission_required": "Se necesitan permisos",
+      "permission_message": "Necesitas permitir el acceso a tus fotos para subir un avatar.",
+      "upload_success": "Éxito",
+      "upload_success_message": "¡Foto de perfil actualizada!",
+      "upload_failed": "Error al subir",
+      "upload_failed_message": "No se pudo actualizar tu foto de perfil. Por favor, inténtalo de nuevo."
     }
   },
   "pages": {
@@ -23,17 +40,18 @@
       "header-title": "Inicio",
       "subtitle": "Alertas de mantenimiento",
       "tasks": {
-        "ITV": "Inspección Técnica de Vehículos (ITV)",
-        "Brakes": "Revisión de frenos",
-        "Tires": "Cambio de neumáticos"
+        "itv": "Inspección Técnica de Vehículos (ITV)",
+        "brakes": "Revisión de frenos",
+        "tires": "Cambio de neumáticos",
+        "oilchange": "Cambio de aceite"
       },
       "details": {
         "upcoming_days_one": "Vence en {{count}} día",
         "upcoming_days_other": "Vence en {{count}} días",
         "upcoming_km": "{{count}} km restantes",
-        "overdue_days_one": "Cumple en {{count}} día",
-        "overdue_days_other": "Cumple en {{count}} días",
-        "overdue_km": "Cumple en {{count}} km",
+        "overdue_days_one": "Cumplió hace {{count}} día",
+        "overdue_days_other": "Cumplió hace {{count}} días",
+        "overdue_km": "Cumplió hace {{count}} km",
         "due_today": "Cumple hoy"
       },
       "all_clear": "¡Todo en orden!",
@@ -58,7 +76,10 @@
     "profile": {
       "title": "Perfil",
       "header-title": "Mi perfil",
-      "logout-button": "Cerrar sesión"
+      "logout-button": "Cerrar sesión",
+      "load-error": "No se ha podido cargar el perfil",
+      "no-user-data": "No hay información del usuario",
+      "member-since": "Miembro desde"
     },
     "login": {
       "title": "Inicio de sesión",
@@ -66,7 +87,8 @@
       "email": "Correo electrónico",
       "password": "Contraseña",
       "login-button": "Iniciar sesión",
-      "register-link": "¿No tienes una cuenta? Regístrate"
+      "register-link": "¿No tienes una cuenta? Regístrate",
+      "invalid-credentials": "Credenciales incorrectas"
     },
     "register": {
       "title": "Registro",
@@ -75,7 +97,10 @@
       "email": "Correo electrónico",
       "password": "Contraseña",
       "register-button": "Registrarse",
-      "login-link": "¿Ya tienes una cuenta? Inicia sesión"
+      "login-link": "¿Ya tienes una cuenta? Inicia sesión",
+      "invalid-credentials": "Credenciales para registro incorrectas",
+      "password-mismatch": "Las contraseñas difieren",
+      "repeat-password": "Repite la contraseña"
     }
   },
   "stats": {

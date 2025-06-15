@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { API_URL } from '@/constants/config';
@@ -10,7 +10,7 @@ import { withAuth } from '@/utils/withAuth';
 interface MaintenanceTask {
   id: string; // A stable ID from the backend
   vehicle: string;
-  taskType: 'ITV' | 'Brakes' | 'Tires' | 'OilChange';
+  taskType: 'itv' | 'brakes' | 'tires' | 'oilchange';
   isOverdue: boolean;
   unit: 'days' | 'km';
   value: number;
@@ -22,11 +22,11 @@ function MaintenanceItem({ item }: { item: MaintenanceTask }) {
   const iconColor = item.isOverdue ? '#d32f2f' : '#f57c00';
   
   // --- COMPLETE ICON LOGIC ---
-  let iconName: React.ComponentProps<typeof Ionicons>['name'] = 'build-outline';
-  if (item.taskType === 'ITV') iconName = 'document-text-outline';
-  if (item.taskType === 'Brakes') iconName = 'disc-outline';
-  if (item.taskType === 'Tires') iconName = 'ellipse-outline';
-  if (item.taskType === 'OilChange') iconName = 'water-outline';
+  let iconName: React.ComponentProps<typeof MaterialCommunityIcons>['name'] = 'wrench-outline';
+  if (item.taskType === 'itv') iconName = 'file-document-outline';
+  if (item.taskType === 'brakes') iconName = 'car-brake-worn-linings';
+  if (item.taskType === 'tires') iconName = 'tire';
+  if (item.taskType === 'oilchange') iconName = 'oil-level';
 
   const getDetailString = () => {
     if (item.value === 0 && item.unit === 'days') {
@@ -41,7 +41,7 @@ function MaintenanceItem({ item }: { item: MaintenanceTask }) {
 
   return (
     <View style={styles.card}>
-      <Ionicons name={iconName} size={40} color={iconColor} style={styles.icon} />
+      <MaterialCommunityIcons name={iconName} size={40} color={iconColor} style={styles.icon} />
       <View style={styles.content}>
         <Text style={styles.vehicleName}>{item.vehicle}</Text>
         <Text style={styles.taskName}>{t(`pages.maintenance.tasks.${item.taskType}`)}</Text>
@@ -83,7 +83,7 @@ function MaintenanceScreen() {
       ListHeaderComponent={<Text style={styles.header}>{t('pages.maintenance.subtitle')}</Text>}
       ListEmptyComponent={
         <View style={styles.emptyContainer}>
-            <Ionicons name='checkmark-done-circle-outline' size={60} color='#4caf50' />
+            <MaterialCommunityIcons name='checkbox-multiple-marked-circle-outline' size={60} color='#4caf50' />
             <Text style={styles.emptyText}>{t('pages.maintenance.all_clear')}</Text>
             <Text style={styles.emptySubText}>{t('pages.maintenance.no_tasks')}</Text>
         </View>

@@ -7,6 +7,23 @@
     "language": {
       "meta": "Language",
       "select": "Select the language"
+    },
+    "profile_picture": {
+      "meta": "Profile picture",
+      "change_button": "Change picture"
+    },
+    "units": {
+      "meta": "Measurement units",
+      "distance_select": "Select distance units",
+      "fuel_select": "Select fuel efficiency units"
+    },
+    "alerts": {
+      "permission_required": "Permission required",
+      "permission_message": "You need to allow access to your photos to upload an avatar.",
+      "upload_success": "Success",
+      "upload_success_message": "Profile picture updated!",
+      "upload_failed": "Upload failed",
+      "upload_failed_message": "Could not update your profile picture. Please try again."
     }
   },
   "pages": {
@@ -23,9 +40,10 @@
       "header-title": "Home",
       "subtitle": "Maintenance alerts",
       "tasks": {
-        "ITV": "ITV Inspection",
-        "Brakes": "Brake check",
-        "Tires": "Tire replacement"
+        "itv": "ITV Inspection",
+        "brakes": "Brake check",
+        "tires": "Tire replacement",
+        "oilchange": "Oil change"
       },
       "details": {
         "upcoming_days_one": "Due in {{count}} day",
@@ -58,7 +76,10 @@
     "profile": {
       "title": "Profile",
       "header-title": "My profile",
-      "logout-button": "Logout"
+      "logout-button": "Logout",
+      "load-error": "Unable to load user profile",
+      "no-user-data": "No user data",
+      "member-since": "Member since"
     },
     "login": {
       "title": "Login",
@@ -66,7 +87,8 @@
       "email": "Email",
       "password": "Password",
       "login-button": "Login",
-      "register-link": "Don't have an account? Register"
+      "register-link": "Don't have an account? Register",
+      "invalid-credentials": "Invalid credentials"
     },
     "register": {
       "title": "Register",
@@ -75,7 +97,10 @@
       "email": "Email",
       "password": "Password",
       "register-button": "Register",
-      "login-link": "Already have an account? Login"
+      "login-link": "Already have an account? Login",
+      "invalid-credentials": "Invalid registration details",
+      "password-mismatch": "Passwords do not match",
+      "repeat-password": "Repeat password"
     }
   },
   "stats": {

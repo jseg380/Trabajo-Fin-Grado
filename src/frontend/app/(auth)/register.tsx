@@ -4,12 +4,15 @@ import { Link, router, Stack } from 'expo-router';
 import { useState } from 'react';
 import TitleSetterWebPage from '@/components/TitleSetter';
 import { useTranslation } from 'react-i18next';
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const { register } = useAuth();
   const { t } = useTranslation();
 
@@ -18,7 +21,14 @@ export default function RegisterScreen() {
       await register(username, email, password);
       router.replace('/(tabs)/home');
     } catch (err) {
-      setError('Invalid registration details');
+      setError(t('pages.register.invalid-credentials'));
+    }
+  };
+
+  const handleConfirmPassword = (text: string) => {
+    setConfirmPassword(text);
+    if (password && text !== password) {
+      setConfirmPasswordError(t('pages.register.password-mismatch'));
     }
   };
 
@@ -28,6 +38,19 @@ export default function RegisterScreen() {
         options={{
           title: t('pages.register.title'),
           headerLeft: () => null, // Hide the back button
+          headerTitle: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <SimpleLineIcons 
+                name='login'
+                size={20} 
+                color='black'
+                style={{ marginRight: 20 }} 
+              />
+              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                {t('pages.login.title')}
+              </Text>
+            </View>
+          )
         }}
       />
       <TitleSetterWebPage title={t('pages.register.title')} />
@@ -35,6 +58,7 @@ export default function RegisterScreen() {
       
       {error ? <Text style={styles.error}>{error}</Text> : null}
 
+      <Text style={styles.inputLabel}>{t('pages.register.username')}</Text>
       <TextInput
         style={styles.input}
         placeholder={t('pages.register.username')}
@@ -44,6 +68,7 @@ export default function RegisterScreen() {
         inputMode='text'
       />
       
+      <Text style={styles.inputLabel}>{t('pages.register.email')}</Text>
       <TextInput
         style={styles.input}
         placeholder={t('pages.register.email')}
@@ -53,11 +78,23 @@ export default function RegisterScreen() {
         inputMode='email'
       />
       
+      <Text style={styles.inputLabel}>{t('pages.register.password')}</Text>
       <TextInput
         style={styles.input}
         placeholder={t('pages.register.password')}
         value={password}
         onChangeText={setPassword}
+        secureTextEntry
+      />
+
+      {confirmPasswordError ? <Text style={styles.error}>{confirmPasswordError}</Text> : null}
+
+      <Text style={styles.inputLabel}>{t('pages.register.repeat-password')}</Text>
+      <TextInput
+        style={styles.input}
+        placeholder={t('pages.register.repeat-password')}
+        value={confirmPassword}
+        onChangeText={handleConfirmPassword}
         secureTextEntry
       />
       
@@ -107,5 +144,10 @@ const styles = StyleSheet.create({
     color: 'blue',
     marginTop: 15,
     textAlign: 'center'
+  },
+  inputLabel: {
+    fontSize: 16,
+    marginBottom: 5,
+    marginTop: 10
   }
 });

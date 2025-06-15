@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Button } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { Link, Stack, useNavigation } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { Link, Stack, useFocusEffect, useNavigation } from 'expo-router';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import TitleSetterWebPage from '@/components/TitleSetter';
 import { API_URL } from '@/constants/config';
@@ -29,9 +29,11 @@ function ProfileScreen() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  useFocusEffect(() => {
     navigation.setOptions({ title: t('pages.profile.title') });
+  });
 
+  useEffect(() => {
     const fetchProfile = async () => {
       if (!authUser) {
         setLoading(false);
@@ -45,7 +47,7 @@ function ProfileScreen() {
         setUserData(response.data);
       } catch (err) {
         console.warn(err);
-        setError('Unable to load user profile');
+        setError(t('pages.profile.load-error'));
       } finally {
         setLoading(false);
       }
@@ -68,7 +70,7 @@ function ProfileScreen() {
   if (error || !userData) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.errorText}>{error || 'No user data'}</Text>
+        <Text style={styles.errorText}>{error || t('pages.profile.no-user-data')}</Text>
       </View>
     );
   }
@@ -86,6 +88,19 @@ function ProfileScreen() {
       <Stack.Screen
         options={{
           headerLeft: () => <CustomHeaderBackButton route='/' />,
+          headerTitle: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <FontAwesome5 
+                name='user-alt'
+                size={20} 
+                color='black'
+                style={{ marginRight: 20 }} 
+              />
+              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                {t('pages.profile.title')}
+              </Text>
+            </View>
+          )
         }}
       />
       <TitleSetterWebPage title={t('pages.profile.title')} />
@@ -114,7 +129,7 @@ function ProfileScreen() {
         />
         <Text style={styles.name}>{userData.name}</Text>
         <Text style={styles.email}>{userData.email}</Text>
-        <Text style={styles.joinDate}>{userData.joinDate}</Text>
+        <Text style={styles.joinDate}>{t('pages.profile.member-since')}: {new Date(userData.joinDate).toLocaleDateString()}</Text>
       </View>
 
       <Button

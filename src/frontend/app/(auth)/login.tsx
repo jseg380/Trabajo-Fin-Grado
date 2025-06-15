@@ -4,6 +4,7 @@ import { Link, router, Stack } from 'expo-router';
 import { useState } from 'react';
 import TitleSetterWebPage from '@/components/TitleSetter';
 import { useTranslation } from 'react-i18next';
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ export default function LoginScreen() {
       await login(email, password);
       router.replace('/(tabs)/home');
     } catch (err) {
-      setError('Invalid credentials');
+      setError(t('pages.login.invalid-credentials'));
     }
   };
 
@@ -27,6 +28,19 @@ export default function LoginScreen() {
         options={{
           title: t('pages.login.title'),
           headerLeft: () => null, // Hide the back button
+          headerTitle: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <SimpleLineIcons 
+                name='login'
+                size={20} 
+                color='black'
+                style={{ marginRight: 20 }} 
+              />
+              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                {t('pages.login.title')}
+              </Text>
+            </View>
+          )
         }}
       />
       <TitleSetterWebPage title={t('pages.login.title')} />
@@ -34,6 +48,7 @@ export default function LoginScreen() {
       
       {error ? <Text style={styles.error}>{error}</Text> : null}
       
+      <Text style={styles.inputLabel}>{t('pages.login.email')}</Text>
       <TextInput
         style={styles.input}
         placeholder={t('pages.login.email')}
@@ -43,6 +58,7 @@ export default function LoginScreen() {
         inputMode='email'
       />
       
+      <Text style={styles.inputLabel}>{t('pages.login.password')}</Text>
       <TextInput
         style={styles.input}
         placeholder={t('pages.login.password')}
@@ -97,5 +113,10 @@ const styles = StyleSheet.create({
     color: 'blue',
     marginTop: 15,
     textAlign: 'center'
+  },
+  inputLabel: {
+    fontSize: 16,
+    marginBottom: 5,
+    marginTop: 10
   }
 });
