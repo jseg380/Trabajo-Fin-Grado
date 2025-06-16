@@ -1,0 +1,87 @@
+name: AlDiaCAR Full Stack CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  # This job runs the backend tests. It's fast and self-contained.
+  backend_tests:
+    name: Backend unit & integration tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm' # Cache npm dependencies
+
+      - name: Install all dependencies
+        run: npm install
+
+      - name: Run backend tests
+        # This command is defined in the root package.json and runs Jest
+        # The tests use an in-memory MongoDB, so no external services are needed.
+        run: npm run test:backend
+        env:
+          # The backend tests need a JWT secret, as defined in tests/backend/.env
+          JWT_SECRET: a_super_secret_key_for_testing
+
+  # This job runs the frontend E2E tests. It depends on the backend tests passing.
+  frontend_e2e_tests:
+    name: Frontend End-to-End tests
+    runs-on: ubuntu-latest
+    # Don't run this job if the backend tests failed
+    needs: backend_tests
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install all dependencies
+        run: npm install
+
+      - name: Install Playwright browsers
+        # This command is defined in the tests/frontend/package.json
+        # and installs the browser binaries needed by Playwright
+        run: npx playwright install --with-deps
+        working-directory: ./tests/frontend
+
+      - name: Create backend .env file for the test run
+        run: |
+          echo "JWT_SECRET=ci_secret_key" > src/backend/.env
+          echo "MONGODB_URI=mongodb://localhost:27017/aldiacardb" >> src/backend/.env
+          echo "CLIENT_URL=http://localhost:3000" >> src/backend/.env
+
+      - name: Run Playwright tests
+        # This command is in the root package.json.
+        # The playwright.config.ts is configured to automatically start
+        # the frontend web server. We start the backend and mock API manually
+        # in the background first.
+        run: |
+          # Start the backend API server in the background
+          npm run start:backend &
+          # Start the mock car API server in the background
+          node src/backend/mock-api/mock-car-api.js &
+          # Run the Playwright tests (this will also start the frontend server)
+          npm run test:frontend
+
+      - name: Upload Playwright test report
+        # This runs even if the tests fail, so you can see the report for debugging
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: tests/frontend/playwright-report/
+          retention-days: 7 # Keep the report for 7 days
