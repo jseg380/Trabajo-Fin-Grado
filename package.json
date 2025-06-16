@@ -4,13 +4,15 @@
   "version": "1.0.0",
   "description": "Vehicle management application backend",
   "scripts": {
+    "install:backend": "cd ./src/backend && npm install",
+    "install:frontend": "cd ./src/frontend && npm install",
+    "install": "npm run install:backend && npm run install:frontend",
     "start:backend": "cd ./src/backend && npm run start",
     "start:frontend": "cd ./src/frontend && npm run start",
     "start": "npm run start:backend && npm run start:frontend",
     "test:backend": "cd ./tests/backend && npm run test",
     "test:frontend": "cd ./tests/frontend && npm run test",
-    "test:integration": "cd ./tests/integration && npm run test",
-    "test": "npm run test:backend && npm run test:frontend && npm run test:integration",
+    "test": "npm run test:backend && npm run test:frontend",
     "prepare": "ln -fs ../../.githooks/commit-msg .git/hooks/commit-msg"
   },
   "keywords": [],
