@@ -1,0 +1,68 @@
+\chapter{Appendix: Test plans and strategy}
+
+This appendix outlines the testing strategy employed to ensure the quality, correctness, and reliability of the AlDiaCAR application. The strategy incorporates multiple levels of testing, from backend unit and integration tests to full end-to-end (E2E) user journey simulations. This section details both the tests that were implemented as part of the project's validation and those planned for future development cycles.
+
+\section{Backend testing (Jest \& Supertest)}
+
+The backend was tested using the Jest framework, with Supertest for HTTP assertions and MongoDB Memory Server to provide a clean, isolated database for each test run.
+
+\subsection{Implemented backend test cases}
+The following table describes the key test cases that were implemented to validate the core server-side functionality.
+
+\begin{table}[h!]
+    \centering
+    \caption{Implemented Backend Unit and Integration Test Cases}
+    \begin{tabular}{|p{0.15\textwidth}|p{0.5\textwidth}|p{0.3\textwidth}|}
+        \hline
+        \textbf{Test Case ID} & \textbf{Description} & \textbf{Expected Result} \\
+        \hline \hline
+        BE-U-01 & A new user registers via the \texttt{/api/auth/register} endpoint. & A 201 status is returned, the user is created in the database, and a JWT cookie is set. \\
+        \hline
+        BE-U-02 & An existing user attempts to log in with valid credentials. & A 200 status is returned, and a valid JWT cookie is set. \\
+        \hline
+        BE-I-01 & An authenticated user performs a full CRUD cycle on a vehicle (Create, Read, Update, Delete). & All operations succeed with the correct HTTP status codes, and database changes are verified. \\
+        \hline
+        BE-I-02 & An authenticated user requests their maintenance summary from \texttt{/api/maintenance/summary}. & A 200 status is returned with a correctly sorted array of upcoming and overdue tasks based on seeded data. \\
+        \hline
+        BE-I-03 & An authenticated user requests a vehicle recommendation from \texttt{/api/recommendations}. & A 200 status is returned with a vehicle array sorted by lowest \texttt{totalEmissions}. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Planned future backend tests}
+\begin{itemize}
+    \item \textbf{Input Validation Edge Cases:} Write dedicated tests for invalid inputs (e.g., short passwords, malformed emails, non-numeric trip distances) to ensure robust error handling.
+    \item \textbf{Authorization Logic:} Add specific tests to confirm that a user cannot access or modify resources (vehicles, trips) belonging to another user.
+    \item \textbf{Achievement Logic:} Test the achievement-granting logic more thoroughly, for example, by simulating the exact trip distance that crosses a milestone (e.g., from 999km to 1001km).
+\end{itemize}
+
+\section{Frontend End-to-End testing (Playwright)}
+
+E2E tests were written using Playwright to simulate complete user workflows in a browser, validating the integration between the frontend and backend. All E2E tests utilize a \texttt{beforeEach} hook to call the backend's \texttt{/api/init-db} endpoint, ensuring each test runs with a fresh, predictable dataset.
+
+\subsection{Implemented E2E test cases}
+The following table describes the core user journeys validated with Playwright.
+
+\begin{table}[h!]
+    \centering
+    \caption{Implemented End-to-End Test Cases}
+    \begin{tabular}{|p{0.15\textwidth}|p{0.5\textwidth}|p{0.3\textwidth}|}
+        \hline
+        \textbf{Test Case ID} & \textbf{Description} & \textbf{Expected Result} \\
+        \hline \hline
+        E2E-01 & A user successfully registers a new account and logs in. & The user is redirected from the auth pages to the main application's home screen, and the UI reflects a logged-in state. \\
+        \hline
+        E2E-02 & An authenticated user adds, edits, and deletes a vehicle. & The vehicle list UI updates correctly after each operation. The user can navigate to the respective forms, and confirmation dialogs for deletion are handled. \\
+        \hline
+        E2E-03 & A user attempts to log in with invalid credentials. & An error message is displayed, and the user remains on the login page without being redirected. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Planned future E2E tests}
+\begin{itemize}
+    \item \textbf{Recommendation and Trip Logging Flow:} A test to simulate a user entering a distance on the "Routes" screen, selecting the recommended vehicle, and successfully logging the trip.
+    \item \textbf{Profile and Settings Update:} A test where a user navigates to their profile, changes their profile picture, and verifies that the new image is displayed in the UI (e.g., in the header).
+    \item \textbf{Responsive Design Validation:} Utilize Playwright's device emulation to run the test suite on various viewports (e.g., desktop and mobile sizes) to ensure the layout remains functional.
+    \item \textbf{Localization Check:} A test that changes the application's language in the settings and verifies that key UI elements (like page headers) are updated to the selected language.
+\end{itemize}

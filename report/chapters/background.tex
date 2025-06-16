@@ -4,84 +4,89 @@ To contextualize the contribution of this thesis, this chapter provides a review
 
 \section{State of the art in vehicle management applications}
 
-The market for vehicle-related software is mature, but it is highly segmented, with tools typically targeting either commercial enterprises or individual users with a narrow focus.
+The market for vehicle-related software is mature but highly segmented, with tools typically targeting either commercial enterprises or individual users with a narrow focus.
 
 \subsection{Commercial fleet management systems}
 Fleet management platforms such as \textit{Fleetio} and \textit{Samsara} offer powerful, comprehensive solutions for businesses that manage a large number of vehicles. Their core features include real-time GPS tracking, advanced telematics, fuel management, maintenance scheduling, and detailed operational analytics.
 
 \textgap
 
-While highly effective for their target audience, these systems are ill-suited for the context of a private household for several reasons:
+While highly effective for their target audience, these systems are ill-suited for the context of a private individual for several reasons:
 \begin{itemize}
-    \item \textbf{Complexity and Cost:} They are enterprise-grade platforms with pricing models and feature sets that are excessive for a family with a few cars.
-    \item \textbf{User Experience:} The user interface is designed for fleet managers and administrators, not for casual, non-technical family members.
-    \item \textbf{Focus:} Their primary goal is operational efficiency and cost reduction for a business, not promoting sustainable habits or facilitating collaborative use among a small group of drivers.
+    \item \textbf{Complexity and cost:} They are enterprise-grade platforms with pricing models and feature sets that are excessive for an individual managing a small number of personal cars.
+    \item \textbf{User experience:} The user interface is designed for professional fleet managers and administrators, not for a casual, non-technical user.
+    \item \textbf{Focus:} Their primary goal is operational efficiency and cost reduction for a business, not promoting personal sustainable habits.
 \end{itemize}
 
 \subsection{Personal car maintenance applications}
-Applications like \textit{Drivvo}, \textit{Fuelly}, and the formerly popular \textit{aCar} are designed for individual car enthusiasts and owners who want to diligently track their vehicle's health. These apps excel at logging fuel-ups, tracking expenses, and setting reminders for routine maintenance like oil changes, tire rotations, and technical inspections (e.g., the Spanish ITV).
+Applications like \textit{Drivvo}, \textit{Fuelly}, and the formerly popular \textit{aCar} are designed for individual car enthusiasts and owners who want to diligently track their vehicle's health. These apps excel at logging fuel-ups, tracking expenses, and setting reminders for routine maintenance like oil changes or technical inspections (e.g., the Spanish ITV).
 
 \textgap
 
-However, their utility is limited in the multi-driver, multi-vehicle household scenario that this project addresses. Their main drawbacks are:
+However, their utility is limited in the multi-vehicle scenario that this project addresses. Their main drawbacks are:
 \begin{itemize}
-    \item \textbf{Single-User Focus:} They are typically built around the concept of a single owner for a single vehicle, lacking features for sharing vehicle data and coordinating usage among multiple drivers.
-    \item \textbf{Lack of Sustainability Focus:} While they may calculate fuel economy, their purpose is generally financial tracking rather than environmental impact. They do not offer recommendations on which vehicle is the most eco-friendly for a given trip.
-    \item \textbf{Limited Engagement Model:} Most of these apps are functional utilities. They do not incorporate gamification or other behavioral reinforcement techniques to actively encourage better maintenance or driving habits.
+    \item \textbf{Single-vehicle focus:} While designed for a single user, they are often optimized for tracking just one or two vehicles. They lack the dashboarding and comparative features needed to efficiently manage a diverse personal fleet.
+    \item \textbf{Lack of integrated sustainability:} While they may calculate fuel economy, their purpose is generally financial tracking rather than environmental impact. They do not offer intelligent recommendations on which vehicle is the most eco-friendly for a given trip.
+    \item \textbf{Limited engagement model:} Most of these apps are functional utilities. They do not incorporate gamification to actively encourage better maintenance or driving habits.
 \end{itemize}
 
 \subsection{Eco-routing and navigation tools}
-Mainstream navigation applications have started to incorporate sustainability features. A prominent example is \textit{Google Maps}, which now offers "eco-friendly routing" that suggests a route optimized for lower fuel consumption, even if it is not the fastest. Other specialized apps also focus exclusively on calculating the most efficient route.
+Mainstream navigation applications have started to incorporate sustainability features. A prominent example is \textit{Google Maps}, which now offers "eco-friendly routing" that suggests a route optimized for lower fuel consumption. Other specialized apps also focus exclusively on calculating the most efficient route.
 
 \textgap
 
-The limitation of these tools is their lack of integration with the user's specific context. They operate in isolation and cannot answer more complex questions relevant to a household, such as:
+The limitation of these tools is their lack of integration with the user's specific context. They operate in isolation and cannot answer more complex questions relevant to an owner of multiple vehicles, such as:
 \begin{itemize}
-    \item They do not know the specific vehicles a household owns or their relative efficiencies.
-    \item They cannot factor in a vehicle's maintenance status when making a recommendation.
-    \item They are disconnected from the logistics of multi-driver coordination.
+    \item They are unaware of the specific vehicles a user owns or their relative efficiencies.
+    \item They cannot factor in a vehicle's upcoming maintenance needs when making a recommendation.
+    \item They are disconnected from the user's broader vehicle management goals.
 \end{itemize}
-Essentially, they can optimize the route for a given car, but not help the user choose the optimal car for that route from a pool of available vehicles.
+Essentially, they can optimize the route for a given car, but cannot help the user choose the optimal car for that route from their personal fleet.
 
 \section{Theoretical foundations}
 
 The design of this project is informed by established principles from human-computer interaction and sustainable computing.
 
 \subsection{Gamification for behavior change}
-Gamification is defined as "the use of game design elements in non-game contexts" \cite{deterding2011gamification}. It is a powerful technique for increasing user engagement and motivating specific behaviors. In the context of this project, gamification elements such as badges, leaderboards, and progress statistics are not mere embellishments. They are core mechanics designed to provide positive reinforcement for sustainable choices, such as selecting the lowest-emission vehicle or performing maintenance on time. By making sustainable actions rewarding and visible, the application aims to foster long-term habit formation.
+Gamification is defined as "the use of game design elements in non-game contexts" \cite{deterding2011gamification}. It is a powerful technique for increasing user engagement and motivating specific behaviors. In the context of this project, gamification elements such as badges and progress statistics are core mechanics designed to provide positive reinforcement for sustainable choices, such as selecting the lowest-emission vehicle or performing maintenance on time. By making sustainable actions rewarding and visible, the application aims to foster long-term habit formation, a claim supported by a large body of empirical studies \cite{hamari2014does}.
 
 \subsection{Green IT and sustainable HCI}
-This project aligns with the principles of Green Information Technology (Green IT), also known as Sustainable Human-Computer Interaction (HCI). While some Green IT initiatives focus on reducing the energy consumption of computing hardware itself ("Green in IT"), this project exemplifies the concept of "Green through IT." It uses software as a persuasive technology to influence user behavior in the physical world, leading to tangible environmental benefits such as reduced fuel consumption and lower CO$_2$ emissions.
+This project aligns with the principles of Green Information Technology (Green IT), also known as Sustainable Human-Computer Interaction (HCI). While some Green IT initiatives focus on reducing the energy consumption of computing hardware itself ("Green in IT"), this project exemplifies the "Green through IT" concept. It uses software as a persuasive technology to influence user behavior in the physical world, leading to tangible environmental benefits. This aligns with research by Berkhout and Hertin, who analyzed how digital technologies can both "de-materialise and re-materialise" environmental impacts, highlighting the potential for software to guide more sustainable outcomes \cite{berkhout2004de}.
 
 \section{Gap analysis and niche identification}
+A review of the state of the art reveals a clear gap in the market. While specialized tools exist for commercial fleets, single-car maintenance, and generic eco-routing, no existing solution integrates these functionalities into a single, cohesive platform designed specifically for the individual managing a personal, multi-vehicle fleet. This synthesis is the core contribution of this project, as illustrated in Figure \ref{fig:gap-analysis-diagram}.
 
-A review of the state of the art reveals a clear and significant gap in the market. While specialized tools exist for fleet management, individual maintenance, and eco-routing, no existing solution integrates these functionalities into a single, cohesive platform designed specifically for the modern multi-driver household.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/gap-analysis-diagram.png}
+    \caption{Visual representation of the market gap and AlDiaCAR's position as an integrated solution.}
+    \label{fig:gap-analysis-diagram}
+\end{figure}
 
-Table \ref{tab:gap_analysis} summarizes the limitations of existing application categories in relation to the goals of this project.
+Table \ref{tab:gap_analysis} further summarizes the limitations of existing application categories in relation to this project's goals.
 
 \begin{table}[h!]
     \centering
+    \caption{Summary of gaps in existing application categories}
     \label{tab:gap_analysis}
     \begin{tabular}{p{0.3\textwidth}|p{0.35\textwidth}|p{0.35\textwidth}}
         \hline
         \textbf{Application category} & \textbf{Primary focus} & \textbf{Identified gaps for this project} \\
-        % \hline
+        \hline \hline
+        Fleet management systems & B2B operational efficiency and large-scale logistics. & Not designed for personal use; too complex and expensive; lacks focus on individual habit formation. \\
         \hline
-        Fleet management systems & B2B operational efficiency, large-scale logistics, and cost reduction. & Not designed for household use; too complex and expensive; lacks sustainability and gamification focus. \\
+        Personal maintenance apps & Tracking expenses and maintenance for a single vehicle. & Lacks robust multi-vehicle management features and integrated sustainability recommendations. \\
         \hline
-        Personal maintenance apps & Individual vehicle expense and maintenance tracking for a single owner. & No multi-driver coordination; limited or no sustainability features; lacks integrated recommendations. \\
-        \hline
-        Eco-routing tools & Calculating a fuel-efficient route for a single journey. & Not integrated with vehicle ownership or maintenance data; cannot recommend the best vehicle, only the best route. \\
+        Eco-routing tools & Calculating a fuel-efficient route for a single, generic journey. & Not integrated with a user's specific vehicle data; cannot recommend the best vehicle, only the best route. \\
         \hline
     \end{tabular}
-    \caption{Summary of gaps in existing application categories}
 \end{table}
 
-Therefore, this thesis project, \textit{AlDiaCAR}, is positioned to fill this distinct niche. It aims to be the first application that holistically addresses the needs of a family or shared household by unifying:
+Therefore, this thesis project, \textit{AlDiaCAR}, is positioned to fill this distinct niche. It aims to be the first application that holistically addresses the needs of an individual managing multiple vehicles by unifying:
 \begin{enumerate}
-    \item \textbf{Collaborative vehicle management:} Centralized tracking of maintenance for multiple vehicles shared among multiple drivers.
-    \item \textbf{Integrated sustainability recommendations:} A system that not only suggests an eco-friendly route but also the most appropriate, low-emission vehicle from the household pool for that route.
+    \item \textbf{Personal fleet management:} Centralized, user-friendly tracking of maintenance for multiple vehicles.
+    \item \textbf{Integrated sustainability recommendations:} A system that recommends not only an eco-friendly route but also the most appropriate, low-emission vehicle from the user's fleet for that route.
     \item \textbf{Behavioral reinforcement:} A gamification layer designed to motivate and reward sustainable choices and diligent vehicle care.
 \end{enumerate}
 
-By combining these three pillars, the project provides a novel contribution to the field of sustainable computing and offers a practical tool to help households reduce their environmental footprint.
+By combining these three pillars, the project provides a novel contribution to the field of sustainable HCI and offers a practical tool to help individuals reduce their personal transportation footprint.

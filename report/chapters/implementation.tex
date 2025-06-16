@@ -1,0 +1,156 @@
+\chapter{Implementation details}
+
+This chapter transitions from the abstract design of Chapter 3 to the concrete technical implementation of the \textit{AlDiaCAR} system. It provides a detailed walkthrough of the project's source code, explaining the structure, key modules, and programming patterns used in both the backend and frontend.
+
+\section{Project structure overview}
+
+The project is organized as a monorepo, a single repository containing all the code for the system. This approach simplifies dependency management and streamlines development across the different parts of the application. The high-level directory structure is shown in Figure \ref{fig:dirtree}.
+
+\begin{figure}[h!]
+\dirtree{%
+.1 .
+.2 config/ \textit{(Docker service configurations)}.
+.3 mongo-express-config.js.
+.2 docker/ \textit{(Local environment definition)}.
+.3 docker-compose.yaml.
+.2 src/ \textit{(Main source code)}.
+.3 backend/ \textit{(Node.js REST API)}.
+.4 controllers/.
+.4 middleware/.
+.4 models/.
+.4 routes/.
+.4 server.js.
+.3 frontend/ \textit{(React Native mobile app)}.
+.4 app/ \textit{(Expo file-based routes)}.
+.4 components/.
+.4 context/.
+.4 localization/.
+.2 tests/ \textit{(Automated tests)}.
+.3 backend/ \textit{(Jest tests)}.
+.3 frontend/ \textit{(Playwright E2E tests)}.
+.2 package.json \textit{(Root monorepo scripts)}.
+}
+\caption{High-level project directory structure.}
+\label{fig:dirtree}
+\end{figure}
+
+The \texttt{src} directory cleanly separates the \texttt{backend} and \texttt{frontend} concerns. The \texttt{docker} directory ensures a reproducible development environment, while the \texttt{tests} directory houses the quality assurance framework.
+
+\section{Backend implementation (Node.js)}
+
+The backend is a RESTful API built with Node.js and the Express.js framework. It is responsible for all business logic, data persistence, and security.
+
+\subsection{Data models (Mongoose)}
+Data schemas are defined in \texttt{src/backend/models/} using Mongoose. The principal models are \texttt{User.js}, \texttt{Vehicle.js}, and \texttt{Trip.js}. A key feature is the use of Mongoose's \texttt{timestamps} option in the User schema to automatically manage \texttt{createdAt} and \texttt{updatedAt} fields. The password field uses \texttt{select: false} to prevent it from ever being sent in an API response. The full schema definitions are detailed in Appendix B.
+
+\subsection{Controllers and business logic}
+Controllers, located in \texttt{src/backend/controllers/}, contain the core logic for each API endpoint. While many controllers perform standard CRUD operations, some, like \texttt{tripController.js}, encapsulate more complex business logic. The \texttt{logSimulatedTrip} function demonstrates how a single API call can trigger multiple state changes across the system.
+
+\begin{lstlisting}[language=JavaScript, caption={Core logic from \texttt{tripController.js}}]
+// 1. UPDATE VEHICLE MAINTENANCE METRICS
+if (vehicle.upcomingMaintenance) {
+  if (vehicle.upcomingMaintenance.brakes?.distance) {
+    vehicle.upcomingMaintenance.brakes.distance -= distance;
+  }
+  // ... other distance-based counters are reduced
+}
+
+// 2. CREATE THE TRIP RECORD
+const calculatedEmissions = distance * (vehicle.emissions || 150);
+await Trip.create({ driver: userId, vehicle: vehicleId, distance, ... });
+
+// 3. UPDATE USER STATS & GRANT ACHIEVEMENTS
+user.stats.distanceTraveled += distance;
+const achievementsToGrant = [];
+if (!user.achievements.includes('FIRST_TRIP')) {
+  achievementsToGrant.push('FIRST_TRIP');
+}
+if (oldDistance < 1000 && user.stats.distanceTraveled >= 1000) {
+  achievementsToGrant.push('DIST_1000');
+}
+if (achievementsToGrant.length > 0) {
+  user.achievements.push(...achievementsToGrant);
+}
+
+// 4. SAVE ALL CHANGES ATOMICALLY
+await Promise.all([vehicle.save(), user.save()]);
+\end{lstlisting}
+
+This function shows how logging a trip correctly decrements maintenance counters on the vehicle, creates a new trip record, and updates the user's statistics and achievements, all within a single transaction. Figure \ref{fig:data-flow-trip} illustrates this interaction.
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[
+        node distance=2cm and 3.2cm, 
+        font=\sffamily,
+        proc/.style={
+            rectangle, rounded corners, draw, dashed, fill=gray!10,
+            text width=4cm, align=center, minimum height=1.5cm
+        }
+    ]
+        \node (client) [comp, minimum width=2.5cm, text width=2.3cm] {Frontend Client};
+        \node (backend) [comp, right=of client, text width=4cm] {Backend API \\ (\texttt{tripController.js})};
+        \node (db) [db, right=of backend] {MongoDB};
+
+        \draw[arrow, bend left=30] (client.east) to node[midway, above, sloped] {\texttt{POST /api/trips/log}} (backend.west);
+        \draw[arrow, bend left=30] (backend.west) to node[midway, below, sloped] {201 Created} (client.east);
+        
+        \draw[arrow, bend left=30] (backend.east) to node[midway, above, sloped] {Find User, Vehicle} (db.west);
+        \draw[arrow, bend left=30] (db.west) to node[midway, below, sloped] {Return documents} (backend.east);
+        
+        \node[proc, below=of backend, node distance=2cm] (logic) {Update stats \& achievements. \\ Decrement maintenance km.};
+        \draw[arrow] (backend) -- (logic);
+        
+        \draw[arrow, bend right=40] (logic.south) to node[midway, below, sloped] {Save User, Vehicle, Trip} (db.south);
+
+    \end{tikzpicture}
+    \caption{Sequence diagram for the trip logging data flow.}
+    \label{fig:data-flow-trip}
+\end{figure}
+
+\subsection{API routes and middleware}
+Routes defined in \texttt{src/backend/routes/} map the API endpoints to controller functions. The most critical middleware, \texttt{authMiddleware.js}, protects these routes. It extracts the JWT from an \texttt{HttpOnly} cookie, verifies it, and attaches the user's ID to the request object. This makes the user's identity available to any protected controller.
+
+\section{Frontend implementation (React Native)}
+
+The frontend is a cross-platform mobile application developed using React Native with the Expo framework and TypeScript for static typing.
+
+\subsection{Navigation and screen structure}
+The application uses Expo's file-based router. Directories and files within \texttt{src/frontend/app/} automatically become routes.
+\begin{itemize}
+    \item \textbf{Layouts (`\_layout.tsx`):} These files define the shell UI, such as the main tab bar defined in \texttt{app/(tabs)/\_layout.tsx}.
+    \item \textbf{Authentication flow (`app/(auth)`):} A route group for the login and register screens, active when a user is not authenticated.
+    \item \textbf{Main screens (`app/(tabs)`):} Represent the core features. A key pattern used is \texttt{useFocusEffect} from Expo Router to re-fetch data whenever a screen comes into view, ensuring data is always fresh after an update (e.g., after adding a new vehicle).
+\end{itemize}
+
+\subsection{State management and API communication}
+Global state for user authentication is managed via React's Context API in \texttt{context/AuthContext.tsx}. This provider stores the user's authentication status and profile information. Communication with the backend is handled using the \texttt{axios} library, which is configured with \texttt{withCredentials: true} to automatically handle the sending and receiving of authentication cookies.
+
+\section{Integration and deployment}
+
+\subsection{Local development with Docker}
+To ensure a consistent development environment, the project utilizes Docker and Docker Compose. The \texttt{docker/docker-compose.yaml} file defines all services required to run the application stack locally, including the backend, frontend, database, and the Mongo Express GUI. A developer can start the entire stack with a single command: \texttt{docker-compose up}.
+
+\subsection{Deployment strategy}
+While the current focus is a robust prototype, a potential production deployment strategy would involve:
+\begin{itemize}
+    \item \textbf{Backend:} Containerizing the Node.js application and deploying it to a Platform-as-a-Service (PaaS) like Heroku or a container orchestrator.
+    \item \textbf{Database:} Using a managed database service like MongoDB Atlas.
+    \item \textbf{Frontend:} Building the mobile application for production using Expo Application Services (EAS) and submitting the binaries to the app stores.
+\end{itemize}
+
+\section{Testing strategy and implementation}
+The \texttt{tests/} directory houses a multi-layered testing strategy. For full details on the specific test cases, see Appendix D.
+\begin{itemize}
+    \item \textbf{Backend unit \& Integration tests:} The \texttt{tests/backend/} directory uses Jest to test modules in isolation and Supertest to test API endpoint integration.
+    \item \textbf{Frontend E2E tests:} The \texttt{tests/frontend/} directory is configured for Playwright, which runs automated tests that simulate key user journeys in a real browser environment.
+\end{itemize}
+
+\section{Security and privacy considerations}
+Security is implemented through several mechanisms:
+\begin{itemize}
+    \item \textbf{Password hashing:} The \texttt{bcryptjs} library is used to securely hash and salt user passwords.
+    \item \textbf{Authentication:} JWTs are stored in secure, \texttt{HttpOnly} cookies, which helps mitigate cross-site scripting (XSS) attacks.
+    \item \textbf{Route protection:} The \texttt{authMiddleware} ensures that only authenticated users can access protected endpoints.
+    \item \textbf{Environment variables:} Sensitive information like database connection strings and JWT secrets are managed via \texttt{.env} files and are not committed to version control.
+\end{itemize}

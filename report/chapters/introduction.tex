@@ -1,131 +1,116 @@
 \chapter{Introduction}
 
-\section{Context and relevance: From global emissions to household mobility}
+\section{Context and relevance: global emissions and personal vehicle management}
 
 The escalating climate crisis represents one of the most significant challenges of the 21st century, demanding urgent and innovative solutions across all sectors of society. Transportation stands out as a critical area for intervention. According to comprehensive data analysis, the transport sector was responsible for approximately 16.2\% of global greenhouse gas (GHG) emissions in 2016. Within this figure, road transport—comprising cars, motorcycles, buses, and trucks—was the largest contributor, accounting for 11.9\% of total global emissions. A striking 60\% of these road transport emissions originate from passenger travel alone, primarily from the use of private vehicles \cite{owid-ghg-emissions-by-sector}.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{images/ghg-emissions-by-sector.png}
+    \caption{Breakdown of global greenhouse gas emissions by sector.}
+\end{figure}
+
+This reliance on private cars is particularly pronounced in developed nations. In the European Union, for instance, the number of passenger cars per thousand inhabitants reached 560 in 2022, signaling a persistent trend towards private vehicle ownership \cite{passengers-cars-per-thousand-people}. This trend, combined with longer vehicle lifecycles, presents a new challenge for the individual owner: managing a personal fleet that often consists of multiple vehicles, each with a distinct age, fuel type, and emissions profile. This complexity introduces significant inefficiencies, as daily transportation choices are often made based on convenience rather than optimal, sustainable selection.
+
 \textgap
 
-This reliance on private cars is particularly pronounced in developed nations. In the European Union, for instance, the number of passenger cars per thousand inhabitants grew by 14.3\% between 2012 and 2022, signaling a persistent trend towards private vehicle ownership \cite{passengers-cars-per-thousand-people}. This trend is exacerbated in suburban and rural landscapes, where fragmented or insufficient public transit systems often make private vehicles a necessity rather than a choice. The result is a modern household dynamic defined by multiple vehicles, each with a distinct age, fuel type, and emissions profile. This complexity introduces significant inefficiencies, both economically and environmentally, as daily transportation choices are often made based on convenience or availability rather than optimization.
+This thesis addresses these inefficiencies by focusing on holistic sustainability in private vehicle use. The concept extends beyond simply owning an electric vehicle; it encompasses diligent maintenance to ensure peak operational efficiency, as poorly maintained vehicles can see a significant increase in fuel consumption and pollutant emissions \cite{iea2021fuel}. It also involves conscious vehicle selection for each journey and the adoption of eco-driving habits.
 
 \textgap
 
-This thesis addresses the intersection of these trends by focusing on sustainability in private vehicle use. The concept extends beyond simply owning an electric vehicle; it encompasses a holistic approach that includes diligent maintenance to ensure peak operational efficiency, conscious vehicle selection for each specific journey, and the adoption of eco-driving habits.
+Furthermore, this project is grounded in the principles of Green Computing, specifically "ICT for Sustainability." This pillar of Green IT focuses on applying software to influence and improve real-world processes. By developing intelligent software solutions, we can empower users to make more informed, environmentally conscious decisions. This project posits that a well-designed mobile application can serve as a persuasive technology, a concept defined as technology intentionally designed to change a person's attitudes or behaviors \cite{fogg2002persuasive}, thereby nudging users towards sustainable mobility patterns.
 
-\textgap
-
-Furthermore, this project is grounded in the principles of Green Computing, also known as Green Information and Communication Technology (ICT). While often associated with reducing the energy consumption of data centers and hardware, a crucial pillar of Green Computing is "ICT for Sustainability"—the application of software to influence and improve real-world processes. By developing intelligent software solutions, we can empower users to make more informed, environmentally conscious decisions at a scale unachievable through manual methods. This project posits that a well-designed mobile application can serve as a persuasive technology, nudging user behavior towards sustainable mobility patterns and transforming individual choices into a collective, positive environmental impact.
-
-\section{The problem statement: the coordination gap in the modern multi-driver household}
+\section{The problem statement: the management gap for the modern vehicle owner}
 
 \subsection{Core problem}
-
 Individuals managing multiple personal vehicles lack integrated tools to:
-
 \begin{itemize}
-    \item Centralize maintenance schedules (ITV inspections, tire replacements) across their fleet
-
-    \item Optimize vehicle selection based on sustainability metrics
-
-    \item Track and incentivize eco-conscious usage patterns
+    \item Centralize maintenance schedules (e.g., technical inspections, oil changes) across their fleet.
+    \item Optimize vehicle selection for trips based on sustainability metrics.
+    \item Track and be incentivized for eco-conscious usage patterns.
 \end{itemize}
 
 \subsection{User persona}
 \textbf{Alejandro Martínez}
-
 \vspace{0.7em}
-
 \begin{flushleft}
-    Scenario: Alejandro lives in a household with three vehicles (2015 diesel SUV, 2020 hybrid sedan, 2022 electric hatchback). He struggles to manage maintenance schedules and often selects vehicles suboptimally for trips.
+    \textbf{Scenario:} Alejandro is a tech-savvy professional who owns three vehicles: a 2015 diesel SUV, a 2020 hybrid sedan, and a 2022 electric hatchback. As the primary manager of this personal fleet, he struggles to keep track of the different maintenance needs and timelines for each car and often makes suboptimal choices for short trips out of habit.
 \end{flushleft}
 
-Pain Points:
-
+\textbf{Pain points:}
 \begin{itemize}
-    \item Maintenance Overlooks: Missed the SUV's oil change deadline, causing engine inefficiency and premature wear of components
-    
-    \item Suboptimal Selection: Used the SUV for a 18km urban trip despite the electric car being available
-    
-    \item Usage Tracking: No centralized system to compare trip emissions across vehicles
-    
-    \item Eco-Awareness Gap: Lacks feedback on how vehicle choices impact carbon footprint
+    \item \textbf{Maintenance Overlooks:} He recently missed the SUV's oil change deadline, leading to reduced engine efficiency and potential for premature component wear.
+    \item \textbf{Suboptimal Selection:} He used the high-emission SUV for a 18km urban trip despite the fully charged electric car being available, simply because it was parked more conveniently.
+    \item \textbf{Usage Tracking:} He has no centralized system to compare the total trip emissions or running costs across his different vehicles.
+    \item \textbf{Eco-Awareness Gap:} He lacks clear, actionable feedback on how his daily vehicle choices impact his carbon footprint.
 \end{itemize}
 
-This results in higher operational costs, accelerated vehicle wear, and avoidable emissions – challenges addressable through personal fleet management.
+This results in higher operational costs, accelerated vehicle wear, and avoidable emissions—challenges directly addressable through a personal fleet management application, as illustrated in Figure \ref{fig:user-problem-diagram}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/user-problem-diagram.png}
+    \caption{Conceptual diagram of the user's suboptimal vehicle selection problem.}
+    \label{fig:user-problem-diagram}
+\end{figure}
+
 
 \section{Objectives and scope}
 
 \subsection{Primary objective}
-
-Design and develop a cross-platform application (Android/web/iOS) to optimize personal vehicle usage for individuals managing multiple vehicles through:
-
+Design and develop a cross-platform application (Android/web/iOS) to help an individual optimize the use of their multiple vehicles through:
 \begin{itemize}
-    \item Centralized vehicle management
-    
-    \item Sustainability-driven recommendations
-    
-    \item Behavioral reinforcement mechanisms
+    \item Centralized vehicle and maintenance management.
+    \item Sustainability-driven trip recommendations.
+    \item Behavioral reinforcement via gamification.
 \end{itemize}
 
 \subsection{Specific objectives}
-
 \begin{table}[h]
     \centering
+    \caption{Project objectives and technical approaches}
     \begin{tabular}{@{}p{0.35\textwidth} p{0.6\textwidth}@{}}
         \toprule
-        \textbf{Objective} & \textbf{Technical Approach} \\ \midrule
-        1. Cross-platform accessibility & Develop using React Native (Expo) for universal device access \\
-        2. Maintenance automation & Implement mileage/time-based triggers (oil changes, tire rotations) \\
-        3. Vehicle selection optimization & Create heuristic algorithms recommending optimal vehicle per trip \\
-        4. Emissions tracking & Calculate CO\textsubscript{2} output using vehicle-specific emission factors \\
-        5. Gamification system & Design achievement badges for sustainable usage patterns \\ \bottomrule
+        \textbf{Objective} & \textbf{Technical approach} \\ \midrule
+        1. Cross-platform accessibility & Develop using React Native (Expo) for universal device access. \\
+        2. Maintenance automation & Implement alerts based on time and mileage triggers. \\
+        3. Vehicle selection optimization & Create a heuristic algorithm to recommend the optimal vehicle per trip based on CO\textsubscript{2} output. \\
+        4. Emissions tracking & Calculate CO\textsubscript{2} output using vehicle-specific emission factors. \\
+        5. Gamification system & Design an achievement and badge system for sustainable usage. \\ \bottomrule
     \end{tabular}
-    \caption{Project objectives and technical approaches}
 \end{table}
 
 \subsection{Scope boundaries}
-
-Included:
-
+\textbf{Included:}
 \begin{itemize}
-    \item Private vehicles (cars) managed by individual users
-    
-    \item Support for multiple vehicles per user
-    
-    \item Rule-based recommendation heuristics
-    
-    \item Third-party technical car specs APIs (Auto-data API)
+    \item Private vehicles (cars) managed by a single user account.
+    \item Support for multiple vehicles per user.
+    \item Rule-based recommendation heuristics.
+    \item Integration with a mock third-party API for technical vehicle specifications.
 \end{itemize}
 
-Excluded:
-
+\textbf{Excluded:}
 \begin{itemize}
-    \item Multi-user coordination features
-    
-    \item Public transport integration
-    
-    \item Machine learning components
+    \item Multi-user/household coordination features.
+    \item Real-time traffic data or public transport integration.
+    \item Machine learning components for predictive analysis.
 \end{itemize}
 
 \section{Methodology overview}
-
-\textbf{Development approach}
-
+\textbf{Development approach:}
 \begin{itemize}
-    \item Cross-platform strategy:
+    \item \textbf{Cross-platform strategy:}
     \begin{itemize}
-        \item Frontend: Expo (React Native) for reusable UI components
-        \item Backend: Express.js (Node.js) REST API with MongoDB
+        \item Frontend: Expo (React Native) for reusable UI components.
+        \item Backend: Express.js (Node.js) REST API with MongoDB.
     \end{itemize}
-    
-    \item Testing protocol:
+    \item \textbf{Testing protocol:}
     \begin{itemize}
-        \item Unit testing (Jest) for backend controllers
-        \item End-to-end testing (Playwright) for core user journeys
+        \item Backend Testing: Unit and integration tests using Jest.
+        \item Frontend Testing: End-to-end tests for core user journeys using Playwright.
     \end{itemize}
-    
-    \item Deployment:
+    \item \textbf{Deployment environment:}
     \begin{itemize}
-        \item Docker containers for environment consistency
+        \item Docker and Docker Compose for a consistent and reproducible development environment.
     \end{itemize}
 \end{itemize}

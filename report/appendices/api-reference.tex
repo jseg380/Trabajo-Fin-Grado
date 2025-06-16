@@ -1,0 +1,262 @@
+\chapter{Appendix: API Reference}
+
+This appendix provides a detailed specification for the REST API endpoints implemented in the AlDiaCAR backend. All endpoints requiring authentication are protected by a middleware that verifies a JWT sent as an HTTP-only cookie.
+
+\section{Authentication Endpoints}
+Base Path: \texttt{/api/auth}
+
+\subsection{POST /register}
+\begin{itemize}
+    \item \textbf{Description:} Registers a new user account.
+    \item \textbf{Protection:} Public.
+    \item \textbf{Request Body:}
+    \begin{verbatim}
+    {
+        "name": "string",
+        "email": "string (unique)",
+        "password": "string"
+    }
+    \end{verbatim}
+    \item \textbf{Success Response (201 Created):} Returns the new user's profile and sets a JWT cookie.
+    \begin{verbatim}
+    {
+        "_id": "string (ObjectId)",
+        "name": "string",
+        "email": "string",
+        "avatar": "string (path)"
+    }
+    \end{verbatim}
+    \item \textbf{Error Response (400 Bad Request):} If validation fails or email already exists.
+\end{itemize}
+
+\subsection{POST /login}
+\begin{itemize}
+    \item \textbf{Description:} Authenticates an existing user.
+    \item \textbf{Protection:} Public.
+    \item \textbf{Request Body:}
+    \begin{verbatim}
+    {
+        "email": "string",
+        "password": "string"
+    }
+    \end{verbatim}
+    \item \textbf{Success Response (200 OK):} Returns the user's profile and sets a JWT cookie.
+    \begin{verbatim}
+    {
+        "_id": "string (ObjectId)",
+        "name": "string",
+        "email": "string",
+        "avatar": "string (path)"
+    }
+    \end{verbatim}
+    \item \textbf{Error Response (401 Unauthorized):} If credentials are invalid.
+\end{itemize}
+
+\subsection{POST /logout}
+\begin{itemize}
+    \item \textbf{Description:} Logs the user out by clearing the JWT cookie.
+    \item \textbf{Protection:} Public.
+    \item \textbf{Success Response (200 OK):}
+    \begin{verbatim}
+    {
+        "message": "Logged out successfully"
+    }
+    \end{verbatim}
+\end{itemize}
+
+\section{User Profile Endpoints}
+Base Path: \texttt{/api/users}
+
+\subsection{GET /profile}
+\begin{itemize}
+    \item \textbf{Description:} Retrieves the complete profile of the currently authenticated user.
+    \item \textbf{Protection:} JWT Required.
+    \item \textbf{Success Response (200 OK):}
+    \begin{verbatim}
+    {
+        "_id": "string (ObjectId)",
+        "name": "string",
+        "email": "string",
+        "avatar": "string (relative path)",
+        "avatarUrl": "string (full URL)",
+        "stats": { "distanceTraveled": "number", ... },
+        "joinDate": "Date",
+        "achievements": ["string", ...]
+    }
+    \end{verbatim}
+    \item \textbf{Error Response (404 Not Found):} If the user associated with the token cannot be found.
+\end{itemize}
+
+\subsection{PUT /profile/avatar}
+\begin{itemize}
+    \item \textbf{Description:} Updates the user's profile picture.
+    \item \textbf{Protection:} JWT Required.
+    \item \textbf{Request Body:} \texttt{multipart/form-data} with an image file under the field name \texttt{avatar}.
+    \item \textbf{Success Response (200 OK):}
+    \begin{verbatim}
+    {
+        "message": "Avatar updated successfully",
+        "avatar": "string (new relative path)",
+        "avatarUrl": "string (new full URL)"
+    }
+    \end{verbatim}
+    \item \textbf{Error Response (400 Bad Request):} If no file is uploaded or the file is not an image.
+\end{itemize}
+
+\section{Vehicle Endpoints}
+Base Path: \texttt{/api/vehicles}
+
+\subsection{POST /}
+\begin{itemize}
+    \item \textbf{Description:} Adds a new vehicle for the authenticated user. Awards the 'FIRST\_VEHICLE' achievement if it's the user's first vehicle.
+    \item \textbf{Protection:} JWT Required.
+    \item \textbf{Request Body:}
+    \begin{verbatim}
+    {
+        "make": "string",
+        "model": "string",
+        "year": "number",
+        "fuelType": "string",
+        "emissionFactor": "number"
+    }
+    \end{verbatim}
+    \item \textbf{Success Response (201 Created):} The newly created vehicle object, including default maintenance schedules.
+\end{itemize}
+
+\subsection{GET /}
+\begin{itemize}
+    \item \textbf{Description:} Retrieves all vehicles associated with the authenticated user.
+    \item \textbf{Protection:} JWT Required.
+    \item \textbf{Success Response (200 OK):} An array of vehicle objects.
+    \begin{verbatim}
+    [
+        {
+            "_id": "string",
+            "owner": "string (userId)",
+            "make": "string",
+            "model": "string",
+            "emissions": "number",
+            "upcomingMaintenance": { ... },
+            ...
+        }
+    ]
+    \end{verbatim}
+\end{itemize}
+
+\subsection{PUT /:id}
+\begin{itemize}
+    \item \textbf{Description:} Updates the details of a specific vehicle.
+    \item \textbf{Protection:} JWT Required. User must own the vehicle.
+    \item \textbf{Request Body:} A partial or full vehicle object with fields to update.
+    \item \textbf{Success Response (200 OK):} The updated vehicle object.
+    \item \textbf{Error Responses:} 401 Unauthorized (if not owner), 404 Not Found.
+\end{itemize}
+
+\subsection{DELETE /:id}
+\begin{itemize}
+    \item \textbf{Description:} Deletes a specific vehicle.
+    \item \textbf{Protection:} JWT Required. User must own the vehicle.
+    \item \textbf{Success Response (200 OK):}
+    \begin{verbatim}
+    { "message": "Vehicle removed" }
+    \end{verbatim}
+    \item \textbf{Error Responses:} 401 Unauthorized (if not owner), 404 Not Found.
+\end{itemize}
+
+\section{Trip \& recommendation endpoints}
+Base Path: \texttt{/api}
+
+\subsection{POST /trips/log}
+\begin{itemize}
+    \item \textbf{Description:} Logs a simulated trip. This action updates the vehicle's distance-based maintenance counters and the user's statistics, and may grant new achievements.
+    \item \textbf{Protection:} JWT Required.
+    \item \textbf{Request Body:}
+    \begin{verbatim}
+    {
+        "vehicleId": "string (ObjectId)",
+        "distance": "number"
+    }
+    \end{verbatim}
+    \item \textbf{Success Response (201 Created):}
+    \begin{verbatim}
+    {
+        "message": "Trip logged successfully!",
+        "granted": ["ACHIEVEMENT_KEY", ...]
+    }
+    \end{verbatim}
+\end{itemize}
+
+\subsection{POST /recommendations}
+\begin{itemize}
+    \item \textbf{Description:} Calculates estimated emissions for a given distance across all of the user's vehicles and returns them sorted by sustainability (lowest emissions first).
+    \item \textbf{Protection:} JWT Required.
+    \item \textbf{Request Body:}
+    \begin{verbatim}
+    { "distance": "number" }
+    \end{verbatim}
+    \item \textbf{Success Response (200 OK):} A sorted array of recommendation objects.
+    \begin{verbatim}
+    [
+        {
+            "_id": "string", "make": "string", "model": "string",
+            "emissionFactor": "number", "totalEmissions": "number"
+        },
+        ...
+    ]
+    \end{verbatim}
+    \item \textbf{Error Responses:} 400 Bad Request (invalid distance), 404 Not Found (no vehicles).
+\end{itemize}
+
+
+\section{Data \& Logic Endpoints}
+Base Path: \texttt{/api}
+
+\subsection{GET /maintenance/summary}
+\begin{itemize}
+    \item \textbf{Description:} Returns a dynamic list of all upcoming or overdue maintenance tasks for the user's entire fleet, sorted by urgency (overdue items first).
+    \item \textbf{Protection:} JWT Required.
+    \item \textbf{Success Response (200 OK):} An array of maintenance task objects.
+    \begin{verbatim}
+    [
+      {
+        "id": "string (stable_id)",
+        "vehicle": "string (name)",
+        "taskType": "string (e.g., 'itv', 'tires')",
+        "isOverdue": "boolean",
+        "unit": "string ('days' or 'km')",
+        "value": "number (remaining days/km)"
+      },
+      ...
+    ]
+    \end{verbatim}
+\end{itemize}
+
+\subsection{GET /stats}
+\begin{itemize}
+    \item \textbf{Description:} Retrieves aggregated statistics for the authenticated user.
+    \item \textbf{Protection:} JWT Required.
+    \item \textbf{Success Response (200 OK):}
+    \begin{verbatim}
+    {
+        "totalDistance": "number",
+        "totalEmissions": "number",
+        "tripCount": "number",
+        "vehicleCount": "number",
+        "averageEmissions": "number"
+    }
+    \end{verbatim}
+\end{itemize}
+
+\section{Development Endpoints}
+Base Path: \texttt{/api}
+
+\subsection{POST /init-db}
+\begin{itemize}
+    \item \textbf{Description:} A development-only endpoint to clear and seed the database with test data (a test user, vehicles with varied maintenance states, and trips).
+    \item \textbf{Protection:} Public, but disabled in production environments.
+    \item \textbf{Success Response (201 Created):}
+    \begin{verbatim}
+    { "message": "Database initialized..." }
+    \end{verbatim}
+    \item \textbf{Error Response (403 Forbidden):} If \texttt{NODE\_ENV} is set to 'production'.
+\end{itemize}

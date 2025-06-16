@@ -1,157 +1,152 @@
-\chapter{System Design and Architecture}
+\chapter{System design and architecture}
 
-This chapter details the architectural design of the application, named \textit{AlDiaCAR}\footnote{A placeholder name for the application, derived from "Al Día" (up-to-date) and "Car".}. The design is guided by the project's core objectives: to provide a cross-platform, scalable, and maintainable solution for optimizing household vehicle use with a focus on sustainability. We will discuss the high-level architecture, break down the system into its primary components, define the data flow and API contracts, justify the technology stack, and outline the logic for the sustainability and gamification features.
+This chapter details the architectural design of the application, named \textit{AlDiaCAR}\footnote{A placeholder name for the application, derived from "Al Día" (up-to-date) and "Car".}. The design is guided by the project's core objectives: to provide a cross-platform, scalable, and maintainable solution for optimizing an individual's personal vehicle use with a focus on sustainability. We will discuss the high-level architecture, break down the system into its primary components, define the data flow, justify the technology stack, and outline the logic for the sustainability and gamification features.
 
-\section{High-Level Architecture}
+\section{High-level architecture}
 
-The system is designed following a classic client-server architecture, which decouples the user interface from the core business logic and data storage. This model enhances security, scalability, and allows for multiple types of clients to be developed in the future (e.g., a web application) without altering the backend.
+The system is designed following a classic client-server architecture, which decouples the user interface from the core business logic and data storage. This model enhances security, scalability, and allows for multiple types of clients to be developed in the future without altering the backend.
 
 The main components are:
 \begin{itemize}
-    \item \textbf{Frontend Client:} A cross-platform mobile application built with React Native and the Expo framework. It is responsible for all user interactions, data presentation, and communication with the backend via a REST API.
-    \item \textbf{Backend Server:} A Node.js application using the Express.js framework. It serves as the central hub, handling business logic, user authentication, data processing, and communication with the database.
-    \item \textbf{Database:} A MongoDB NoSQL database, which stores all persistent data, including user profiles, vehicle details, trip logs, and gamification state.
-    \item \textbf{External APIs (Future Integration):} The architecture is designed to integrate with third-party APIs for enriching vehicle data (e.g., technical specifications, maintenance schedules) and potentially real-time route information.
+    \item \textbf{Frontend client:} A cross-platform mobile application built with React Native and the Expo framework. It is responsible for all user interactions, data presentation, and communication with the backend.
+    \item \textbf{Backend server:} A Node.js application using the Express.js framework. It serves as the central hub, handling business logic, user authentication, data processing, and communication with the database.
+    \item \textbf{Database:} A MongoDB NoSQL database that stores all persistent data, including user profiles, vehicle details, and trip logs.
+    \item \textbf{Mock API:} A secondary Node.js server that simulates a third-party API for retrieving vehicle specifications, ensuring development and testing can occur offline and with deterministic data.
 \end{itemize}
 
-Figure \ref{fig:high-level-arch} provides a visual representation of this architecture, illustrating the flow of information between the components.
+Figure \ref{fig:high-level-arch} provides a visual representation of this architecture and the data flow between components within the development environment.
 
 \begin{figure}[h!]
     \centering
-    % Placeholder for architecture diagram.
-    % Example: \includegraphics[width=0.9\textwidth]{images/architecture-diagram.png}
-    \framebox[0.9\textwidth][c]{
-        \parbox{0.85\textwidth}{
-            \vspace{4cm}
-            \centering
-            \textbf{Figure Placeholder:} A diagram showing a mobile device (Frontend) connecting via REST API to a server block (Backend: Node.js/Express). The server connects to a database cylinder (MongoDB). An arrow points from "External APIs" towards the Backend.
-            \vspace{4cm}
-        }
-    }
-    \caption{High-Level System Architecture}
+    \begin{tikzpicture}[
+        node distance=2cm and 2.5cm,
+    ]
+    % Components
+    \node[user] (user) {User};
+    \node[comp, right=of user] (frontend) {\textbf{Frontend Client} \\ React Native (Expo)};
+    
+    % Backend server, placed below frontend
+    \node[comp, below=of frontend, yshift=-1cm] (backend) {\textbf{Backend API} \\ Node.js / Express.js};
+    
+    % Mock API server
+    \node[comp, right=of backend] (mockapi) {\textbf{Mock Car API} \\ Node.js};
+
+    % Database
+    \node[db, left=of backend] (db) {MongoDB};
+
+    % Docker environment container
+    \begin{pgfonlayer}{background}
+        \node[env={Docker Environment}, fit=(backend) (db), inner sep=0.5cm] (dockerenv) {};
+    \end{pgfonlayer}
+
+    % Arrows
+    \draw[arrow] (user.east) -- (frontend.west);
+    \draw[arrow] (frontend.south) -- (backend.north) node[midway, right, xshift=0.1cm] {REST API};
+    \draw[arrow] (backend.west) -- (db.east) node[midway, below] {Mongoose};
+    \draw[arrow, dashed] (frontend.east) .. controls +(east:1) and +(north:1.5) .. (mockapi.north) node[midway, above, sloped] {Mock API Call};
+
+    \end{tikzpicture}
+    \caption{High-level system architecture, including the development environment.}
     \label{fig:high-level-arch}
 \end{figure}
 
-\section{Component Overview}
 
-The system is logically divided into frontend and backend components, each with distinct responsibilities and internal structures that reflect the project's source code organization.
+\section{Component overview}
 
-\subsection{Frontend Components (React Native)}
-The frontend is structured as a mobile application using Expo, with a file-based routing system. The key components, located in `src/frontend/app/`, are:
+The system is logically divided into frontend and backend components, each with distinct responsibilities that reflect the project's source code organization.
 
+\subsection{Frontend components (React Native)}
+The frontend is structured as a mobile application using Expo, with a file-based routing system. The key components, located in \texttt{src/frontend/app/}, are:
 \begin{itemize}
-    \item \textbf{Authentication (`/app/(auth)`):} Contains screens for user registration (`register.tsx`) and login (`login.tsx`). It handles user input, form validation, and communicates with the backend's authentication endpoints.
-    \item \textbf{Main Application Tabs (`/app/(tabs)`):} This is the core user-facing part of the app, organized into several tabs:
+    \item \textbf{Authentication (`/app/(auth)`):} Screens for user registration and login.
+    \item \textbf{Main application tabs (`/app/(tabs)`):} The core user-facing part of the app:
     \begin{itemize}
-        \item \textbf{Home (`/home`):} The main dashboard, designed to show a summary of important information, such as upcoming maintenance reminders, the last trip taken, and a quick recommendation for the most sustainable vehicle available.
-        \item \textbf{Vehicles (`/vehicles`):} A module for managing the household's vehicles. Users can view a list of all registered vehicles, add new ones, and edit their details (e.g., make, model, year, fuel type).
-        \item \textbf{Routes (`/routes`):} The interface for the recommendation system. Users can input a destination to receive a suggestion on which vehicle to use, based on sustainability metrics.
-        \item \textbf{Statistics (`/stats`):} This screen implements the gamification and data visualization aspects, showing user statistics, earned badges, and sustainability scores.
+        \item \textbf{Home (`/home`):} A dashboard showing upcoming maintenance alerts.
+        \item \textbf{Vehicles (`/vehicles`):} A module for a user to manage their personal fleet, including adding, viewing, and editing vehicles.
+        \item \textbf{Routes (`/routes`):} The interface for the recommendation system.
+        \item \textbf{Statistics (`/stats`):} Implements gamification and data visualization, showing user stats and earned achievements.
     \end{itemize}
-    \item \textbf{User Profile (`/app/profile`):} Displays user information and provides access to application settings (`settings.tsx`).
-    \item \textbf{State Management (`/context/AuthContext.tsx`):} A React Context is used to manage global application state, primarily for user authentication, ensuring that user session data is available throughout the component tree.
-    \item \textbf{Localization (`/localization`):} The application supports internationalization with dedicated folders for English (`en-UK`) and Spanish (`es-ES`), allowing for easy translation of all user-facing text.
+    \item \textbf{State management (`/context/AuthContext.tsx`):} A React Context that manages the global authentication state, making user session data available throughout the component tree.
+    \item \textbf{Localization (`/localization`):} Supports internationalization with dedicated folders for English and Spanish, allowing for easy translation of all UI text.
 \end{itemize}
 
-\subsection{Backend Components (Node.js)}
-The backend, located in `src/backend/`, is a RESTful API built with Node.js and Express.js. Its structure promotes separation of concerns:
-
+\subsection{Backend components (Node.js)}
+The backend, located in \texttt{src/backend/}, is a RESTful API built with Node.js and Express.js. Its structure promotes separation of concerns:
 \begin{itemize}
-    \item \textbf{Routes (`/routes`):} Defines the API endpoints. For instance, `authRoutes.js` handles `/api/auth/register` and `/api/auth/login`, while `userRoutes.js` (a placeholder for vehicle and trip routes) would manage vehicle and trip-related endpoints.
-    \item \textbf{Controllers (`/controllers`):} Contains the business logic for each route. For example, `authController.js` implements the logic for user registration, password hashing, and token generation. `userController.js` will manage fetching and updating user and vehicle data.
-    \item \textbf{Models (`/models`):} Defines the data schemas for the MongoDB database using the Mongoose library. The core models are:
-    \begin{itemize}
-        \item \textbf{User.js:} Schema for user accounts, including name, email, hashed password, and associations with vehicles and trips.
-        \item \textbf{Vehicle.js:} Schema for vehicles, storing properties like make, model, registration year, fuel type, user-defined emission factor, and maintenance schedules.
-        \item \textbf{Trip.js:} Schema for trip logs, linking a user and a vehicle to a specific journey, and storing data like distance, duration, and calculated CO$_2$ emissions.
-    \end{itemize}
-    \item \textbf{Middleware (`/middleware`):} Contains functions that execute before the main route handlers. `authMiddleware.js` is crucial for protecting routes by verifying the user's JSON Web Token (JWT).
-    \item \textbf{Database Configuration (`/config/db.js`):} Manages the connection to the MongoDB database, using environment variables for security.
+    \item \textbf{Routes (`/routes`):} Defines the API endpoints. The project uses dedicated files for each resource (e.g., \texttt{authRoutes.js}, \texttt{vehicleRoutes.js}, \texttt{maintenanceRoutes.js}).
+    \item \textbf{Controllers (`/controllers`):} Contains the business logic for each route. For example, \texttt{authController.js} handles registration and login, while \texttt{maintenanceController.js} contains the logic to calculate and sort vehicle alerts.
+    \item \textbf{Models (`/models`):} Defines the data schemas for MongoDB using Mongoose. The core models are \texttt{User.js}, \texttt{Vehicle.js}, and \texttt{Trip.js}.
+    \item \textbf{Middleware (`/middleware`):} Contains functions that process requests before they reach the controller. \texttt{authMiddleware.js} is crucial for protecting routes by verifying the user's JWT.
 \end{itemize}
 
-\subsection{Data Model}
-The NoSQL data model, implemented in MongoDB, was chosen for its flexibility. The primary collections are \texttt{Users}, \texttt{Vehicles}, and \texttt{Trips}. Relationships are managed through object references (e.g., a `Trip` document contains a reference to the `\_id` of the `User` and `Vehicle`). This structure is well-suited for the application's needs, as vehicle attributes and maintenance requirements can vary significantly.
+\subsection{Data model}
+The NoSQL data model, implemented in MongoDB, was chosen for its flexibility. The primary collections are \texttt{Users}, \texttt{Vehicles}, and \texttt{Trips}. Relationships are managed through object references (e.g., a \texttt{Trip} document contains a reference to the \texttt{\_id} of the \texttt{User} and \texttt{Vehicle}). This structure is well-suited for the application's needs, as vehicle attributes and maintenance requirements can vary significantly. A diagram of the data model is presented in Figure \ref{fig:data-model}.
 
-% Placeholder for a simple ERD or UML class diagram
-% \begin{figure}[h!]
-%    \centering
-%    \includegraphics[width=0.8\textwidth]{images/data-model-diagram.png}
-%    \caption{Simplified Data Model (ERD)}
-%    \label{fig:data-model}
-% \end{figure}
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[
+        node distance=2.5cm and 4cm,
+        entity/.style={
+            rectangle, rounded corners, draw=black, very thick,
+            minimum width=3.5cm, minimum height=1.5cm, align=left,
+            text width=4.5cm, fill=blue!10, drop shadow
+        },
+        arrow/.style={-{Latex[length=3mm]}, very thick}
+    ]
 
-\section{Data Flow and API Design}
-Communication between the frontend and backend occurs over HTTPS via a RESTful API. The API uses standard HTTP methods (GET, POST, PUT, DELETE) and JSON for data interchange.
+    % Entities
+    \node[entity] (user) {\textbf{User Collection} \\ \texttt{\_id} (PK) \\ \texttt{name: String} \\ \texttt{email: String} \\ \texttt{achievements: [String]}};
+    \node[entity, right=of user] (vehicle) {\textbf{Vehicle Collection} \\ \texttt{\_id} (PK) \\ \texttt{owner: ObjectId} (FK) \\ \texttt{make: String} \\ \texttt{emissions: Number}};
+    \node[entity, below=of vehicle] (trip) {\textbf{Trip Collection} \\ \texttt{\_id} (PK) \\ \texttt{driver: ObjectId} (FK) \\ \texttt{vehicle: ObjectId} (FK) \\ \texttt{distance: Number}};
 
-A typical data flow for a core feature, such as getting a vehicle recommendation, is as follows:
+    % Relationships
+    \draw[arrow] (user.east) -- (vehicle.west) node[midway, above, text width=2cm, align=center] {owns};
+    \draw[arrow] (vehicle.south) -- (trip.north) node[midway, right] {used in};
+    \path (user.south) edge[arrow, bend right=30] node[midway, left] {logs} (trip.west);
+
+    \end{tikzpicture}
+    \caption{Simplified Data Model illustrating the relationships between the primary collections.}
+    \label{fig:data-model}
+\end{figure}
+
+\section{Data flow and API design}
+Communication between the frontend and backend occurs over HTTPS via a RESTful API using standard HTTP methods and JSON. A typical data flow for a core feature, such as getting a vehicle recommendation, is as follows:
 \begin{enumerate}
-    \item The user enters a destination in the frontend's "Routes" screen and requests a recommendation.
-    \item The React Native client sends a POST request to a backend endpoint, such as `/api/recommendations/`, including the route details and the user's ID in the authenticated request.
-    \item The backend's authentication middleware verifies the user's JWT.
-    \item The recommendation controller fetches all vehicles associated with the user's household from the database.
-    \item The controller's algorithm processes each vehicle, calculating the estimated emissions for the proposed route based on the vehicle's stored emission factor.
-    \item The backend responds with a sorted list of vehicles, with the most sustainable option first, in a JSON format.
-    \item The frontend parses the JSON response and displays the recommendation to the user.
+    \item The user enters a trip distance on the "Routes" screen and requests a recommendation.
+    \item The React Native client sends a POST request to the backend endpoint \texttt{/api/recommendations}. The browser automatically includes the JWT cookie with the request.
+    \item The backend's authentication middleware intercepts the request and verifies the JWT.
+    \item The recommendation controller fetches all vehicles associated with that user from the database.
+    \item The controller's algorithm calculates the estimated emissions for each vehicle and responds with a sorted JSON array.
+    \item The frontend parses the response and displays the recommendations to the user.
 \end{enumerate}
+A complete specification of all API endpoints is available in Appendix A.
 
-Key API endpoints designed for the system include:
-\begin{verbatim}
--- Authentication --
-POST   /api/auth/register
-POST   /api/auth/login
-
--- Vehicle Management --
-GET    /api/vehicles
-POST   /api/vehicles
-GET    /api/vehicles/:id
-PUT    /api/vehicles/:id
-DELETE /api/vehicles/:id
-
--- Trip Management --
-POST   /api/trips/start
-POST   /api/trips/end
-GET    /api/trips?userId=<id>
-
--- Recommendation --
-POST   /api/recommendations
-\end{verbatim}
-
-\section{Non-Functional Requirements}
+\section{Non-functional requirements}
 Beyond the core features, the system was designed with several non-functional requirements in mind:
 \begin{itemize}
-    \item \textbf{Cross-Platform Compatibility:} The choice of React Native ensures that a single codebase can be deployed to both iOS and Android, reducing development and maintenance effort.
-    \item \textbf{Scalability:} The backend is stateless, allowing for horizontal scaling by running multiple instances behind a load balancer. MongoDB also offers robust scaling capabilities.
-    \item \textbf{Security:} User authentication is handled using JSON Web Tokens (JWTs). Passwords are not stored in plain text; they are hashed using bcrypt. All communication between client and server is intended to be over HTTPS in a production environment.
-    \item \textbf{Maintainability:} The project is structured into logical modules with a clear separation of concerns (models, views, controllers on the backend; components, screens, services on the frontend). This modularity, combined with the use of TypeScript in the frontend, improves code quality and makes future maintenance easier.
-    \item \textbf{Usability:} The application provides internationalization support and aims for a clean, intuitive user interface to encourage adoption.
+    \item \textbf{Cross-platform compatibility:} React Native and Expo ensure a single codebase can be deployed to both iOS and Android, as well as the web.
+    \item \textbf{Scalability:} The backend is stateless, allowing for horizontal scaling. MongoDB also offers robust scaling capabilities.
+    \item \textbf{Security:} User authentication is handled using JWTs stored in secure, HTTP-only cookies. Passwords are never stored in plain text, only as bcrypt hashes.
+    \item \textbf{Maintainability:} The project is structured into logical modules with a clear separation of concerns. This modularity, combined with TypeScript, improves code quality and makes future maintenance easier.
+    \item \textbf{Usability:} The application provides internationalization support and aims for a clean, intuitive user interface.
 \end{itemize}
 
-\section{Technology Choices Justification}
-The technology stack was selected to align with the project requirements and leverage modern, well-supported tools.
+\section{Technology choices justification}
 \begin{itemize}
-    \item \textbf{React Native (with Expo):} Chosen for its ability to build native-quality applications for iOS and Android from a single JavaScript/TypeScript codebase. Expo further accelerates development by simplifying the build process, providing a rich library of pre-built components, and managing native project configuration.
-    \item \textbf{Node.js with Express.js:} Selected for the backend due to its high performance with asynchronous, non-blocking I/O, making it ideal for an API-driven application. The vast npm ecosystem and the fact that it uses JavaScript create language synergy with the frontend.
-    \item \textbf{MongoDB:} A NoSQL database was preferred over a relational one due to its flexible schema. This is advantageous for storing vehicle data, where different cars may have different attributes and maintenance items. Its document-based structure maps naturally to JavaScript objects.
-    \item \textbf{Docker:} The inclusion of a `docker-compose.yaml` file facilitates a consistent and isolated development environment. It allows any developer to run the backend and database with a single command, eliminating "it works on my machine" issues.
-    \item \textbf{Jest \& Playwright:} These frameworks were selected for the testing strategy. Jest is a standard for unit testing JavaScript/Node.js applications, while Playwright is a powerful tool for end-to-end testing that can simulate user interactions across different platforms.
+    \item \textbf{React Native (with Expo):} Chosen for its ability to build native-quality applications from a single JavaScript/TypeScript codebase. Expo further accelerates development by simplifying the build process and managing native project configuration.
+    \item \textbf{Node.js with Express.js:} Selected for the backend due to its high performance with asynchronous I/O, making it ideal for an API-driven application. Its use of JavaScript creates language synergy with the frontend.
+    \item \textbf{MongoDB:} A NoSQL database was preferred over a relational one due to its flexible schema, which is advantageous for storing vehicle data where attributes and maintenance items can vary.
+    \item \textbf{Docker:} The inclusion of a \texttt{docker-compose.yaml} file facilitates a consistent and isolated development environment, eliminating "it works on my machine" issues.
+    \item \textbf{Jest \& Playwright:} Selected for testing. Jest is a standard for unit testing Node.js applications, while Playwright is a powerful tool for E2E testing that simulates real user interactions.
 \end{itemize}
 
-\section{Gamification and Sustainability Logic}
-The sustainability and gamification features are central to the application's goal of influencing user behavior. The logic for these features is implemented on the backend.
+\section{Gamification and sustainability logic}
+The logic for these features is implemented on the backend to ensure consistency and security.
 \begin{itemize}
-    \item \textbf{Sustainability Recommendation:} The initial recommendation algorithm is heuristic-based. It calculates the total CO$_2$ emissions for a given trip using a simplified formula:
+    \item \textbf{Sustainability recommendation:} The algorithm calculates total CO\textsubscript{2} emissions for a trip using the formula:
     \begin{equation}
         \text{Emissions (gCO$_2$)} = \text{Distance (km)} \times \text{Emission Factor (gCO$_2$/km)}
     \end{equation}
-    The `Emission Factor` is a value stored for each vehicle, which can be sourced from official manufacturer data or entered by the user. The system recommends the vehicle with the lowest calculated emissions for the trip.
-    \item \textbf{Gamification:} The gamification module is designed to reward sustainable behavior and consistent maintenance. The backend will track user actions and award badges or points based on predefined rules, such as:
-    \begin{itemize}
-        \item Completing a maintenance task on time.
-        \item Choosing the recommended sustainable vehicle for a trip.
-        \item Achieving a certain number of "green" trips in a month.
-        \item Reducing the household's average emissions over a period.
-    \end{itemize}
-    These achievements will be stored in the database and displayed on the user's statistics screen to provide positive reinforcement.
+    The system recommends the vehicle with the lowest calculated emissions.
+    \item \textbf{Gamification:} The backend tracks user actions to award achievements. For example, upon creating the first vehicle, the 'FIRST\_VEHICLE' key is added to the user's \texttt{achievements} array in the database. When a trip is logged that surpasses a distance milestone (e.g., 1000 km), the corresponding achievement key is granted.
 \end{itemize}
-
-This architectural foundation provides a robust and extensible platform for developing the \textit{AlDiaCAR} application, balancing rapid development with long-term maintainability and scalability.

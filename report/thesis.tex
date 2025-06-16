@@ -29,6 +29,8 @@
 \usepackage[most]{tcolorbox}
 \usepackage[style=indexgroup]{glossaries}
 \usepackage{etoolbox}                   % For patching commands
+\usepackage{tikz}
+\usepackage{dirtree}
 
 \hypersetup{
 	colorlinks=true,	  % False: boxed links; true: colored links
@@ -37,6 +39,48 @@
 }
 \renewcommand{\familydefault}{\sfdefault}
 \setlength{\headheight}{15pt}           % Customize the height of the header
+
+
+% Custom diagrams
+\usetikzlibrary{
+    shapes.geometric, % For cylinder, ellipse, etc.
+    arrows.meta,      % For modern arrowheads like -{Latex}
+    positioning,      % For advanced node placement (e.g., right=of...)
+    shapes.multipart, % For nodes with multiple parts (nodepart)
+    backgrounds,      % For drawing layers (on background layer)
+    fit,              % To fit nodes around other nodes
+    shadows,          % For drop shadows
+    calc              % For calculations if needed
+}
+
+% --- GLOBAL TIKZ STYLES for the entire thesis ---
+\tikzset{
+  % Style for component boxes (frontend, backend)
+  comp/.style={
+    rectangle, draw, very thick, fill=blue!10, rounded corners,
+    minimum width=3cm, minimum height=1cm, text centered,
+    text width=3.5cm, drop shadow
+  },
+  % Style for database cylinders
+  db/.style={
+    cylinder, shape border rotate=90, aspect=0.25, draw, very thick,
+    fill=orange!20, minimum height=1.5cm, minimum width=1.2cm,
+    text centered, drop shadow
+  },
+  % Style for the user circle
+  user/.style={
+    circle, draw, very thick, fill=green!20, minimum size=1.5cm
+  },
+  % Style for dashed environment boxes
+  env/.style={
+    rectangle, draw, dashed, thick, rounded corners,
+    label={[yshift=0.2cm]north:#1}
+  },
+  % Style for arrows
+  arrow/.style={
+    -{Latex[length=3mm]}, very thick
+  }
+}
 
 
 % Custom fancypagestyle for all the pages in the frontmatter (prev to the "content")
@@ -61,6 +105,29 @@
 \newcommand{\hsp}{\hspace{20pt}}
 \titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
 \setcounter{secnumdepth}{4}
+
+% Verbatim languages {{{
+\lstdefinelanguage{JavaScript}{
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, finally,
+            for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, let, const, while, with},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{magenta},
+  identifierstyle=\color{black},
+  sensitive=true,
+  comment=[l]//,
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]",
+  morestring=[b]`,
+}
+
+\lstdefinelanguage{TypeScript}[]{JavaScript}{
+  morekeywords={interface, type, private, public, protected, as, any, unknown, never, enum},
+}
+% }}}
 
 % Glossary entries
 \input{prefaces/glossary}
@@ -113,6 +180,12 @@
     % System design
     \input{chapters/system-design}
 
+    % Code implementation
+    \input{chapters/implementation}
+
+    % Validation
+    \input{chapters/validation}
+
     % }}}
 
 
@@ -122,5 +195,23 @@
     \pagestyle{frontmatterstyle}  % All frontmatter pages will be empty
     \bibliographystyle{unsrt}
     \bibliography{bibliography}
+
+    % Appendices {{{
+
+    \appendix
+
+    % API reference
+    \input{appendices/api-reference}
+
+    % MongoDB schemas (sort of table definition for NoSQL)
+    \input{appendices/db-schemas}
+
+    % Mock API
+    \input{appendices/mock-api}
+
+    % Test plans
+    \input{appendices/test-plans}
+
+    % }}}
 	
 \end{document}

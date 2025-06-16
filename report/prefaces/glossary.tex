@@ -1,122 +1,131 @@
 \makeglossaries
 
-
 \newglossaryentry{API}{
     name=API (Application Programming Interface),
-    description={A set of rules and protocols that allows different software applications to communicate with each other. In this project, it refers to the REST API that connects the frontend mobile app to the backend server}
+    description={A set of rules and protocols that allows different software applications to communicate. In this project, it refers to the REST API that connects the frontend mobile app to the backend server.}
+}
+
+\newglossaryentry{bcryptjs}{
+    name=bcryptjs,
+    description={A password-hashing function designed to be slow and computationally intensive, which protects against brute-force search attacks. This library is used in the project to securely hash and store user passwords.}
+}
+
+\newglossaryentry{CI}{
+    name=CI/CD (Continuous Integration/Continuous Deployment),
+    description={A software development practice where developers regularly merge their code changes into a central repository, after which automated builds and tests are run. In this project, CI is implemented via GitHub Actions to automatically run backend and frontend tests on every pull request.}
+}
+
+\newglossaryentry{CORS}{
+    name=CORS (Cross-Origin Resource Sharing),
+    description={A browser security feature that restricts web pages from making requests to a different domain than the one that served the page. The backend uses the \texttt{cors} middleware to explicitly allow the frontend (e.g., at \texttt{localhost:3000}) to access the API (at \texttt{localhost:5000}).}
 }
 
 \newglossaryentry{CRUD}{
     name=CRUD,
-    description={An acronym for Create, Read, Update, and Delete, which are the four basic functions of persistent storage. These operations are the foundation of most resource management APIs}
+    description={An acronym for Create, Read, Update, and Delete, which are the four basic functions of persistent storage. These operations are the foundation of the project's vehicle management API.}
 }
 
 \newglossaryentry{Docker}{
     name=Docker,
-    description={A platform for developing, shipping, and running applications in containers. Used in this project to create a consistent and reproducible development environment for the backend and database}
+    description={A platform for developing and running applications in isolated environments called containers. It is used in this project via Docker Compose to create a consistent and reproducible development environment for the backend and database.}
+}
+
+\newglossaryentry{dotenv}{
+    name=dotenv,
+    description={A zero-dependency module that loads environment variables from a \texttt{.env} file into \texttt{process.env}. It is used in the backend to manage configuration and secrets like database connection strings and JWT keys.}
 }
 
 \newglossaryentry{E2E}{
     name=E2E (End-to-End) Testing,
-    description={A testing methodology used to verify the workflow of an application from start to finish, simulating real user scenarios}
+    description={A testing methodology used to verify the workflow of an application from start to finish. This project uses Playwright to conduct E2E tests by simulating real user scenarios in a browser.}
 }
 
 \newglossaryentry{Expo}{
     name=Expo,
-    description={A framework and platform for universal React applications. It provides a set of tools and services built around React Native that simplify the development and deployment of mobile apps}
+    description={A framework and platform for universal React applications. It provides a set of tools and services built around React Native that simplify the development and deployment of the project's mobile app.}
 }
 
 \newglossaryentry{Expressjs}{
     name=Express.js,
-    description={A minimal and flexible Node.js web application framework that provides a robust set of features for building web and mobile applications, particularly APIs}
-}
-
-\newglossaryentry{GDPR}{
-    name=GDPR (General Data Protection Regulation),
-    description={A regulation in EU law on data protection and privacy for all individuals within the European Union and the European Economic Area}
+    description={A minimal and flexible Node.js web application framework that provides a robust set of features for building APIs. It is the core framework for the AlDiaCAR backend.}
 }
 
 \newglossaryentry{Gamification}{
     name=Gamification,
-    description={The application of game-design elements and principles in non-game contexts to engage users and motivate specific behaviors}
+    description={The application of game-design elements (like achievements and stats) in non-game contexts to engage users and motivate specific behaviors, such as sustainable driving.}
 }
 
 \newglossaryentry{GreenIT}{
     name=Green IT,
-    description={The practice of environmentally sustainable computing. It encompasses "Green in IT" (making computing itself more efficient) and "Green through IT" (using IT to enable sustainability in other domains), the latter of which is the focus of this project}
+    description={The practice of environmentally sustainable computing. It encompasses "Green in IT" (making computing itself more efficient) and "Green through IT" (using IT to enable sustainability in other domains), the latter of which is the focus of this project.}
 }
 
 \newglossaryentry{HCI}{
     name=HCI (Human-Computer Interaction),
-    description={A multidisciplinary field of study focusing on the design of computer technology and, in particular, the interaction between humans (the users) and computers}
+    description={A multidisciplinary field of study focusing on the design of computer technology and the interaction between humans (the users) and computers.}
 }
 
 \newglossaryentry{JSON}{
     name=JSON (JavaScript Object Notation),
-    description={A lightweight data-interchange format that is easy for humans to read and write and easy for machines to parse and generate. It is the standard format for data transfer in the project's API}
+    description={A lightweight data-interchange format that is the standard for data transfer in this project's REST API.}
 }
 
 \newglossaryentry{JWT}{
     name=JWT (JSON Web Token),
-    description={A compact, URL-safe means of representing claims to be transferred between two parties. Used in this project for managing user authentication and authorizing API requests}
+    description={A compact, URL-safe means of representing claims to be transferred between two parties. Used in this project for managing user authentication sessions via secure cookies.}
 }
 
 \newglossaryentry{Jest}{
     name=Jest,
-    description={A JavaScript testing framework with a focus on simplicity, used for unit and integration testing of the backend}
+    description={A JavaScript testing framework with a focus on simplicity. It is used for the unit and integration testing of the backend API.}
 }
 
 \newglossaryentry{Middleware}{
     name=Middleware,
-    description={Functions that have access to the request object (req), the response object (res), and the next middleware function in the application’s request-response cycle. Used extensively in the Express.js backend for tasks like authentication and logging}
+    description={In Express.js, these are functions that execute during the lifecycle of a request to the server. Used extensively in this project for authentication (\texttt{authMiddleware}) and file uploads (\texttt{uploadMiddleware}).}
 }
 
 \newglossaryentry{MongoDB}{
     name=MongoDB,
-    description={A source-available, cross-platform, document-oriented NoSQL database program. Its flexible schema is ideal for storing the varied data of this project}
+    description={A document-oriented NoSQL database program. It was chosen for this project due to its flexible schema, which is ideal for storing the varied data of users and vehicles.}
 }
 
 \newglossaryentry{Mongoose}{
     name=Mongoose,
-    description={An Object Data Modeling (ODM) library for MongoDB and Node.js. It manages relationships between data, provides schema validation, and is used to translate between objects in code and their representation in MongoDB}
+    description={An Object Data Modeling (ODM) library for MongoDB and Node.js. It is used throughout the backend to define schemas, validate data, and manage relationships between documents.}
 }
 
 \newglossaryentry{Monorepo}{
     name=Monorepo,
-    description={A software development strategy where code for many projects is stored in the same repository}
-}
-
-\newglossaryentry{NoSQL}{
-    name=NoSQL,
-    description={A type of database that provides a mechanism for storage and retrieval of data that is modeled in means other than the tabular relations used in relational databases}
+    description={A software development strategy where code for multiple projects is stored in the same repository. This strategy is used to manage the \texttt{frontend}, \texttt{backend}, and \texttt{tests} codebases together.}
 }
 
 \newglossaryentry{Nodejs}{
     name=Node.js,
-    description={An open-source, cross-platform, back-end JavaScript runtime environment that runs on the V8 engine and executes JavaScript code outside a web browser. It is the foundation of the project's backend}
+    description={A back-end JavaScript runtime environment that executes JavaScript code outside a web browser. It is the foundation of the project's backend server.}
+}
+
+\newglossaryentry{ODM}{
+    name=ODM (Object Data Modeling),
+    description={A programming technique for converting data between incompatible type systems in object-oriented programming languages. Mongoose is the ODM used in this project to map JavaScript objects to documents in MongoDB.}
 }
 
 \newglossaryentry{PaaS}{
     name=PaaS (Platform-as-a-Service),
-    description={A category of cloud computing services that provides a platform allowing customers to develop, run, and manage applications without the complexity of building and maintaining the infrastructure}
+    description={A category of cloud computing services that provides a platform allowing customers to develop, run, and manage applications without the complexity of building and maintaining the underlying infrastructure.}
 }
 
 \newglossaryentry{Playwright}{
     name=Playwright,
-    description={A framework for Web Testing and Automation. It allows testing of web applications across all modern rendering engines including Chromium, WebKit, and Firefox, and is used for E2E testing of the frontend}
+    description={A framework for web testing and automation. It is used for the end-to-end testing of the frontend, simulating user journeys across different browsers and devices.}
 }
 
 \newglossaryentry{REST}{
     name=REST (Representational State Transfer),
-    description={An architectural style for designing networked applications. RESTful APIs use HTTP requests to access and use data}
+    description={An architectural style for designing networked applications. The project's backend is a RESTful API that uses HTTP requests to manage resources.}
 }
 
 \newglossaryentry{ReactNative}{
     name=React Native,
-    description={An open-source UI software framework created by Meta Platforms, Inc. It is used to develop applications for Android, iOS, and other platforms by enabling developers to use the React framework along with native platform capabilities}
-}
-
-\newglossaryentry{bcrypt}{
-    name=bcrypt,
-    description={A password-hashing function designed to be slow and computationally intensive, which protects against brute-force search attacks. Used in this project to securely store user passwords}
+    description={An open-source UI software framework used to develop applications for Android, iOS, and the Web from a single codebase. It is the core technology of the frontend.}
 }
