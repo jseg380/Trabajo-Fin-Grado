@@ -15,13 +15,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install all dependencies
-        run: npm run install:backend
+      - name: Install dependencies
+        working-directory: ./tests/backend
+        run: npm install
 
       - name: Run backend tests
         # This command is defined in the root package.json and runs Jest
         # The tests use an in-memory MongoDB, so no external services are needed.
-        run: npm run test:backend
+        run: npm run test
         env:
           # The backend tests need a JWT secret, as defined in tests/backend/.env
           JWT_SECRET: a_super_secret_key_for_testing
