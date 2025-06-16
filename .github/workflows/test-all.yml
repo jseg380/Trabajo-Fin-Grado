@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install all dependencies
-        run: npm install:backend
+        run: npm run install:backend
 
       - name: Run backend tests
         # This command is defined in the root package.json and runs Jest
@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install all dependencies
-        run: npm install:frontend
+        run: npm run install:frontend
 
       - name: Install Playwright browsers
         # This command is defined in the tests/frontend/package.json
