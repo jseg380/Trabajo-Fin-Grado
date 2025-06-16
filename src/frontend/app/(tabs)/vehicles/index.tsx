@@ -48,10 +48,10 @@ function VehicleItem({ vehicle, onDelete, router }: { vehicle: Vehicle, onDelete
         <Text style={styles.cardEmissions}>Emissions: {vehicle.emissions} gCO₂/km</Text>
       </View>
       <View style={styles.actionsContainer}>
-        <TouchableOpacity onPress={handleEdit} style={styles.actionButton}>
+        <TouchableOpacity onPress={handleEdit} style={styles.actionButton} accessibilityLabel='Edit'>
           <Ionicons name='pencil' size={24} color='#007AFF' />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleDelete} style={styles.actionButton}>
+        <TouchableOpacity onPress={handleDelete} style={styles.actionButton} accessibilityLabel='Delete'>
           <Ionicons name='trash' size={24} color='#FF3B30' />
         </TouchableOpacity>
       </View>
@@ -121,6 +121,7 @@ function VehiclesScreen() {
         style={styles.fab}
         icon='plus'
         onPress={() => router.push('/(tabs)/vehicles/add')}
+        accessibilityLabel='Add'
       />
     </View>
   );
