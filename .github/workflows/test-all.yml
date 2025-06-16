@@ -15,14 +15,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js v22
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm' # Cache npm dependencies
-
       - name: Install all dependencies
-        run: npm install
+        run: npm install:backend
 
       - name: Run backend tests
         # This command is defined in the root package.json and runs Jest
@@ -43,14 +37,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js v22
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
-
       - name: Install all dependencies
-        run: npm install
+        run: npm install:frontend
 
       - name: Install Playwright browsers
         # This command is defined in the tests/frontend/package.json
