@@ -160,8 +160,8 @@
     \listoftables 
 
     % Glossary
-    \glsaddall[types={main}]         % Add all entries, no matter if they have a corresponding \gls
-    \printglossary[nonumberlist]
+    % \glsaddall[types={main}]         % Add all entries, no matter if they have a corresponding \gls
+    \printglossary
 
     % Restore normal style for main content
     \mainmatter
@@ -171,20 +171,23 @@
 
     \pagestyle{mainmatterstyle}  % All frontmatter pages will be empty
 
-    % Introduction
-    \input{chapters/introduction}
+    % 1. Introduction
+    \input{chapters/1_introduction}
 
-    % Background and related work
-    \input{chapters/background}
+    % 2. Background and related work
+    \input{chapters/2_background}
 
-    % System design
-    \input{chapters/system-design}
+    % 3. Product definition
+    \input{chapters/3_definition}
 
-    % Code implementation
-    \input{chapters/implementation}
+    % 4. System design
+    \input{chapters/4_system-design}
 
-    % Validation
-    \input{chapters/validation}
+    % 5. Code implementation
+    \input{chapters/5_implementation}
+
+    % 6. Validation
+    \input{chapters/6_validation}
 
     % }}}
 
@@ -192,25 +195,26 @@
     % Bibliography
     \clearpage
     \newpage
+    \addcontentsline{toc}{chapter}{Bibliography}
     \pagestyle{frontmatterstyle}  % All frontmatter pages will be empty
     \bibliographystyle{unsrt}
     \bibliography{bibliography}
 
     % Appendices {{{
 
-    \appendix
+    % \appendix
 
-    % API reference
-    \input{appendices/api-reference}
+    % % API reference
+    % \input{appendices/api-reference}
 
-    % MongoDB schemas (sort of table definition for NoSQL)
-    \input{appendices/db-schemas}
+    % % MongoDB schemas (sort of table definition for NoSQL)
+    % \input{appendices/db-schemas}
 
-    % Mock API
-    \input{appendices/mock-api}
+    % % Mock API
+    % \input{appendices/mock-api}
 
-    % Test plans
-    \input{appendices/test-plans}
+    % % Test plans
+    % \input{appendices/test-plans}
 
     % }}}
 	

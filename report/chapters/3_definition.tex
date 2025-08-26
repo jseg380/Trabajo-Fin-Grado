@@ -1,0 +1,218 @@
+\chapter{AlDiaCAR: System architecture and phased development}
+
+Having established the theoretical foundations and identified a distinct gap in the state-of-the-art of vehicle management applications in the preceding chapter, this chapter provides a comprehensive definition of the proposed solution: \textit{AlDiaCAR}. This chapter will serve as the architectural blueprint for the project, articulating its core mission, foundational principles, and detailed feature set. The objective is to translate the conceptual framework into a tangible product specification that directly addresses the coordination frictions, maintenance blindness, and suboptimal decision-making prevalent in the modern multi-vehicle household, as exemplified by the Martínez family persona.
+
+\textgap
+
+The project's vision is ambitious, encompassing a wide range of functionalities from real-time coordination to intelligent, data-driven recommendations and behavioral reinforcement. To manage this complexity and ensure a methodologically sound development process, this chapter also introduces a phased implementation roadmap. This iterative approach deconstructs the complete vision into three distinct, sequential stages: the Alpha version, representing the core viable product; the Beta version, which enhances the system with intelligent features and user engagement mechanics; and finally, the Zenith release, which embodies the fully realized, feature-complete expression of the AlDiaCAR concept. This structured methodology allows for focused development, iterative testing, and the progressive validation of the project's hypotheses at each stage.
+
+\section{The AlDiaCAR vision: A holistic framework}
+
+The core mission of AlDiaCAR is to serve as the intelligent, collaborative "Digital Garage" for the modern household. It is designed to seamlessly integrate vehicle management, user coordination, and sustainable decision-making into a single, cohesive, and effortless user experience. The system is architected upon four foundational pillars, each conceived to address a critical point of friction and inefficiency in the management of a shared, personal vehicle fleet. These pillars function interdependently to create a holistic solution that is more than the sum of its parts.
+
+\textgap
+
+\subsection{Visual identity and design principles}
+
+Before detailing the functional pillars, it is important to define the visual and interaction design philosophy that underpins the user experience. A consistent and thoughtful visual identity is critical for establishing user trust, ensuring usability, and creating an intuitive interface. The design of AlDiaCAR is guided by three core principles: clarity, accessibility, and encouragement. All visual elements, from the color palette to the typography, are selected to support these principles, creating a clean, modern, and non-intrusive user environment.
+
+\textgap
+
+Figure \ref{fig:visual-identity} presents the project's style guide, which specifies the primary and secondary color palettes, the chosen fonts for headings and body text, and the application logo. The color scheme utilizes a base of calming blues and greens to evoke a sense of reliability and sustainability, with vibrant accent colors used purposefully to draw attention to key actions and notifications.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/branding/moodboard.png}
+    \caption{AlDiaCAR visual identity guide, defining the color palette, typography, and logo.}
+    \label{fig:visual-identity}
+\end{figure}
+
+\subsection{Pillar 1: The shared digital key rack (Coordination)}
+
+This foundational pillar is designed to definitively eradicate the persistent and friction-inducing "who has what car?" problem. It transforms the physical, opaque state of the household's vehicles into a transparent, digital, and universally accessible source of truth. The primary goal is to eliminate ambiguity and the need for constant, ad-hoc communication.
+
+\textgap
+
+Key functionalities of this pillar include:
+\begin{itemize}
+    \item \textbf{Real-time vehicle status:} At the heart of the application is a centralized dashboard where each vehicle in the household fleet is represented with a clear, instantly discernible status. These states are designed to be unambiguous: `At Home` (available for use), `In Use (by [Family Member Name])`, `Reserved` (for a future time), or `Unavailable (Maintenance)`. This immediate visibility allows any family member to understand the state of their shared assets with a single glance.
+
+    \textgap
+
+    \item \textbf{Seamless check-out / check-in protocol:} To maintain the accuracy of the system, a lightweight protocol for tracking vehicle usage is implemented. When a user takes a vehicle, they perform a simple, one-tap "Check-Out" action within the application. This immediately updates the vehicle's status to `In Use` and associates it with their user profile. Upon returning, a corresponding "Check-In" action reverts the status to `At Home`, making it available for others. This process is designed to be as frictionless as possible to encourage consistent adoption.
+
+    \textgap
+
+    \item \textbf{Proactive reservation system:} To facilitate forward planning and prevent scheduling conflicts, users are empowered to reserve a specific vehicle for a future date and time slot (e.g., "Reserve the SUV on Saturday from 14:00 to 17:30"). The system automatically updates the vehicle's timeline, displaying it as `Reserved` during that period to all other users. This feature is critical for coordinating important events and ensuring that a required vehicle is available when needed, thus shifting the family's management paradigm from reactive to proactive.
+\end{itemize}
+
+\subsection{Pillar 2: The proactive co-pilot (Intelligent recommendation)}
+
+This pillar represents the core intelligence of the AlDiaCAR system. It is designed to answer the complex, multi-faceted question: "What is the smartest vehicle choice for \textit{this specific trip}?" It moves beyond simple availability to provide data-driven, context-aware decision support, making the optimal choice the easiest choice.
+
+\textgap
+
+The engine's process involves a multi-factor trip analysis:
+\begin{itemize}
+    \item \textbf{Multi-vector analysis engine:} When a user inputs their destination, the system's recommendation engine initiates a real-time analysis across several critical vectors. This process is designed to be instantaneous from the user's perspective.
+    
+    \textgap
+    
+    \begin{enumerate}
+        \item \textbf{Regulatory constraints analysis:} The engine first cross-references the destination's geographic coordinates with a constantly updated national database of Low Emission Zones (Zonas de Bajas Emisiones - ZBEs) and their specific access rules. It compares these rules against the stored `distintivo ambiental` of each vehicle in the user's fleet, instantly filtering out any non-compliant options.
+        
+        \textgap
+        
+        \item \textbf{Economic optimization:} For all compliant vehicles, the engine calculates the estimated fuel or energy cost for the proposed journey. This calculation is based on the vehicle's pre-configured efficiency profile (L/100km or kWh/100km), the route distance, and real-time local fuel price data fetched from an external API.
+        
+        \textgap
+        
+        \item \textbf{Environmental impact assessment:} Concurrently, the system calculates the estimated total CO\textsubscript{2} emissions for the journey for each eligible vehicle. This provides users with a clear, quantifiable measure of the environmental consequence of their choice.
+        
+        \textgap
+        
+        \item \textbf{Maintenance status awareness:} The engine performs a critical check against the maintenance schedules defined in Pillar 3. If a vehicle is approaching a critical service interval (e.g., its mandatory ITV inspection is due next week, or its tires are within 50km of their replacement threshold), the application will flag this vehicle as "Not Recommended" for a long-distance trip, thereby preventing potential safety issues or legal infractions.
+    \end{enumerate}
+
+    \textgap
+
+    \item \textbf{Holistic, user-centric recommendations:} After completing the analysis, the application does not present the raw data. Instead, it synthesizes the findings into a simple, ranked list of recommendations, such as: "Best Choice" (the optimal balance of all factors), "Eco Choice" (the lowest CO\textsubscript{2} emissions), and "Cheapest Choice." Each recommendation is accompanied by a clear, concise summary of its pros and cons, empowering the user to make a truly informed, one-glance decision that aligns with their immediate priorities.
+\end{itemize}
+
+\subsection{Pillar 3: The omniscient mechanic (Automated maintenance)}
+
+This pillar is architected to be the household's collective, digital memory for vehicle health, ensuring that all automotive assets are consistently maintained to be safe, reliable, and operating at peak efficiency. It combats the "shared maintenance blindness" that often plagues multi-driver environments.
+
+\textgap
+
+Its core functionalities are:
+\begin{itemize}
+    \item \textbf{Smart maintenance profiling and scheduling:} The system maintains a comprehensive and distinct maintenance profile for each vehicle. This includes standard items like mandatory technical inspections (ITV), oil changes, and tire rotations, as well as user-definable custom reminders (e.g., "Check brake fluid"). For each item, the system tracks due dates based on both fixed time intervals (e.g., annually) and dynamic mileage data, which is updated with each logged trip. This allows for accurate, predictive scheduling of required services.
+    
+    \textgap
+    
+    \item \textbf{Shared alerts and collaborative task management:} When a maintenance event is approaching its due date, the system generates a notification that is sent not to a single individual, but to a shared "Household Tasks" list visible to all family members. An alert such as "ITV due for Sedan in 15 days" becomes a collective responsibility. Any member of the household can take ownership of the task, and once completed, mark it as such. This closes the communication loop and ensures everyone is aware that the maintenance has been handled. The system can also be configured to suggest nearby approved service centers or ITV stations via integration with mapping services.
+\end{itemize}
+
+\subsection{Pillar 4: The household impact dashboard (Gamification \& analytics)}
+
+This final pillar addresses the motivational and behavioral aspects of sustainable mobility. It transforms the abstract data generated by the family's daily activities into tangible insights, shared goals, and a system of positive reinforcement, leveraging the principles of gamification and persuasive technology.
+
+\textgap
+
+The key components include:
+\begin{itemize}
+    \item \textbf{Unified impact dashboard:} A central screen in the application serves as the household's command center for analytics. It displays key performance metrics in a clear, graphical format. These include the total monthly transportation expenditure, the household's aggregate CO\textsubscript{2} emissions for the month, and a composite "Household Eco-Score" that provides an at-a-glance measure of their overall sustainability.
+    
+    \textgap
+    
+    \item \textbf{Personal and team-based achievements:} To foster engagement, the system incorporates a dual-layered achievement system. It includes individual achievements designed to reward personal positive actions (e.g., "Eco-Warrior: Your first 100\% eco-friendly week!"). Crucially, it also features collaborative household goals (e.g., "Team Effort: Reduce our collective emissions by 10\% this month compared to last"). This encourages cooperation and transforms sustainability into a shared family objective.
+    
+    \textgap
+    
+    \item \textbf{Actionable and insightful analytics:} The dashboard goes beyond simply displaying raw data. It is designed to provide clear, actionable insights that connect choices to consequences. For example, the system might generate a card stating, "Insight of the Month: Choosing the hatchback over the SUV for short urban trips saved the family €45 and prevented 50kg of CO\textsubscript{2} emissions." This direct feedback loop makes the economic and environmental benefits of sustainable choices tangible, visible, and rewarding, reinforcing positive behavior over the long term.
+\end{itemize}
+
+\section{Phased implementation roadmap}
+
+To systematically construct the comprehensive system described above, a phased development roadmap is proposed. This iterative methodology deconstructs the full feature set into three manageable and logically sequential versions. Each phase builds upon the last, allowing for focused development, targeted testing, and the potential for user feedback to inform subsequent stages. The three phases are designated as the Alpha version, the Beta version, and the Zenith release.
+
+\textgap
+
+\subsection{The Alpha version: Establishing the core viable product}
+
+The primary objective of the Alpha phase is to build and validate the foundational functionality of AlDiaCAR. This version is conceived as the Minimum Viable Product (MVP), focusing exclusively on solving the most acute and immediate pain points: coordination friction and shared maintenance blindness. The feature set is deliberately constrained to what is essential for the system to be useful and to prove the core concept.
+
+\textgap
+
+\textbf{Features of the Alpha version:}
+\begin{itemize}
+    \item \textbf{Pillar 1 (Coordination):}
+    \begin{itemize}
+        \item User and multiple vehicle registration.
+        \item A simple, clear dashboard showing the status of each vehicle.
+        \item Manual, one-tap "Check-Out" and "Check-In" functionality to update a vehicle's status between `At Home` and `In Use`. The user who checked out the vehicle is displayed.
+    \end{itemize}
+    \item \textbf{Pillar 2 (Recommendation):}
+    \begin{itemize}
+        \item This pillar is \textbf{not implemented} in the Alpha version. The focus is on coordination, not decision support, at this initial stage.
+    \end{itemize}
+    \item \textbf{Pillar 3 (Maintenance):}
+    \begin{itemize}
+        \item A dedicated section for each vehicle to manually log key maintenance dates (e.g., next ITV, next oil change).
+        \item Simple, time-based push notifications to all users when a logged date is approaching (e.g., "ITV for Sedan is due in 30 days").
+    \end{itemize}
+    \item \textbf{Pillar 4 (Gamification):}
+    \begin{itemize}
+        \item This pillar is \textbf{not implemented} in the Alpha version. The focus is on pure utility before engagement mechanics are introduced.
+    \end{itemize}
+\end{itemize}
+
+The Alpha version, in essence, is a digital replacement for the family's whiteboard or group chat, but with the added structure and reliability of a dedicated application. Its successful implementation would validate the core user need for a centralized coordination and information hub.
+
+\subsection{The Beta version: Enhancing intelligence and engagement}
+
+Building upon the stable and validated foundation of the Alpha version, the Beta phase introduces the "smart" features that define AlDiaCAR's unique value proposition. The focus shifts from merely logging status to actively assisting in decision-making and beginning to foster user engagement.
+
+\textgap
+
+\textbf{Features of the Beta version (Includes all Alpha features, plus):}
+\begin{itemize}
+    \item \textbf{Pillar 1 (Coordination):}
+    \begin{itemize}
+        \item Introduction of the vehicle \textbf{Reservation System}, allowing users to book cars for future time slots.
+    \end{itemize}
+    \item \textbf{Pillar 2 (Recommendation):}
+    \begin{itemize}
+        \item Implementation of the \textbf{initial Recommendation Engine}.
+        \item Users can input a destination, and the app will perform a basic check.
+        \item The engine's initial capability will be limited to \textbf{ZBE constraint analysis}. It will identify which vehicles are legally permitted to travel to the destination and present a simple "Compliant" or "Not Compliant" status.
+    \end{itemize}
+    \item \textbf{Pillar 3 (Maintenance):}
+    \begin{itemize}
+        \item Enhanced maintenance tracking that includes \textbf{mileage-based intervals}. Users can log their trip mileage, which the system uses to provide more accurate service reminders.
+    \end{itemize}
+    \item \textbf{Pillar 4 (Gamification):}
+    \begin{itemize}
+        \item Introduction of the \textbf{first layer of gamification}.
+        \item A basic dashboard showing total trips and distance per vehicle.
+        \item A system of \textbf{individual achievements and badges} for positive actions, such as consistently logging trips or completing maintenance on time.
+    \end{itemize}
+\end{itemize}
+
+The Beta version transforms AlDiaCAR from a simple utility into an intelligent assistant. It begins to deliver on the promise of smarter, more informed choices and introduces the motivational mechanics intended to drive long-term adoption.
+
+\subsection{The Zenith release: The complete vision}
+
+The Zenith release represents the culmination of the development roadmap, a feature-complete version of the application that fully realizes the initial four-pillar vision. It integrates all planned functionalities, creating a deeply interconnected and powerful tool for holistic household fleet management.
+
+\textgap
+
+\textbf{Features of the Zenith release (Includes all Beta features, plus):}
+
+\begin{itemize}
+    \item \textbf{Pillar 1 (Coordination):}
+    \begin{itemize}
+        \item Polished UI/UX with potential integration into third-party calendar applications for seamless reservation management.
+    \end{itemize}
+    \item \textbf{Pillar 2 (Recommendation):}
+    \begin{itemize}
+        \item The \textbf{full, multi-factor Recommendation Engine} is implemented.
+        \item The engine analyzes trips based on ZBE constraints, \textbf{estimated fuel cost} (with real-time price data), \textbf{CO\textsubscript{2} emissions}, and \textbf{upcoming maintenance status}.
+        \item The app presents the final, synthesized recommendations ("Best Choice," "Eco Choice," etc.) with clear justifications.
+    \end{itemize}
+    \item \textbf{Pillar 3 (Maintenance):}
+    \begin{itemize}
+        \item Implementation of the shared, collaborative \textbf{Household Task List} for maintenance items.
+        \item Integration with mapping services to \textbf{suggest nearby service centers} and ITV stations.
+    \end{itemize}
+    \item \textbf{Pillar 4 (Gamification):}
+    \begin{itemize}
+        \item The complete \textbf{Household Impact Dashboard} is launched.
+        \item It displays aggregate metrics for household cost, emissions, and an Eco-Score.
+        \item It features \textbf{collaborative household goals} in addition to individual achievements.
+        \item The \textbf{insightful analytics engine} is activated, providing users with tangible feedback on the positive impact of their choices.
+    \end{itemize}
+\end{itemize}
+
+The Zenith release is the ultimate expression of AlDiaCAR: an intelligent layer that removes friction, saves money, enhances safety, and systematically guides the entire family toward more sustainable mobility patterns by making the most responsible choice the easiest and most rewarding one.

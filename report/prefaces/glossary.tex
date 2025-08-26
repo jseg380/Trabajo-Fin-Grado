@@ -1,5 +1,11 @@
 \makeglossaries
 
+\newglossaryentry{autonomo}{
+    name=Autónomo,
+    text=autónomo,
+    description={An autónomo is the Spanish legal and fiscal term for a self-employed individual or sole trader, roughly equivalent to a "freelancer" or "independent contractor" in anglophone contexts. This is a highly prevalent form of employment in Spain, encompassing a vast range of professions from skilled tradespeople like plumbers and electricians to professional service providers such as consultants, designers, and lawyers. Unlike employees with fixed 9-to-5 schedules, autónomos typically manage their own working hours and client engagements, resulting in a highly variable and often unpredictable daily schedule. This lack of a fixed routine is a critical factor in the user persona for this thesis, as it complicates household resource planning—particularly the availability and use of shared vehicles—necessitating a dynamic, real-time coordination tool rather than a static, schedule-based system.}
+}
+
 \newglossaryentry{API}{
     name=API (Application Programming Interface),
     description={A set of rules and protocols that allows different software applications to communicate. In this project, it refers to the REST API that connects the frontend mobile app to the backend server.}
@@ -23,6 +29,18 @@
 \newglossaryentry{CRUD}{
     name=CRUD,
     description={An acronym for Create, Read, Update, and Delete, which are the four basic functions of persistent storage. These operations are the foundation of the project's vehicle management API.}
+}
+
+\newglossaryentry{distintivo-ambiental}{
+    name=Distintivo Ambiental,
+    text=Distintivo Ambiental,
+    description={The Distintivo Ambiental is an official vehicle classification system implemented by Spain's Dirección General de Tráfico (DGT). It categorizes vehicles based on their pollutant emission levels, assigning a corresponding colored sticker that must be displayed on the vehicle. This system is the primary mechanism used by municipalities to regulate traffic in Low Emission Zones (ZBEs). The badges are not a measure of CO\textsubscript{2} emissions but of local air pollutants like NOx and particulate matter. The main classifications for passenger cars are:
+        \newline \textbullet\ \textbf{0 Emisiones (Blue Badge)}: Reserved for the cleanest vehicles, primarily Battery Electric Vehicles (BEVs), extended-range electric vehicles (REEVs), plug-in hybrids (PHEVs) with a range of over 40km, and fuel cell vehicles. They enjoy the most privileges, including unrestricted access to all ZBEs.
+        \newline \textbullet\ \textbf{ECO (Green and Blue Badge)}: This category includes standard hybrid vehicles (HEVs), plug-in hybrids with a range under 40km, and vehicles powered by compressed natural gas (CNG) or liquefied petroleum gas (LPG). They have significant privileges, though slightly fewer than '0 Emisiones'.
+        \newline \textbullet\ \textbf{C (Green Badge)}: For gasoline vehicles registered from 2006 onwards (Euro 4, 5, 6 standards) and diesel vehicles registered from 2014 onwards (Euro 6). This is a very common category for modern internal combustion engine vehicles.
+        \newline \textbullet\ \textbf{B (Yellow Badge)}: For gasoline vehicles registered from 2001 to 2005 (Euro 3) and diesel vehicles from 2006 to 2013 (Euro 5). These vehicles face the most significant access restrictions in ZBEs.
+        \newline \textbullet\ \textbf{Sin Distintivo (No Badge)}: The oldest and most polluting vehicles, which are typically barred from entering any ZBE.
+    }
 }
 
 \newglossaryentry{Docker}{
@@ -128,4 +146,17 @@
 \newglossaryentry{ReactNative}{
     name=React Native,
     description={An open-source UI software framework used to develop applications for Android, iOS, and the Web from a single codebase. It is the core technology of the frontend.}
+}
+
+\newglossaryentry{low-emissions-zones}{
+    name=Zona de Bajas Emisiones (ZBE),
+    text=Low Emission Zones,
+    description={A \textit{Zona de Bajas Emisiones (ZBE)} is a geographically defined urban area where access for certain polluting vehicles is restricted to improve air quality. Mandated by Spain's Climate Change and Energy Transition Law, all municipalities with over 50,000 inhabitants are required to establish ZBEs. The implementation and severity of these restrictions are at the discretion of the local city council, leading to a fragmented and often confusing regulatory landscape for drivers.
+        \newline Access restrictions are enforced based on the vehicle's Distintivo Ambiental. A ZBE may, for example:
+        \newline \textbullet\ \textbf{0 Emisiones (Blue Badge)}: Reserved for the cleanest vehicles, primarily Battery Electric Vehicles (BEVs), extended-range electric vehicles (REEVs), plug-in hybrids (PHEVs) with a range of over 40km, and fuel cell vehicles. They enjoy the most privileges, including unrestricted access to all ZBEs.
+        \newline \textbullet\ \textbf{ECO (Green and Blue Badge)}: This category includes standard hybrid vehicles (HEVs), plug-in hybrids with a range under 40km, and vehicles powered by compressed natural gas (CNG) or liquefied petroleum gas (LPG). They have significant privileges, though slightly fewer than '0 Emisiones'.
+        \newline \textbullet\ \textbf{C (Green Badge)}: For gasoline vehicles registered from 2006 onwards (Euro 4, 5, 6 standards) and diesel vehicles registered from 2014 onwards (Euro 6). This is a very common category for modern internal combustion engine vehicles.
+        \newline \textbullet\ \textbf{B (Yellow Badge)}: For gasoline vehicles registered from 2001 to 2005 (Euro 3) and diesel vehicles from 2006 to 2013 (Euro 5). These vehicles face the most significant access restrictions in ZBEs.
+        \newline \textbullet\ \textbf{Sin Distintivo (No Badge)}: The oldest and most polluting vehicles, which are typically barred from entering any ZBE.
+    }
 }

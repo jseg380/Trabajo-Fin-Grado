@@ -1,0 +1,88 @@
+\chapter{Introduction}
+
+\section{Context and relevance: global emissions and personal vehicle management}
+
+The escalating climate crisis, a defining global challenge of the 21st century, necessitates profound and immediate transformations across all sectors of society. Among these, the transportation sector emerges as a particularly critical domain for intervention due to its substantial contribution to anthropogenic greenhouse gas emissions. According to a comprehensive analysis of global climate data, the transport sector was directly responsible for approximately 16.2\% of all greenhouse gas (GHG) emissions recorded in 2016. 
+
+\textgap
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{images/ghg-emissions-by-sector.png}
+\caption{Breakdown of global greenhouse gas emissions by sector.}
+\end{figure}
+
+A more granular examination of this figure reveals that road transport—encompassing a wide array of vehicles such as cars, motorcycles, buses, and trucks—constituted the single largest contributor, accounting for a significant 11.9\% of total global emissions. Most notably, a striking 60\% of these road transport emissions can be attributed directly to passenger travel, a figure dominated by the widespread use of private vehicles \cite{owid-ghg-emissions-by-sector}. This disaggregation underscores the disproportionate environmental impact of individual mobility choices.
+
+\textgap
+
+This pronounced reliance on private automobiles is a hallmark of developed economies. In the European Union, for example, statistical trends indicate a persistent pattern of increasing private vehicle ownership, with the number of passenger cars per thousand inhabitants reaching a new peak of 560 in the year 2022 \cite{passengers-cars-per-thousand-people}. This saturation of private vehicles not only places immense strain on public infrastructure but also complicates efforts to meet ambitious regional and national emissions reduction targets.
+
+\textgap
+
+This thesis posits that the millions of multi-car households globally constitute a vast, decentralized, and inefficiently managed network of small-scale vehicle fleets. It is within this context of the fragmented, privately-managed household "micro-fleet" that this research identifies a unique and critically underserved technological niche. The cumulative impact of suboptimal vehicle selection, uncoordinated maintenance, and inefficient usage patterns within these micro-fleets represents a substantial, yet largely unaddressed, opportunity for environmental and economic improvement.
+
+\textgap
+
+Consequently, this thesis directly confronts these widespread inefficiencies by championing a framework of holistic sustainability for private vehicle utilization. This comprehensive concept necessarily extends beyond the singular act of purchasing an electric vehicle. True sustainability in this context must encompass a multi-faceted approach, including the disciplined and diligent maintenance of all vehicles to ensure they operate at their peak design efficiency. It is well-documented that poorly maintained vehicles, regardless of their powertrain, can experience a significant degradation in performance, leading to increased fuel consumption and a corresponding rise in harmful pollutant emissions \cite{iea2021fuel}. Furthermore, this holistic view involves fostering more conscious and data-informed vehicle selection for each specific journey, as well as promoting the consistent adoption of eco-driving habits among all users within a household.
+
+\textgap
+
+Furthermore, the theoretical underpinnings of this project are firmly grounded in the principles of Green Computing, with a specific focus on the paradigm known as "ICT for Sustainability." This particular pillar of Green IT is oriented towards the strategic application of information and communication technologies to monitor, model, and ultimately improve the efficiency of real-world physical processes. By architecting intelligent software solutions, it becomes possible to empower end-users to make more informed and environmentally conscious decisions in their daily lives. This project hypothesizes that a well-designed mobile application can function as a potent form of persuasive technology, a term defined by B.J. Fogg as technology that is intentionally designed to change a person's attitudes or behaviors without resorting to coercion or deception \cite{fogg2002persuasive}. By providing timely feedback, relevant information, and facilitating collaborative planning, such a system can effectively nudge users towards more sustainable mobility patterns, thereby transforming abstract environmental goals into concrete, actionable behaviors.
+
+\section{The problem statement: the management gap for the modern vehicle owner}
+
+\subsection{User persona: The Martínez household}
+
+To precisely articulate and contextualize the real-world challenges this thesis aims to resolve, we employ the methodological tool of a user persona. We introduce the Martínez family—a carefully constructed archetype of a modern, middle-class household comprising four individuals. This family unit consists of two parents and their two adult children, all residing in the same home. Their professional and academic lives reflect contemporary societal structures: one parent is a self-employed professional (\gls{autonomo}) whose work demands a highly variable and often unpredictable schedule. The other parent maintains a traditional 9-to-5 office job with a regular commute. One of the adult children works primarily from home in a remote capacity, while the other is a full-time university student with their own distinct travel requirements.
+
+\textgap
+
+Driven by both economic prudence and a genuine concern for their environmental footprint, the family has made a conscious decision to manage a shared pool of three vehicles, correctly identifying the acquisition of a fourth car as an unnecessary financial and ecological burden. This shared 'household fleet' is deliberately diverse, designed to mirror common vehicle ownership patterns observed in contemporary Spain and other parts of Europe:
+
+\begin{itemize}
+\item \textbf{Vehicle 1: The City runner.} This vehicle is a 2014 diesel-powered hatchback. Its primary attributes are its compact size, superior fuel efficiency in urban environments, and ease of parking. However, its age and engine type mean it has been assigned a \gls{distintivo-ambiental} B, an environmental classification that legally restricts its access to designated \gls{low-emissions-zones} (Zonas de Bajas Emisiones - ZBE) now prevalent in major city centers. This regulatory constraint creates a significant operational limitation.
+\item \textbf{Vehicle 2: The All-rounder.} A 2017 gasoline sedan, this car holds a more favorable Distintivo 'C'. It represents a compromise, offering a satisfactory balance of passenger comfort, luggage capacity, and acceptable fuel efficiency. Crucially, its environmental classification grants it full access to many of the ZBEs that restrict the City Runner, making it a more versatile asset for a wider range of journeys.
+\item \textbf{Vehicle 3: The Workhorse.} The newest vehicle in the fleet is a 2021 diesel SUV, which also possesses a Distintivo 'C'. This vehicle is reserved for specific use cases such as long-distance family trips, transporting bulky items, or when maximum passenger comfort is a priority. Despite its utility and modern features, it inherently has the highest fuel consumption, greatest carbon emissions, and most expensive running costs of the three.
+\end{itemize}
+
+The confluence of the family members' unpredictable, often overlapping schedules with the distinct operational and regulatory characteristics of their diverse vehicle set generates a complex, daily logistical puzzle. The management of this micro-fleet thus transcends simple maintenance scheduling and becomes a significant source of recurring inefficiency and household friction.
+
+\subsection{A day in the Martínez's household: The cascading inefficiencies}
+
+To illustrate this dynamic, let us consider a typical Wednesday morning scenario. The \textit{autónomo} parent must attend a critical client meeting located deep within the city center's primary ZBE, a destination that immediately renders the 'B' rated City Runner unusable for this specific trip. Concurrently, the university student needs to travel to campus for a lecture and, given the choice, would naturally prefer the small, fuel-efficient 'B' car for its low running cost and ease of parking near the university. Meanwhile, the parent with the 9-to-5 job has already departed for their office, having taken the 'C' rated sedan, the 'All-Rounder,' as is their daily routine.
+
+\textgap
+
+This seemingly mundane situation triggers a cascade of logistical queries that, in the absence of a centralized management system, must be resolved through a flurry of ad-hoc, inefficient communication and physical verification. Questions arise instantly: Is the SUV's key readily available, or did someone misplace it? Is the vehicle's mandatory technical inspection (ITV) due in the coming week, making a long journey inadvisable and potentially illegal? Does the SUV have sufficient fuel for the required trip, or will it necessitate an unplanned stop?
+
+\textgap
+
+Lacking a unified, digital source of truth for the status of their shared assets, the parent is compelled to make a decision based on incomplete information. In this instance, they take the high-emission, high-cost SUV for what is essentially a short urban errand. This represents a demonstrably suboptimal choice, a direct consequence of a systemic coordination failure. This single, commonplace event serves to crystallize the core pain points that this thesis seeks to address.
+
+\subsection{Core pain points}
+
+The daily challenges faced by the Martínez household can be deconstructed into four distinct, yet interconnected, core pain points. These issues represent significant barriers to the efficient, economical, and environmentally responsible management of a shared household vehicle fleet.
+
+\textgap
+
+The first and most immediate issue is \textbf{coordination friction}. The current management method relies entirely on synchronous, manual communication channels such as text messages, phone calls, and face-to-face conversations. This constant need to query the status and location of vehicles and their keys introduces a significant cognitive overhead into the daily lives of the family members. It consumes valuable time, generates unnecessary stress, and frequently leads to minor conflicts and misunderstandings, creating a persistent source of domestic friction.
+
+\textgap
+
+Secondly, the family suffers from \textbf{shared maintenance blindness}. In a multi-driver, multi-vehicle environment, responsibility for vehicle upkeep becomes dangerously diffused. No single individual possesses a complete, accurate, or real-time overview of the comprehensive maintenance status—including mandatory inspections (ITV), scheduled oil changes, tire wear and pressure, and other critical service intervals—across all three vehicles. This lack of centralized oversight inevitably leads to critical and potentially hazardous oversights, increasing the risk of mechanical failures, legal infractions, and avoidable repair costs.
+
+\textgap
+
+The third pain point is \textbf{inefficient, constraint-unaware selection}. In the heat of the moment, vehicle choices are predominantly dictated by immediate physical availability rather than a rational, holistic assessment of all relevant constraints. An optimal decision would weigh multiple factors simultaneously: ZBE access restrictions, real-time fuel costs, the specific emissions profile of each car, upcoming maintenance deadlines, and the nature of the journey itself. The absence of a tool to facilitate this multi-criteria analysis ensures that the family consistently makes suboptimal choices, leading to higher expenses and a greater environmental impact than necessary.
+
+\textgap
+
+Finally, the household operates with a complete \textbf{lack of shared visibility} into their collective mobility behavior. There exists no mechanism for the family to aggregately track and visualize their total transportation expenditures, fuel consumption, or cumulative environmental impact over time. This information vacuum prevents the formation of effective feedback loops, which are essential for behavioral change. Without access to clear, quantifiable data on their collective habits, the family is unable to make informed group decisions, set meaningful goals for improvement, or objectively measure their progress towards becoming more sustainable and economically efficient.
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{images/user-problem-diagram.png}
+%     \caption{Conceptual diagram of the user's suboptimal vehicle selection problem.}
+%     \label{fig:user-problem-diagram}
+% \end{figure}
