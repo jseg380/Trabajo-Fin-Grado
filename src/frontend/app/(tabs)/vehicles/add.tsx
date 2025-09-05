@@ -160,7 +160,7 @@ function AddVehicleScreen() {
           title={isSubmitting ? 'Adding...' : 'Add Vehicle to My Garage'}
           onPress={handleAddVehicle}
           disabled={emissionFactor === null || isSubmitting}
-          color='#007AFF'
+          color='#2196F3'
         />
       </View>
 
