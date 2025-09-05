@@ -78,24 +78,23 @@ The licensor cannot revoke these freedoms as long as you follow the license term
 \end{center}
 
 \begin{flushleft}
-    \textbf{Keywords:} Sustainable Mobility, Green IT, Full-Stack Development, React Native, Vehicle Management, Gamification.
+    \textbf{Keywords:} Sustainable Mobility, Vehicle Fleet Management, Collaborative Systems, Persuasive Technology, Green Computing, Vehicle Recommendation, Proof-of-Concept, Software Architecture, Mobile Application.
 \end{flushleft}
 
 \begin{flushleft}
     \textbf{Abstract:}
 \end{flushleft}
 
-This project presents the design and development of \textit{AlDiaCAR}\footnote{The complete source code for this project is available at: \url{https://github.com/jseg380/Trabajo-Fin-Grado}}, a cross-platform mobile and web application aimed at promoting sustainable and conscious use of a personal fleet of vehicles. The application is designed to support an individual user managing one or more vehicles, offering tools to centralize maintenance tracking and encourage environmentally-aware decisions.
-
-\textit{AlDiaCAR} provides three core functionalities: (1) unified vehicle maintenance tracking with smart reminders based on upcoming dates and distance-based intervals, (2) a trip logging system that updates vehicle metrics and user statistics, and (3) a recommendation system that suggests the most sustainable vehicle for a given route based on estimated emissions. To further engage the user, the application incorporates gamification elements and statistical feedback, fostering eco-responsible habits.
+The widespread ownership of multiple vehicles within a single household represents a significant, yet largely unaddressed, source of economic and environmental inefficiency. The ad-hoc management of these personal "micro-fleets" leads to coordination friction, neglected maintenance, and suboptimal vehicle selection, contributing to excess fuel consumption and greenhouse gas emissions. This thesis addresses this problem by proposing, designing, and implementing \textit{AlDiaCAR}\footnote{The complete source code for this project is available at: \url{https://github.com/jseg380/Trabajo-Fin-Grado}}, a novel, collaborative mobile application conceived as a "Digital Garage" for the modern family.
 
 \textgap
 
-The system architecture is built with Expo (a React Native framework) for the frontend and Express.js (a Node.js framework) for the backend, supported by a MongoDB database for flexible data management. The project was developed following modular design principles and includes a comprehensive testing suite to ensure quality and reliability.
+The system is architected upon a four-pillar framework designed to holistically tackle the core pain points: Coordination, Vehicle Recommendation, Automated Maintenance, and Analytics. The intellectual centerpiece of this research is the "Proactive Co-Pilot," a multi-factor recommendation engine that acts as a persuasive technology, nudging users toward more sustainable mobility choices by analyzing journey constraints such as Low-Emission Zone (ZBE) regulations.
 
 \textgap
 
-This report documents the design rationale, implementation details, and validation of the application, which aligns with the broader goals of sustainable software and "Green through IT" initiatives.
+This work provides a comprehensive architectural blueprint for a full-stack, cross-platform solution, utilizing a technology stack of React Native, Node.js, and MongoDB. The viability of the system's most innovative component was successfully validated through the implementation of a proof-of-concept prototype. This functional artifact demonstrates the core ZBE-aware recommendation logic, confirming the technical feasibility of the proposed solution and establishing a robust foundation for future development towards a feature-complete system. The project's primary contribution is, therefore, a validated design and a functional prototype for a system that synthesizes personal fleet management, collaborative tools, and sustainable decision-making into a single, cohesive platform.
+
 
 % % Empty page
 % \clearpage
@@ -114,24 +113,22 @@ This report documents the design rationale, implementation details, and validati
 \end{center}
 
 \begin{flushleft}
-    \textbf{Palabras clave:} Movilidad Sostenible, TI Verde, Desarrollo Full-Stack, React Native, Gestión de Vehículos, Gamificación.
+    \textbf{Palabras clave:} Movilidad Sostenible, Gestión de Flotas de Vehículos, Sistemas Colaborativos, Tecnología Persuasiva, Green IT, Recomendación de Vehículos, Prueba de Concepto, Arquitectura de Software, Aplicación Móvil.
 \end{flushleft}
 
 \begin{flushleft}
     \textbf{Resumen:}
 \end{flushleft}
 
-Este proyecto presenta el diseño y desarrollo de \textit{AlDiaCAR}\footnote{El código fuente completo de este proyecto está disponible en: \url{https://github.com/jseg380/Trabajo-Fin-Grado}}, una aplicación multiplataforma (móvil y web) orientada a fomentar un uso sostenible y consciente de una flota de vehículos personal. La aplicación está diseñada para dar soporte a un usuario individual que gestiona uno o más vehículos, ofreciendo herramientas para centralizar el seguimiento del mantenimiento y fomentar decisiones respetuosas con el medio ambiente.
-
-\textit{AlDiaCAR} ofrece tres funcionalidades principales: (1) seguimiento unificado del mantenimiento del vehículo con recordatorios inteligentes basados en fechas próximas e intervalos de distancia, (2) un sistema de registro de viajes que actualiza las métricas del vehículo y las estadísticas del usuario, y (3) un sistema de recomendaciones que sugiere el vehículo más sostenible para una ruta determinada en función de las emisiones estimadas. Para implicar al usuario, la aplicación incorpora elementos de gamificación y retroalimentación estadística que fomentan hábitos eco-responsables.
+La propiedad generalizada de múltiples vehículos dentro de un mismo hogar representa una fuente significativa, y en gran medida desatendida, de ineficiencia económica y medioambiental. La gestión improvisada de estas "microflotas" personales conduce a fricciones de coordinación, un mantenimiento deficiente y una selección de vehículos subóptima, contribuyendo a un exceso de consumo de combustible y a la emisión de gases de efecto invernadero. Esta tesis aborda este problema mediante la propuesta, el diseño y la implementación de \textit{AlDiaCAR}\footnote{El código fuente completo de este proyecto está disponible en: \url{https://github.com/jseg380/Trabajo-Fin-Grado}}, una novedosa aplicación móvil colaborativa concebida como un "Garaje Digital" inteligente para la familia moderna.
 
 \textgap
 
-La arquitectura del sistema se ha desarrollado con Expo (un framework de React Native) para el frontend y Express.js (un framework de Node.js) para el backend, utilizando una base de datos MongoDB para una gestión de datos flexible. El proyecto se ha desarrollado siguiendo principios de diseño modular e incluye una completa suite de tests para garantizar su calidad y fiabilidad.
+El sistema se articula sobre una arquitectura de cuatro pilares, diseñada para abordar de manera integral los principales puntos débiles identificados: Coordinación, Recomendación Inteligente, Mantenimiento Automatizado y Analíticas. El eje intelectual de esta investigación es el "Copiloto Proactivo", un motor de recomendación multifactorial que actúa como una tecnología persuasiva, incentivando a los usuarios a tomar decisiones de movilidad más sostenibles mediante el análisis de restricciones del trayecto, como las regulaciones de las Zonas de Bajas Emisiones (ZBE).
 
 \textgap
 
-Este informe documenta la justificación del diseño, los detalles de implementación y la validación de la aplicación, que se alinea con los objetivos más amplios del software sostenible y las iniciativas de "TI Verde" (Green through IT).
+Este trabajo aporta un plan arquitectónico completo para una solución \textit{full-stack} y multiplataforma, utilizando un conjunto de tecnologías compuesto por React Native, Node.js y MongoDB. La viabilidad del componente más innovador del sistema fue validada con éxito a través de la implementación de una prueba de concepto. Este prototipo funcional demuestra la lógica central de recomendación consciente de las ZBE, confirmando la factibilidad técnica de la solución propuesta y estableciendo una base robusta para el futuro desarrollo hacia un sistema con todas las funcionalidades. La contribución principal del proyecto es, por tanto, un diseño validado y un prototipo funcional para un sistema que sintetiza la gestión de flotas personales, las herramientas colaborativas y la toma de decisiones sostenibles en una única plataforma cohesionada.
 
 % % Empty page
 % \clearpage
