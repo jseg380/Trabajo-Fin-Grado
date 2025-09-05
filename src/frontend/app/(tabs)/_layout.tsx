@@ -47,8 +47,8 @@ type TabRoutes = keyof typeof TAB_CONFIG
 const HIDDEN_PAGES = [
   'vehicles/add',   // Add vehicle page
   'vehicles/[vehicleId]/edit',  // Edit vehicle page
-  // 'routes/add',     // Add route page
-  // 'routes/edit'     // Edit route page
+  'vehicles/[vehicleId]/maintenance',  // Edit maintenance vehicle info
+  'routes/recommendations',   // Recommendation selection page
 ];
 
 
@@ -58,7 +58,7 @@ function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#ff00ff',
+        tabBarActiveTintColor: '#2196F3',
         headerRight: () => ProfileButton()
       }}
     >
