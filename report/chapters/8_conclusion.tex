@@ -1,0 +1,60 @@
+\chapter{Conclusion and future work}
+
+This final chapter synthesizes the outcomes of the research and development efforts undertaken for this thesis. It begins by presenting a concise conclusion, summarizing the core problem addressed, the proposed solution, and the principal contributions of the project. Following this, the chapter outlines a comprehensive roadmap for future work, detailing the logical steps required to evolve the current research prototype into a feature-complete, production-ready system.
+
+\section{Conclusion}
+
+The management of personal vehicles in the modern, multi-car household is fraught with inefficiencies that lead to increased costs, environmental impact, and daily domestic friction. As established in the problem statement, a typical household, exemplified by the Martínez family \textit{persona}, consistently grapples with significant challenges related to coordination friction, shared maintenance blindness, and suboptimal, constraint-unaware vehicle selection. This ad-hoc management of a valuable and environmentally significant set of assets represents a critical and underserved technological niche.
+
+\textgap
+
+In response to these challenges, this thesis proposed, designed, and architected a novel software solution, \textit{AlDiaCAR}, conceived as an intelligent, collaborative "Digital garage". The system is structured upon a four-pillar framework designed to holistically address the identified pain points. The intellectual centerpiece of this proposed solution is the Pillar 2 "Proactive co-pilot", a conceptual model for a multi-factor recommendation engine that can serve as a persuasive technology to guide users toward more sustainable and economically sound mobility choices.
+
+\textgap
+
+The primary contribution of this project is a comprehensive and defensible architectural blueprint for a holistic, personal fleet management system. The viability of this architecture's most innovative component—the constraint-based recommendation logic—was successfully validated through the implementation of a focused, 'vertical slice' proof-of-concept. This prototype effectively demonstrated the architectural pathway for a ZBE-aware recommendation, proving the central hypothesis that such a system is technically feasible and establishing a robust foundation upon which future development can confidently build.
+
+\section{Future work}
+
+The research and development conducted for this thesis have culminated in a successful proof-of-concept that validates the core architectural principles of the \textit{AlDiaCAR} system. The following sections outline a strategic roadmap for evolving this prototype from its current state into the feature-complete Zenith release envisioned in Chapter 3.
+
+\subsection{Full implementation of the four pillars}
+
+The next logical phase of development would focus on building out the full feature set of the remaining pillars to create a truly collaborative and engaging user experience, building upon the foundational elements already in place.
+
+\begin{itemize}
+\item \textbf{Pillar 1 (Coordination):} Future work would focus on enhancing the existing collaborative framework. This includes implementing a seamless user invitation system for the Household entity and building out the full vehicle reservation system with a polished user interface and potential integration with third-party calendar applications (e.g., Google Calendar, Apple Calendar).
+\textgap
+\item \textbf{Pillar 3 (Maintenance):} To more effectively combat "shared maintenance blindness," a shared, collaborative \textbf{"Household task list"} would be developed. This would allow any household member to view, take ownership of, and mark as complete any upcoming maintenance item. This feature would be enhanced through integration with mapping services to automatically suggest nearby approved service centers or ITV stations when an alert is triggered.
+\textgap
+\item \textbf{Pillar 4 (Gamification \& analytics):} The full \textbf{"Household impact dashboard"} would be created, featuring clear, graphical charts and data visualizations for tracking collective transportation costs, total CO\textsubscript{2} emissions, and a composite "Eco-score." The gamification layer would be expanded to include \textbf{collaborative household goals} (e.g., "Reduce our collective emissions by 10\% this month"), transforming sustainability into a cooperative and rewarding team effort.
+\end{itemize}
+
+\subsection{Enhancements to the recommendation engine}
+
+With the core logical flow validated by the proof-of-concept, the recommendation engine would be evolved into the full, multi-factor model described in the system definition.
+
+\begin{itemize}
+\item \textbf{Integration of live data APIs:} A critical step towards production viability is replacing the hardcoded demonstration data with real-time information from third-party services. This would require integration with:
+\begin{itemize}
+\item A national or regional \textbf{ZBE data service} to provide up-to-the-minute information on complex low-emission zone boundaries and access rules.
+\item One or more \textbf{local fuel price data services} to ensure that economic calculations are based on current market rates.
+\item \textbf{Real-time traffic data services} (e.g., Google Maps Directions API) to provide accurate estimations of journey distance and time, which would improve the precision of cost and emissions calculations.
+\end{itemize}
+\textgap
+\item \textbf{Inclusion of maintenance status:} The engine's algorithm would be enhanced to query the status of Pillar 3. It will be programmed to check for upcoming critical maintenance and automatically flag vehicles as "Not Recommended" for long trips if, for example, a tire change or mandatory inspection is imminent.
+\textgap
+\item \textbf{Total Cost of Ownership (TCO) model:} For an even more holistic financial recommendation, a more advanced version of the engine could be developed to incorporate factors beyond immediate operational costs. By factoring in long-term expenses such as scheduled maintenance, vehicle depreciation rates, and insurance premiums, the system could provide a "Total Cost of Ownership" recommendation, offering users a much deeper insight into the true financial implications of their vehicle choices.
+\end{itemize}
+
+\subsection{Technical and architectural evolution}
+
+To support the transition from a research prototype to a scalable, production-grade application, several key technical and architectural advancements would be required.
+
+\begin{itemize}
+\item \textbf{Backend refactoring to a service layer:} As the complexity of the business logic grows with the full implementation of all pillars, the backend would benefit from being refactored. The current controller-centric logic would be migrated to a dedicated service layer\footnote{\href{https://en.wikipedia.org/wiki/Service_layer_pattern}{Service layer pattern}}. This would encapsulate and abstract business logic, improving modularity, promoting code reuse, and significantly enhancing the testability of the system as it scales.
+\textgap
+\item \textbf{Production deployment strategy:} A robust deployment strategy would be implemented. This would involve containerizing the Node.js application for deployment to a Platform-as-a-Service (PaaS)\footnote{\href{https://azure.microsoft.com/en-us/resources/cloud-computing-dictionary/what-is-paas}{What is platform as a service (PaaS)?}} like Heroku\footnote{\href{https://www.heroku.com}{Heroku: The AI PaaS For Deploying, Managing, and Scaling Apps}} or a container orchestration platform like Kubernetes\footnote{\href{https://kubernetes.io}{Production-Grade Container Orchestration}}. The database would be migrated to a managed, auto-scaling service such as MongoDB Atlas\footnote{\href{https://www.mongodb.com/products/platform}{MongoDB Atlas}} to ensure high availability and data integrity.
+\textgap
+\item \textbf{CI/CD pipeline implementation:} To streamline development and ensure high quality, a Continuous Integration/Continuous Deployment (CI/CD) pipeline would be established (e.g., using GitHub Actions\footnote{\href{https://www.geeksforgeeks.org/git/github-actions/}{GitHub Actions}} or Jenkins\footnote{\href{https://www.jenkins.io}{Jenkins}}). This pipeline would automate the process of running unit and integration tests on every code commit and would automate the deployment of successful builds to a staging and then production environment, improving the reliability and velocity of the development cycle.
+\end{itemize}
