@@ -160,3 +160,27 @@
         \newline \textbullet\ \textbf{Sin Distintivo (No Badge)}: The oldest and most polluting vehicles, which are typically barred from entering any ZBE.
     }
 }
+
+\newglossaryentry{obd-ii}{
+name={OBD-II (On-Board Diagnostics II) Port},
+text={OBD-II port},
+description={The OBD-II port is a standardized 16-pin diagnostic connector present in virtually all cars and light trucks manufactured for sale in North America and Europe since the late 1990s. It serves as a direct interface to the vehicle's network of onboard computers, most notably the Engine Control Unit (ECU). Commercial fleet management systems heavily rely on this port for connecting advanced telematics hardware. These devices utilize the port to extract a rich, real-time stream of vehicle data, including speed, engine RPM, fuel consumption, throttle position, and Diagnostic Trouble Codes (DTCs). The existence and standardization of this port is what enables the deep, data-driven analysis that characterizes professional fleet management, a capability generally absent in the personal vehicle context addressed by this thesis, which relies on user-provided data rather than direct hardware integration.}
+}
+
+\newglossaryentry{dtc}{
+name={Diagnostic Trouble Code (DTC)},
+text={Diagnostic Trouble Codes (DTCs)},
+description={DTCs are standardized alphanumeric codes generated and stored by a vehicle's on-board diagnostics (OBD) system when it detects a malfunction or anomaly. Each code corresponds to a specific issue, ranging from a minor sensor fault (e.g., a faulty oxygen sensor) to a critical engine or transmission problem (e.g., a cylinder misfire). The illumination of the "Check Engine" light on a vehicle's dashboard is typically triggered by the generation of one or more DTCs. In the context of commercial fleet management, telematics devices read these codes remotely via the OBD-II port, enabling managers to perform proactive and predictive maintenance by diagnosing problems before they escalate into costly or dangerous failures. This contrasts sharply with the reactive maintenance model of a typical household, which usually only acts after a warning light becomes visible.}
+}
+
+\newglossaryentry{eld}{
+name={Electronic Logging Device (ELD)},
+text={Electronic Logging Device (ELD)},
+description={An Electronic Logging Device is a federally mandated technology for most commercial motor vehicles in North America. Its primary function is to automatically record a driver's driving time and maintain a digital log of their Hours of Service (HOS). The ELD synchronizes with the vehicle's engine to accurately track when the vehicle is in motion, idle, or off, thereby replacing traditional paper-based logbooks which were susceptible to error and falsification. The integration of ELD compliance is a critical, non-negotiable feature in commercial fleet management systems, as it is essential for regulatory adherence and avoiding significant legal penalties. This feature highlights the strong business and legal focus of such platforms, a requirement that is entirely irrelevant to the personal and household context of this thesis.}
+}
+
+\newglossaryentry{ifta}{
+name={International Fuel Tax Agreement (IFTA)},
+text={International Fuel Tax Agreement (IFTA)},
+description={The International Fuel Tax Agreement is a cooperative agreement among the lower 48 U.S. states and the Canadian provinces to simplify the reporting of fuel taxes for interstate motor carriers. Instead of filing separate fuel tax returns in every jurisdiction a vehicle operates in, carriers with an IFTA license file a single, consolidated quarterly report with their base jurisdiction. This report details the total distance traveled and fuel purchased in each member jurisdiction. Commercial fleet management systems automate this complex reporting process by using precise GPS and telematics data to track mileage across state and provincial lines. This automated IFTA reporting capability is a high-value feature for logistics companies but serves as another clear example of the enterprise-grade, regulatory-focused functionality that makes commercial systems fundamentally unsuitable for personal vehicle management.}
+}
