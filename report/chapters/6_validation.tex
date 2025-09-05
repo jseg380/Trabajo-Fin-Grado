@@ -1,106 +1,150 @@
 \chapter{Results and validation}
 
-This chapter presents the results of the implementation, validating the functionality of the AlDiaCAR prototype against the objectives defined in Chapter 1. The validation process confirms that the system's key features are operational and effectively address the problem statement outlined for our user persona, Alejandro Martínez. This chapter provides visual evidence of the working frontend, complemented by a summary of the automated tests that verify the backend logic.
+This chapter presents the results of the implementation phase, validating the functionality of the \textit{AlDiaCAR} prototype against the objectives defined in the preceding chapters. The validation process serves two primary purposes: first, to confirm that the system's key features are operational and have been implemented correctly according to the architectural design; and second, to demonstrate that these features effectively address the core problem statement. This chapter provides visual evidence of the working frontend through a walkthrough of the core user journeys, complemented by a summary of the automated tests that verify the backend logic and the integrity of the system as a whole.
 
 \section{Frontend validation via core user workflows}
 
-The most direct way to validate the application is to walk through the essential user journeys. The following sections use screenshots from the running application to demonstrate that the primary features have been successfully implemented.
+The most direct method for validating the application's success is to demonstrate its functionality from the end-user's perspective. The following sections use screenshots from the running application to provide tangible evidence that the primary features have been successfully implemented and that the core user workflows are operational.
 
-\subsection{User registration and authentication}
-The first step for any user is to create an account and log in. The system's authentication flow, managed by the components in \texttt{/app/(auth)}, was tested manually and via Playwright's E2E tests. Figure \ref{fig:login-screen} shows the application's entry point, and Figure \ref{fig:profile-screen} shows the user's profile after a successful login, confirming the authentication and data retrieval process is working.
+\subsection{User onboarding and household management}
+The user journey begins with registration. As per the system's architecture, upon creating an account, each user is automatically assigned to a new, personal household. This establishes the foundational collaborative entity from the outset. The user can then manage their household, invite others, or join an existing household. This workflow directly validates the implementation of the `Household` data model, which is central to the project's collaborative goals.
+
+\textgap
+
+Figure \ref{fig:login-screen} shows the application's login screen, the entry point for authenticated users. Upon successful login, the user can navigate to their profile, as shown in Figure \ref{fig:profile-household-screen}. This screen serves as the central hub for identity and household management, displaying the user's details, the current household's name, its unique join code for inviting others, and a list of current members. This screen confirms that the authentication, data retrieval, and household association processes are functioning correctly.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.35\textwidth]{images/mobile/login.png}
-    \caption{The user login screen.}
+    \includegraphics[width=0.4\textwidth]{images/results/login_screen.png}
+    \caption{The user login screen, serving as the gateway to the application.}
     \label{fig:login-screen}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.35\textwidth]{images/mobile/profile.png}
-    \caption{The user profile screen after successful authentication.}
-    \label{fig:profile-screen}
+    \includegraphics[width=0.45\textwidth]{images/results/profile_household_screen.png}
+    \caption{The user profile screen, displaying personal details and the household management card with its unique join code and member list.}
+    \label{fig:profile-household-screen}
 \end{figure}
-
 
 \subsection{Vehicle fleet management}
-A core requirement for Alejandro is to manage his personal fleet. The application provides a seamless interface to add and view his cars. Figure \ref{fig:add-vehicle} shows the form used to add a vehicle, and Figure \ref{fig:vehicle-list} shows the central list of all his registered vehicles, providing a complete overview of his fleet. This validates the vehicle CRUD (Create, Read, Update, Delete) functionality.
+A core requirement of the system is to provide users with a centralized tool to manage their personal fleet of vehicles. The "Vehicles" tab provides this functionality, validating the system's CRUD (Create, Read, Update, Delete) capabilities for vehicles. Users can view all vehicles associated with their household, add new vehicles, and edit or delete existing ones.
+
+\textgap
+
+Figure \ref{fig:vehicle-list-screen} shows the main vehicle list, providing a complete, at-a-glance overview of the household's automotive assets. From this screen, the user can initiate the process of adding a new car, which leads to the form shown in Figure \ref{fig:add-vehicle-screen}. This workflow demonstrates a key feature: the system first requires basic vehicle information and then simulates a call to an external service (via the Mock API) to fetch technical specifications like the emission factor, which is crucial for the recommendation engine.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{images/mobile/vehicle-add-2.png}
-    \caption{Adding a new vehicle to the user's fleet.}
-    \label{fig:add-vehicle}
+    \includegraphics[width=0.45\textwidth]{images/results/vehicle_list_screen.png}
+    \caption{The main vehicle management screen, displaying a list of all vehicles registered to the household.}
+    \label{fig:vehicle-list-screen}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{images/mobile/vehicle-list.png}
-    \caption{The user's list of registered vehicles.}
-    \label{fig:vehicle-list}
+    \includegraphics[width=0.45\textwidth]{images/results/add_vehicle_screen.png}
+    \caption{The two-step process for adding a new vehicle, including fetching technical specifications from the mock external API.}
+    \label{fig:add-vehicle-screen}
 \end{figure}
 
-\subsection{Sustainability and maintenance recommendations}
-The application's primary goal is to provide actionable, data-driven advice. Figure \ref{fig:recommendation-screen} demonstrates the recommendation system in action, suggesting the most eco-friendly vehicle for a trip. Figure \ref{fig:maintenance-screen} shows the main dashboard, which displays sorted maintenance alerts, directly addressing Alejandro's pain point of overlooking important tasks.
+\subsection{Coordination and vehicle status dashboard}
+To directly address the problem of coordination friction, the "Home" tab serves as a real-time vehicle status dashboard. This interface, shown in Figure \ref{fig:status-dashboard-screen}, provides all household members with immediate and transparent visibility into the current state of each vehicle: `At Home`, `In Use`, or `Reserved`.
+
+\textgap
+
+This screen validates the implementation of Pillar 1. Users can perform one-tap "Check-Out" and "Check-In" actions to update a vehicle's status. Furthermore, the dashboard provides the interface for the vehicle reservation system. As shown in Figure \ref{fig:reservation-modal}, a user can select an available vehicle and reserve it for a future time slot, which immediately updates its status for all other household members, preventing scheduling conflicts and enabling proactive planning.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{images/mobile/routes.png}
-    \caption{The vehicle recommendation interface.}
-    \label{fig:recommendation-screen}
+    \includegraphics[width=0.6\textwidth]{images/results/status_dashboard_screen.png}
+    \caption{The main status dashboard, providing real-time visibility into the availability of each household vehicle.}
+    \label{fig:status-dashboard-screen}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{images/mobile/maintenance.png}
-    \caption{The main dashboard displaying maintenance alerts.}
-    \label{fig:maintenance-screen}
+    \includegraphics[width=0.45\textwidth]{images/results/reservation_modal.png}
+    \caption{The reservation modal, allowing a user to book an available vehicle for a specific future time slot.}
+    \label{fig:reservation-modal}
 \end{figure}
 
-\section{Backend logic and API validation}
-To validate the backend logic independently of the frontend, a comprehensive suite of automated integration tests was developed using Jest and Supertest. These tests verify the correctness of the API endpoints, business logic, and database interactions in a controlled environment.
+\subsection{Proof-of-concept for recommendation}
+The validation of the system's core hypothesis—that an intelligent engine can guide sustainable choices—is demonstrated through the "Routes" workflow. As established in the project's scope, this implementation serves as a vertical slice proof-of-concept for the Pillar 2 recommendation engine.
 
-A key example from this test suite is the validation of the sustainability recommendation endpoint. The test case, shown below, verifies that the API correctly processes an authenticated request and returns a properly calculated and sorted list of vehicle recommendations, which is a core piece of the application's business logic.
+\textgap
 
-\begin{lstlisting}[language=JavaScript, caption={Integration test for the recommendation API from \texttt{tests/backend/features.test.js}}]
-it('should return a sorted list of vehicle recommendations', async () => {
-  const res = await request(app)
-    .post('/api/recommendations')
-    .set('Cookie', `jwt=${token}`) // Manually set auth cookie
-    .send({ distance: 100 });
+The user first selects a trip from a set of predefined locations, one of which is inside a hardcoded ZBE, as shown in Figure \ref{fig:route-planning-screen}. The application then sends this information to the backend, which processes it against the ZBE rules. The result, displayed in Figure \ref{fig:recommendation-results-screen}, is a ranked list of available vehicles. In this example, the destination is inside the ZBE, so the system has automatically filtered out non-compliant vehicles and presents only the eligible, hybrid car as the "Best Choice," thus validating the core constraint-based filtering logic.
 
-  expect(res.statusCode).toEqual(200);
-  expect(Array.isArray(res.body)).toBe(true);
-  
-  // Verify the business logic: is the list sorted by emissions?
-  expect(res.body[0].totalEmissions).toBeLessThanOrEqual(res.body[1].totalEmissions);
-});
-\end{lstlisting}
-This test confirms not only that the endpoint is reachable and secure, but also that its complex logic—calculating emissions for multiple vehicles and sorting them—is functioning as designed. A full summary of the test strategy is available in Appendix D.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/results/route_planning_screen.png}
+    \caption{The route planning interface, where the user selects a trip from a list of predefined demonstration locations.}
+    \label{fig:route-planning-screen}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/results/recommendation_results_screen.png}
+    \caption{The recommendation results screen. A "ZBE DETECTED" warning is displayed, and the list of vehicles is filtered accordingly.}
+    \label{fig:recommendation-results-screen}
+\end{figure}
+
+\subsection{Statistics and gamification}
+Finally, the "Stats" tab validates the foundational elements of Pillar 4. This screen, shown in Figure \ref{fig:stats-screen}, aggregates data from the user's logged trips to provide key performance indicators, such as total distance traveled and total CO\textsubscript{2} emissions. It also displays the user's earned achievements, confirming that the backend logic for tracking user actions and granting awards is functioning correctly. This serves as the data collection and feedback mechanism upon which the full analytics dashboard and collaborative gamification of the Zenith release would be built.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/results/stats_screen.png}
+    \caption{The statistics and achievements screen, providing the user with tangible feedback on their activity and progress.}
+    \label{fig:stats-screen}
+\end{figure}
+
+\section{Backend and End-to-End validation}
+To validate the system's logic and the integrity of the integration between the frontend and backend, a suite of automated tests was executed.
+
+\subsection{Backend integration testing}
+The backend test suite was run using Jest and Supertest to verify the correctness of the API endpoints in a controlled environment. The tests cover critical business logic, including authentication, household management, and the core recommendation algorithm. Figure \ref{fig:jest-results} shows the output from the test runner, confirming that all implemented tests passed successfully. This result validates that the server-side logic is robust and performs as expected according to the system design.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/results/jest_test_results.png}
+    \caption{Output from the Jest test runner, confirming the successful execution of the backend integration test suite.}
+    \label{fig:jest-results}
+\end{figure}
+
+\subsection{End-to-End (E2E) testing}
+To validate the complete user journey from the user interface to the database and back, E2E tests were conducted using the Playwright framework. These tests automate a web browser to perform critical user flows such as registration, login, and adding a vehicle. Figure \ref{fig:playwright-results} displays the summary report from the Playwright test execution, indicating that all critical-path user journeys completed without errors. This validates the seamless integration between the frontend and backend components.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/results/playwright_test_results.png}
+    \caption{Summary report from the Playwright E2E test suite, showing that all critical user flows passed successfully.}
+    \label{fig:playwright-results}
+\end{figure}
 
 \section{Validation summary}
-The combination of visual confirmation from the frontend and successful execution of the automated test suites confirms that the prototype successfully implements its core objectives. Table \ref{tab:validation-summary} maps the project objectives to their implemented and validated status.
+The combination of visual confirmation from the frontend walkthroughs and the successful execution of the automated test suites confirms that the AlDiaCAR prototype successfully implements its core objectives. The system effectively provides a collaborative framework for household vehicle management and validates the technical feasibility of its innovative recommendation engine. Table \ref{tab:validation-summary} maps the core project objectives to their implemented and validated status.
 
-\begin{table}[h!]
+\begin{table}[H]
     \centering
-    \caption{Summary of Validated Project Objectives}
+    \caption{Summary of validated project objectives}
     \label{tab:validation-summary}
-    \begin{tabular}{|p{0.3\textwidth}|p{0.3\textwidth}|p{0.3\textwidth}|}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{p{0.35\textwidth}|p{0.5\textwidth}|p{0.15\textwidth}}
         \hline
         \textbf{Objective} & \textbf{Validation Method} & \textbf{Status} \\
-        \hline \hline
-        Cross-platform accessibility & Manual testing \& Playwright E2E tests on web browser & Implemented \\
         \hline
-        Vehicle management (CRUD) & Frontend Screenshots, Backend tests (Jest), E2E test (Playwright) & Implemented \\
+        Mitigate coordination friction & Frontend screenshots (Status dashboard, reservation modal), E2E tests (Playwright) & Implemented \\
         \hline
-        Authentication system & Frontend Screenshots, Backend tests (Jest), E2E test (Playwright) & Implemented \\
+        Combat maintenance blindness & Frontend screenshots (Maintenance modal), Backend tests (Jest) & Implemented \\
         \hline
-        Maintenance automation & Frontend Screenshots, Backend integration test (Jest) & Implemented \\
+        Address inefficient selection & Frontend screenshots (Recommendation screen), Backend tests (Jest) & Implemented \\
         \hline
-        Sustainability recommendation & Frontend Screenshots, Backend integration test (Jest) & Implemented \\
+        Establish collaborative framework & Frontend screenshots (Household card), Backend tests (Jest), E2E tests & Implemented \\
         \hline
-        Gamification system & Backend integration test for achievements (Jest) & Implemented \\
+        Gamification foundation & Frontend screenshot (Stats screen), Backend tests (Jest) & Implemented \\
         \hline
     \end{tabular}
+    }
 \end{table}
