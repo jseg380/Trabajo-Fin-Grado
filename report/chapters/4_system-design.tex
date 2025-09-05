@@ -1,10 +1,10 @@
 \chapter{System design and architecture}
 
-This chapter provides a detailed exposition of the architectural design and technical framework for the \textit{AlDiaCAR} application\footnote{A placeholder name for the application, derived from "Al Día" (up-to-date) and "Car".}. The design is fundamentally guided by the project's core objectives as defined in the preceding chapters: to deliver a cross-platform, scalable, and maintainable software solution that empowers individuals to manage and optimize their personal vehicle usage with a primary focus on enhancing sustainability and reducing operational friction.
+This chapter provides a detailed exposition of the architectural design and technical framework for the \textit{AlDiaCAR} application. The design is fundamentally guided by the project's core objectives as defined in the preceding chapters: to deliver a cross-platform, scalable, and maintainable software solution that empowers households to manage and optimize their personal vehicle usage with a primary focus on enhancing sustainability and reducing operational friction.
 
 \textgap
 
-The following sections will deconstruct the system from a high-level perspective down to its constituent components. We will begin by outlining the overarching client-server architecture, providing a rationale for this fundamental design choice. Subsequently, we will conduct a deep dive into the specific architectural patterns employed within both the frontend and backend, justifying the decisions made to balance complexity, performance, and developer ergonomics. The chapter will also thoroughly define the data model and its current limitations, detail the communication protocols and security measures governing the data flow, and provide a comprehensive justification for the selected technology stack, including an analysis of considered alternatives. This architectural blueprint serves as the technical foundation upon which the application's features, detailed in Chapter 5, are built.
+The following sections will deconstruct the system from a high-level perspective down to its constituent components. We will begin by outlining the overarching client-server architecture, providing a rationale for this fundamental design choice. Subsequently, we will conduct a deep dive into the specific architectural patterns employed within both the frontend and backend, justifying the decisions made to balance complexity, performance, and developer ergonomics. The chapter will also thoroughly define the data model that enables the system's collaborative features, detail the communication protocols and security measures governing the data flow, and provide a comprehensive justification for the selected technology stack. This architectural blueprint serves as the technical foundation upon which the application's features, detailed in Chapter 5, are built.
 
 \section{High-level architecture: A client-server model}
 
@@ -14,19 +14,13 @@ The system is architected following a classic, robust client-server model, a par
 
 The system is composed of four primary, logically distinct components:
 \begin{itemize}
-    \item \textbf{Frontend client:} A cross-platform mobile application, which serves as the sole point of interaction for the end-user. It is responsible for rendering the user interface, capturing user input, presenting data in a comprehensible format, and managing all communication with the backend server via a RESTful API. The use of React Native and the Expo framework enables a single codebase to target both iOS and Android platforms.
-    
+    \item \textbf{Frontend Client:} A cross-platform mobile application that serves as the sole point of interaction for the end-user. It is responsible for rendering the user interface, capturing user input, managing client-side state, and handling all communication with the backend server. The use of React Native and the Expo framework enables a single codebase to target both iOS and Android platforms.
     \textgap
-
-    \item \textbf{Backend server:} The central nervous system of the application. Implemented as a Node.js application using the Express.js framework, the backend serves as the authoritative hub for all operations. Its responsibilities include handling business logic, processing data, managing user authentication and authorization, and serving as the exclusive intermediary for all database interactions.
-    
+    \item \textbf{Backend Server:} The central nervous system of the application. Implemented as a Node.js application using the Express.js framework, the backend serves as the authoritative hub for all operations. Its responsibilities include handling business logic, processing data, managing user authentication and authorization, and serving as the exclusive intermediary for all database interactions.
     \textgap
-
-    \item \textbf{Database:} A MongoDB NoSQL database instance is utilized for all persistent data storage. This includes, but is not limited to, user profiles, detailed vehicle specifications, maintenance schedules, and trip logs. Its schema-less nature provides the flexibility required for an evolving data model.
-    
+    \item \textbf{Database:} A MongoDB NoSQL database instance is utilized for all persistent data storage. This includes household profiles, user accounts, detailed vehicle specifications, maintenance schedules, and trip logs. Its flexible, document-oriented nature provides the agility required for an evolving data model.
     \textgap
-
-    \item \textbf{Mock API (Development environment):} To facilitate robust, isolated, and deterministic development and testing, a secondary Node.js server is included in the development environment. This server simulates a third-party API for retrieving vehicle specifications, allowing the frontend and backend to be developed and tested without reliance on external, unpredictable, or unavailable services.
+    \item \textbf{Mock API (Development Environment):} To facilitate robust and isolated development, a secondary Node.js server is included in the development environment. This server simulates a third-party API for retrieving vehicle specifications (e.g., emission factors), allowing the core application to be developed and tested with deterministic data without reliance on external services.
 \end{itemize}
 
 \textgap
@@ -38,29 +32,29 @@ Figure \ref{fig:high-level-arch} provides a visual representation of this archit
     \begin{tikzpicture}[
         node distance=2.5cm and 3cm
     ]
-    % % Components
-    % \node[user] (user) {User};
-    % \node[comp, right=of user] (frontend) {\textbf{Frontend Client} \\ React Native (Expo) \\ \textit{Presentation Layer}};
+    % Components
+    \node[user] (user) {User};
+    \node[comp, right=of user] (frontend) {\textbf{Frontend Client} \\ React Native (Expo) \\ \textit{Presentation Layer}};
 
-    % % Backend server, placed below frontend
-    % \node[comp, below=of frontend, yshift=-0.5cm] (backend) {\textbf{Backend API} \\ Node.js / Express.js \\ \textit{Business Logic Layer}};
+    % Backend server, placed below frontend
+    \node[comp, below=of frontend, yshift=-0.5cm, xshift=3.5cm] (backend) {\textbf{Backend API} \\ Node.js / Express.js \\ \textit{Business Logic Layer}};
 
-    % % Mock API server
-    % \node[comp, right=of backend, xshift=1cm] (mockapi) {\textbf{Mock Car API} \\ Node.js \\ \textit{Development/Test Stub}};
+    % Mock API server
+    \node[comp, left=of backend, xshift=1cm] (mockapi) {\textbf{Mock Car API} \\ Node.js \\ \textit{Development/Test Stub}};
 
-    % % Database
-    % \node[db, left=of backend, xshift=-1cm] (db) {MongoDB \\ \textit{Data Persistence Layer}};
+    % Database
+    \node[db, below=of backend, yshift=1cm] (db) {MongoDB \\ \textit{Data Persistence Layer}};
 
-    % % Docker environment container
-    % \begin{pgfonlayer}{background}
-    %     \node[env={Docker Environment}, fit=(backend) (db) (mockapi), inner sep=0.5cm] (dockerenv) {};
-    % \end{pgfonlayer}
+    % Docker environment container
+    \begin{pgfonlayer}{background}
+        \node[env, label=above:{\color{gray}\small Docker Environment}, fit=(backend) (db) (mockapi), inner sep=0.5cm] (dockerenv) {};
+    \end{pgfonlayer}
 
-    % % Arrows
-    % \draw[arrow] (user.east) -- (frontend.west);
-    % \draw[arrow] (frontend.south) -- (backend.north) node[midway, right, xshift=0.1cm] {\textbf{REST API} \\ (HTTPS/JSON)};
-    % \draw[arrow] (backend.west) -- (db.east) node[midway, below] {Mongoose ODM};
-    % \draw[arrow, dashed] (frontend.east) .. controls +(east:1.5) and +(north:1) .. (mockapi.north) node[midway, above, sloped] {Mock API Call (Dev only)};
+    % Arrows
+    \draw[arrow] (user.east) -- (frontend.west);
+    \draw[arrow] (frontend.south east) -- (backend.north) node[midway, right, xshift=0.1cm, align=center] {\textbf{REST API} \\ (HTTPS/JSON)};
+    \draw[arrow] (backend.south) -- (db.north) node[midway, left] {Mongoose ODM};
+    \draw[arrow, dashed] (frontend.south west) -- (mockapi.north) node[midway, left, align=center] {Mock API Call \\ (Dev only)};
 
     \end{tikzpicture}
     \caption{High-level system architecture, illustrating the separation of layers and data flow.}
@@ -69,187 +63,118 @@ Figure \ref{fig:high-level-arch} provides a visual representation of this archit
 
 \section{Backend architecture: A Model-View-Controller approach}
 
-The backend is architected as a monolithic RESTful API adhering to the Model-View-Controller (MVC) design pattern, a well-established architectural pattern for separating application concerns and improving modularity, as influenced by the principles of object-oriented design \cite{Gamma1995DesignPatterns}. This classical pattern was selected for its proven efficacy in organizing server-side applications, promoting a clear separation of concerns that directly maps to the project's directory structure. This organizational clarity enhances maintainability and simplifies the onboarding of future developers.
+The backend is architected as a monolithic RESTful API adhering to the Model-View-Controller (MVC) design pattern, a well-established architectural pattern for separating application concerns and improving modularity, as influenced by the principles of object-oriented design \cite{Gamma1995DesignPatterns}. This classical pattern was selected for its proven efficacy in organizing server-side applications, promoting a clear separation of concerns that directly maps to the project's directory structure. This organizational clarity enhances maintainability and simplifies development.
 
 \textgap
 
-% The request-response lifecycle within the backend follows a well-defined path, as illustrated in Figure \ref{fig:backend-lifecycle}. An incoming HTTP request from the client is first routed by Express.js to the appropriate endpoint. It then passes through a chain of middleware functions, primarily for authentication and authorization. Upon successful validation, the request is handed to the designated controller function, which contains the core business logic. The controller interacts with the Mongoose model to perform necessary database operations (Create, Read, Update, Delete - CRUD). Finally, the controller formats the response and sends it back to the client.
+The request-response lifecycle within the backend follows a well-defined path, as illustrated in the sequence diagram in Figure \ref{fig:backend-lifecycle}. An incoming HTTP request from the client is first received by the Express.js router. The router identifies the appropriate endpoint and forwards the request through a chain of middleware functions, primarily for authentication. Upon successful validation, the request is handed to the designated controller function, which contains the core business logic. The controller interacts with the Mongoose model to perform necessary database operations (Create, Read, Update, Delete - CRUD). Finally, the controller formats the response and sends it back to the client.
 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=\textwidth]{images/sketches/placeholder.png}
-%     \caption{Sequence diagram of the backend request-response lifecycle.}
-%     \label{fig:backend-lifecycle}
-% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/backend-lifecycle-diagram.png}
+    \caption{Sequence diagram of the backend request-response lifecycle.}
+    \label{fig:backend-lifecycle}
+\end{figure}
 
 \subsection{Backend components}
 \begin{itemize}
-    \item \textbf{Routes (`/routes`):} This layer is responsible for defining the API's endpoints. It maps specific HTTP methods (GET, POST, PUT, DELETE) and URL paths to their corresponding controller functions. The design employs dedicated route files for each logical resource (e.g., \texttt{authRoutes.js}, \texttt{vehicleRoutes.js}), promoting modularity.
-
+    \item \textbf{Routes (`/routes`):} This layer defines the API's endpoints. It maps specific HTTP methods (GET, POST, PUT, DELETE) and URL paths to their corresponding controller functions. The design employs dedicated route files for each logical resource (e.g., \texttt{authRoutes.js}, \texttt{vehicleRoutes.js}, \texttt{householdRoutes.js}), promoting modularity.
     \textgap
-    
-    \item \textbf{Controllers (`/controllers`):} Controllers form the core of the business logic. Each function within a controller is responsible for handling a specific request, orchestrating the necessary operations, and formulating the final response. In the current architecture, controllers directly interact with the Mongoose models to execute data operations and contain all business-specific logic, such as calculating maintenance alerts or processing vehicle recommendations.
-    
+    \item \textbf{Controllers (`/controllers`):} Controllers form the heart of the business logic. Each function within a controller is responsible for handling a specific request, orchestrating the necessary operations, and formulating the final response. In the current architecture, controllers directly interact with the Mongoose models to execute data operations and contain all business-specific logic, such as calculating maintenance alerts or processing vehicle recommendations.
     \textgap
-    
-    \item \textbf{Models (`/models`):} This layer defines the data structures (schemas) for the application's entities using Mongoose, an Object Data Modeling (ODM) library for MongoDB. The primary models are \texttt{User.js}, \texttt{Vehicle.js}, and \texttt{Trip.js}. These models are not merely schemas; they also provide a high-level abstraction for all interactions with the database, encapsulating CRUD operations.
-    
+    \item \textbf{Models (`/models`):} This layer defines the data structures (schemas) for the application's entities using Mongoose, an Object Data Modeling (ODM) library for MongoDB. The primary models are \texttt{Household.js}, \texttt{User.js}, \texttt{Vehicle.js}, and \texttt{Trip.js}. These models provide a high-level abstraction for all interactions with the database.
     \textgap
-    
-    \item \textbf{Middleware (`/middleware`):} Middleware functions are executed in the intermediary stage between the router and the controller. They are primarily used for cross-cutting concerns. The most critical middleware, \texttt{authMiddleware.js}, is responsible for protecting routes by extracting and verifying the user's JSON Web Token (JWT) from the request, ensuring that only authenticated users can access protected resources.
+    \item \textbf{Middleware (`/middleware`):} Middleware functions are executed between the router and the controller. They are primarily used for cross-cutting concerns. The most critical middleware, \texttt{authMiddleware.js}, is responsible for protecting routes by extracting and verifying the user's JSON Web Token (JWT), ensuring that only authenticated users can access protected resources.
 \end{itemize}
 
-\subsection{Architectural decision: Controller-centric business logic}
-A deliberate architectural decision was made to embed all business logic directly within the controller layer, rather than abstracting it into a separate "Service Layer." For the current scope and complexity of the project, this approach offers the benefit of simplicity and reduces developmental overhead. However, it is recognized that as the application scales and business logic becomes more complex, this approach could lead to code duplication and "fat controllers." Future iterations of the system will likely require refactoring to introduce a dedicated service layer, which would encapsulate reusable business logic and be called by multiple controllers, thereby improving modularity and testability for a more complex system.
+\subsection{Architectural Decision: Controller-Centric Business Logic}
+A deliberate architectural decision was made to embed all business logic directly within the controller layer, rather than abstracting it into a separate "Service Layer." For the current scope and complexity of the project, this approach offers the benefit of simplicity and reduces developmental overhead. It allows for rapid iteration on the core functionalities of the prototype. However, it is recognized that as an application scales, this approach can lead to "fat controllers" and code duplication. Future iterations of the system would likely require refactoring to introduce a dedicated service layer to encapsulate reusable business logic, thereby improving modularity and testability.
 
-\section{Frontend architecture: A hybrid state management strategy}
+\section{Frontend Architecture: A Hybrid State Management Strategy}
 
-The frontend client, built with React Native and Expo, employs a sophisticated and pragmatic hybrid state management strategy. This approach avoids the dogmatic application of a single pattern, instead choosing the most appropriate tool for each type of state, thereby optimizing for both developer experience and application performance.
+The frontend client, built with React Native and Expo, employs a pragmatic hybrid state management strategy. This approach avoids the dogmatic application of a single pattern, instead choosing the most appropriate tool for each type of state, thereby optimizing for both developer experience and application performance.
 
-\subsection{Global state management via React context}
-For state that is truly global and required across many disparate parts of the application, the React Context API is employed. The primary use case for this is user authentication. The \texttt{AuthContext} provides the entire component tree with access to the current user's data, authentication status, and functions for logging in and out. This approach is ideal for such cross-cutting concerns because it is lightweight, built directly into the React library, and avoids the boilerplate and complexity associated with larger, third-party state management libraries like Redux, which would be excessive for the project's current needs.
+\subsection{Global State Management via React Context}
+For state that is truly global and required across many disparate parts of the application, the React Context API is employed. The primary use case for this is user authentication. The \texttt{AuthContext} provides the entire component tree with access to the current user's data, authentication status, and functions for logging in and out. This approach is ideal for such cross-cutting concerns because it is lightweight, built directly into the React library, and avoids the complexity of larger, third-party state management libraries.
 
-\subsection{Screen-level state management (MVVM-like pattern)}
-For state that is local to a specific screen or a small group of related components, the architecture follows a pattern that is conceptually aligned with Model-View-ViewModel (MVVM), where each screen manages its own state and logic, a common approach in modern client-side applications for achieving a clean separation of the view from its underlying model \cite{Garg2013ComparingPatterns}.
+\subsection{Screen-Level State Management (MVVM-like Pattern)}
+For state that is local to a specific screen, the architecture follows a pattern that is conceptually aligned with Model-View-ViewModel (MVVM), where each screen manages its own state and logic, a common approach in modern client-side applications for achieving a clean separation of the view from its underlying model \cite{Garg2013ComparingPatterns}. Each screen component is responsible for managing its own state (e.g., list of vehicles, loading status) and data-fetching logic using React's built-in hooks. This encapsulation prevents the global state from becoming a bottleneck, improves performance by preventing unnecessary re-renders, and makes components easier to test in isolation. This approach aligns with the principles of modern, declarative UI development prevalent in the React Native ecosystem \cite{Djirdeh2018FullstackReactNative}.
 
-\textgap
+\section{Data Architecture and Modeling}
 
-For example, the "Vehicles" screen manages its own list of vehicles, its loading status, and any potential error states. It also contains the logic to fetch this data from the backend when the screen comes into focus. This encapsulation offers several advantages:
+The design of the data model is critical to supporting the application's core collaborative features.
+
+\subsection{Rationale for a NoSQL Database (MongoDB)}
+A NoSQL database, specifically MongoDB, was chosen over a traditional relational database for its flexible data schema. The domain of vehicle management involves entities with diverse attributes; for example, an electric vehicle's data profile differs significantly from that of a diesel vehicle. A NoSQL document-based model allows for these variations to exist within the same collection without requiring complex schema migrations. This approach aligns with the principles of aggregate-oriented databases, which prioritize scalability and development flexibility \cite{Sadalage2012NoSQLDistilled}.
+
+\subsection{Core Collections and Collaborative Relationships}
+The data model is architected around the central concept of the "household," as shown in Figure \ref{fig:data-model-detailed}. This design directly reflects the problem statement and enables all multi-user functionalities.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=2cm and 1.5cm,
+        entity/.style={
+            rectangle, rounded corners, draw=black, very thick,
+            minimum width=3.5cm, minimum height=2cm, align=left,
+            text width=4.5cm, fill=blue!10, drop shadow
+        },
+        arrow/.style={-{Latex[length=3mm]}, very thick}
+    ]
+
+    % Entities
+    \node[entity] (household) {\textbf{Household Collection} \\ \texttt{\_id: ObjectId (PK)} \\ \texttt{name: String} \\ \texttt{joinCode: String (unique)} \\ \texttt{owner: ObjectId (FK -> User)}};
+    \node[entity, below left=of household, xshift=0.5cm] (user) {\textbf{User Collection} \\ \texttt{\_id: ObjectId (PK)} \\ \texttt{name: String} \\ \texttt{household: ObjectId (FK -> Household)}};
+    \node[entity, below right=of household, xshift=-2cm, yshift=0.3cm] (vehicle) {\textbf{Vehicle Collection} \\ \texttt{\_id: ObjectId (PK)} \\ \texttt{owner: ObjectId (FK -> User)} \\ \texttt{make: String} \\ \texttt{model: String}};
+
+    % Relationships
+    \draw[arrow] (household.south west) -- (user.north) node[midway, left, align=center, xshift=-0.8cm] {1..n \\ has member};
+    \draw[arrow] (user.east) -- (vehicle.west) node[midway, above, align=center] {1..n \\ owns};
+    \path (household.south east) edge[arrow, dashed] node[midway, right, text width=2cm, align=center, xshift=0.8cm] {contains (via owner)} (vehicle.north);
+
+    \end{tikzpicture}
+    \caption{Detailed data model illustrating the central role of the Household collection and its relationships with users and vehicles.}
+    \label{fig:data-model-detailed}
+\end{figure}
+
+The primary collections and their relationships are as follows:
 \begin{itemize}
-    \item \textbf{Encapsulation and co-location:} State and the logic that manipulates it are kept together within the component that needs it, making the code easier to understand, debug, and refactor.
-    \item \textbf{Performance:} It prevents the global state from becoming a bottleneck or being cluttered with data that is only relevant to a single part of the application, which in turn prevents unnecessary re-renders of unrelated components.
-    \item \textbf{Testability:} Self-contained screen components are significantly easier to unit test in isolation.
+    \item \textbf{Households:} This is the central collection that groups users and their shared assets. Each household has a unique, randomly generated `joinCode` to facilitate a simple and secure invitation mechanism.
+    \item \textbf{Users:} Each user document is linked to a single `Household` via a reference ID. When a new user registers, a personal household is created for them by default. They can then join other households or invite others to theirs.
+    \item \textbf{Vehicles:} Each vehicle is owned by a single user. A vehicle's association with a household is therefore derived implicitly through its owner's membership in that household. This enables authorization logic where any member of a household can view and interact with any vehicle owned by another member of the same household.
 \end{itemize}
-This hybrid strategy provides a "best of both worlds" solution: a simple, centralized way to handle global concerns, and a scalable, encapsulated approach for managing local, feature-specific state. This approach, leveraging component-local state via Hooks and global state via the Context API, aligns with the principles of modern, declarative UI development prevalent in the React Native ecosystem \cite{Djirdeh2018FullstackReactNative}.
-
-\section{Data architecture and modeling}
-
-The choice of a database and the design of the data model are critical architectural decisions that directly impact the application's flexibility, scalability, and performance.
-
-\subsection{Rationale for a NoSQL database (MongoDB)}
-A NoSQL database, specifically MongoDB, was chosen over a traditional relational database (e.g., PostgreSQL) for several strategic reasons. The primary driver for this decision was the need for a flexible data schema. The domain of vehicle management involves entities with potentially diverse and evolving attributes. For example, an electric vehicle's data profile (battery capacity, charger type) is fundamentally different from that of a diesel vehicle (tank capacity, emissions standard). A NoSQL document-based model allows for these variations to exist within the same collection without requiring complex table joins or schema migrations, which is highly advantageous for a project with an iterative development roadmap. This approach aligns with the principles of aggregate-oriented databases, which prioritize scalability and development flexibility \cite{Sadalage2012NoSQLDistilled}.
-
-\subsection{Core collections and relationships}
-The data model for the current single-user scope is composed of three primary collections. The relationships are managed through ObjectIDs, which serve as foreign key equivalents.
-
-% \begin{figure}[H]
-%     \centering
-%     \begin{tikzpicture}[
-%         node distance=2.5cm and 3cm,
-%         entity/.style={
-%             rectangle, rounded corners, draw=black, very thick,
-%             minimum width=4cm, minimum height=2cm, align=left,
-%             text width=5cm, fill=blue!10, drop shadow
-%         },
-%         arrow/.style={-{Latex[length=3mm]}, very thick}
-%     ]
-
-%     % Entities
-%     \node[entity] (user) {\textbf{User Collection} \\ \texttt{\_id: ObjectId (PK)} \\ \texttt{name: String} \\ \texttt{email: String (unique)} \\ \texttt{password: String (hashed)} \\ \texttt{achievements: [String]}};
-%     \node[entity, right=of user, xshift=2cm] (vehicle) {\textbf{Vehicle Collection} \\ \texttt{\_id: ObjectId (PK)} \\ \texttt{owner: ObjectId (FK -> User)} \\ \texttt{make: String} \\ \texttt{model: String} \\ \texttt{year: Number} \\ \texttt{fuelType: String (Enum)} \\ \texttt{emissions: Number (gCO2/km)} \\ \texttt{maintenance: \{...\} (Embedded)} };
-%     \node[entity, below=of vehicle] (trip) {\textbf{Trip Collection} \\ \texttt{\_id: ObjectId (PK)} \\ \texttt{driver: ObjectId (FK -> User)} \\ \texttt{vehicle: ObjectId (FK -> Vehicle)} \\ \texttt{distance: Number} \\ \texttt{date: Date}};
-
-%     % Relationships
-%     \draw[arrow] (user.east) -- (vehicle.west) node[midway, above, text width=2cm, align=center] {1..n \\ owns};
-%     \draw[arrow] (vehicle.south) -- (trip.north) node[midway, right] {1..n \\ used in};
-%     \path (user.south) edge[arrow, bend right=30] node[midway, left] {1..n \\ logs} (trip.west);
-
-%     \end{tikzpicture}
-%     \caption{Detailed Data Model illustrating collections, key fields, and relationships.}
-%     \label{fig:data-model-detailed}
-% \end{figure}
-
-\subsection{Modeling maintenance: The embedded document approach}
-In the current design, maintenance information is modeled as a single, embedded sub-document within each \texttt{Vehicle} document. Each key within this sub-document represents a specific maintenance task (e.g., `oilChange`, `itvInspection`), and its value stores the corresponding due date or mileage. This denormalized approach was chosen for its simplicity and performance. It allows all maintenance data for a vehicle to be retrieved in a single database query, avoiding the need for complex joins or additional lookups that would be required with a separate `MaintenanceItem` collection. While this approach is highly efficient for the current feature set, it may be revisited if future requirements necessitate more complex querying or history tracking of maintenance tasks.
-
-\subsection{Architectural limitation and future work: The household model}
-A significant and acknowledged limitation of the current data architecture is its exclusive focus on a single-user context. Users are standalone entities, and there is no data structure to group them into a "household" or to model the shared ownership or use of vehicles. This design decision was made to constrain the initial project scope to a manageable size.
-
-\textgap
-
-Evolving the system to a full multi-user, collaborative "household" model represents the most significant future architectural challenge. This would necessitate substantial changes to the data model, including:
-\begin{enumerate}
-    \item The introduction of a new \textbf{\texttt{Household}} collection.
-    \item A mechanism to link multiple \texttt{User} documents to a single \texttt{Household}.
-    \item A robust invitation and membership management system.
-    \item A re-evaluation of the `owner` field on the \texttt{Vehicle} collection to support shared ownership or distinguish between an owner and authorized drivers.
-    \item A more granular authorization model (potentially Role-Based Access Control) to manage permissions within a household.
-\end{enumerate}
-This future work is a logical extension of the current system and is a primary consideration for post-thesis development.
+A comprehensive definition of all Mongoose data schemas is provided in Appendix B.
 
 \section{API design and security protocols}
-
-The design of the Application Programming Interface (API) and its underlying security protocols are critical for ensuring reliable communication and protecting user data.
+The Application Programming Interface (API) is the critical boundary between the client and server, and its design is governed by principles of standardization and security.
 
 \subsection{API design: RESTful principles}
-The API is designed following REST (Representational State Transfer) principles, adhering to the constraints of statelessness, resource-based addressing, and a uniform interface as defined in the foundational architectural style \cite{Fielding2000REST}. It uses standard HTTP methods (GET, POST, PUT, DELETE) for operations, leverages URL paths to identify resources (e.g., \texttt{/api/vehicles}), and uses standard HTTP status codes to communicate the outcome of requests. All data is exchanged in the JSON format. This adherence to web standards makes the API predictable, easy to consume by clients, and broadly understood.
+The API is designed following REST (Representational State Transfer) principles, adhering to the constraints of statelessness, resource-based addressing, and a uniform interface as defined in the foundational architectural style \cite{Fielding2000REST}. It uses standard HTTP methods (GET, POST, PUT, DELETE) for operations and leverages URL paths to identify resources (e.g., \texttt{/api/vehicles}). This adherence to web standards makes the API predictable and easy to consume. A complete specification of all API endpoints is available in Appendix A.
 
-\subsection{Authentication: JWT in HTTP-only cookies}
-User authentication is managed via JSON Web Tokens (JWTs). Upon successful login, the backend server generates a signed JWT containing the user's ID and sends it back to the client in a secure, \textbf{HTTP-Only} cookie. This cookie is automatically included by the browser/client in all subsequent requests to the server. The HTTP-Only flag is a crucial security measure, as it prevents the token from being accessed by client-side JavaScript, thereby mitigating the risk of Cross-Site Scripting (XSS) attacks.
-
-\subsection{Authorization: Ownership-based access control (OBAC)}
-The system's authorization strategy is Ownership-Based Access Control. Once a user is authenticated (their identity is confirmed via JWT), the authorization middleware performs a second check for any request that attempts to access or modify a specific resource (like a vehicle). The middleware ensures that the authenticated user's ID matches the \texttt{owner} field of the requested resource. If they do not match, the request is rejected with a `403 Forbidden` status. This simple yet effective model ensures that users can only interact with their own data.
-
-\subsection{Standardized error handling}
-A consistent error handling strategy is employed to ensure that the client can reliably interpret and respond to issues. The API uses standard HTTP status codes in conjunction with a structured JSON error body.
-
-\begin{table}[h!]
-    \centering
-    \caption{Standard API HTTP status codes and meanings}
-    \begin{tabular}{l|p{0.7\textwidth}}
-        \hline
-        \textbf{Status Code} & \textbf{Meaning in AlDiaCAR Context} \\
-        \hline
-        200 OK & The request was successful (e.g., successful GET request). \\
-        \hline
-        201 Created & The request was successful and a new resource was created (e.g., successful POST to create a vehicle). \\
-        \hline
-        400 Bad Request & The request could not be understood by the server due to malformed syntax (e.g., missing required fields in the request body). \\
-        \hline
-        401 Unauthorized & The request requires user authentication. The client has not provided a valid JWT. \\
-        \hline
-        403 Forbidden & The user is authenticated, but does not have permission to access the requested resource (OBAC failure). \\
-        \hline
-        404 Not Found & The requested resource could not be found on the server. \\
-        \hline
-        500 Internal Server Error & A generic error message, given when an unexpected condition was encountered on the server. \\
-        \hline
-    \end{tabular}
-\end{table}
+\subsection{Authentication and authorization}
+The system employs a robust, token-based security model.
+\begin{itemize}
+    \item \textbf{Authentication:} User authentication is managed via JSON Web Tokens (JWTs). Upon successful login, the backend server generates a signed JWT and sends it to the client in a secure, \textbf{HTTP-Only} cookie. The HTTP-Only flag is a crucial security measure that prevents the token from being accessed by client-side JavaScript, mitigating the risk of Cross-Site Scripting (XSS) attacks.
+    \textgap
+    \item \textbf{Authorization:} The system's authorization strategy is \textbf{Household-Based Access Control}. Once a user is authenticated, the middleware performs a second check for any request that attempts to access a resource (like a vehicle). The logic verifies that the requesting user is a member of the same household as the resource's owner. If they are not, the request is rejected with a `403 Forbidden` status. This model ensures that users can only interact with vehicles within their own household group.
+\end{itemize}
 
 \section{Technology stack justification}
 
-The selection of each technology in the stack was the result of a deliberate evaluation of the project's specific requirements against the strengths and weaknesses of available options.
-
+The selection of each technology was the result of a deliberate evaluation of the project's requirements.
 \begin{itemize}
-    \item \textbf{React Native (with Expo):} Chosen for its primary benefit of cross-platform development, allowing a single JavaScript/TypeScript codebase to generate native applications for both iOS and Android. This drastically reduces development time and effort. Expo was specifically included to abstract away the complexities of native build configurations, further accelerating the development cycle.
-    \newline\textit{Considered Alternative: Flutter.} Flutter was a strong contender but was ultimately not selected due to the project's reliance on the vast JavaScript/React ecosystem and the desire for language synergy between the frontend and backend.
-    
+    \item \textbf{React Native (with Expo):} Chosen for its primary benefit of cross-platform development, allowing a single codebase to generate native applications for both iOS and Android. This drastically reduces development time.
+    \newline\textit{Considered Alternative: Flutter.} Flutter was a strong contender but was ultimately not selected due to the project's reliance on the vast JavaScript/React ecosystem and the desire for language synergy with the backend.
     \textgap
-    
-    \item \textbf{Node.js with Express.js:} Selected for the backend due to its non-blocking, event-driven architecture, which provides excellent performance for I/O-heavy operations typical of an API server. The use of JavaScript/TypeScript creates a seamless, full-stack development experience, allowing for shared code and libraries.
-    \newline\textit{Considered Alternative: Python with Django/Flask.} While powerful, this stack was passed over to maintain language consistency across the entire project, which simplifies the development toolchain.
-    
+    \item \textbf{Node.js with Express.js:} Selected for the backend due to its non-blocking, event-driven architecture, which provides excellent performance for an API server. Its use of JavaScript creates a seamless, full-stack development experience.
+    \newline\textit{Considered Alternative: Python with Django/Flask.} This stack was passed over to maintain language consistency across the entire project.
     \textgap
-    
-    \item \textbf{MongoDB:} As previously detailed, MongoDB was chosen for its flexible document-based schema, which is highly suited to the evolving and varied data structures of vehicle profiles. Its inherent scalability is also a significant advantage for future growth.
-    \newline\textit{Considered Alternative: PostgreSQL.} A relational database like PostgreSQL was considered for its data integrity features (ACID compliance). However, the anticipated need for schema flexibility was deemed a more critical requirement for this project, making MongoDB the superior choice.
-    
+    \item \textbf{MongoDB:} As previously detailed, MongoDB was chosen for its flexible document-based schema, highly suited to the evolving data structures of vehicle profiles.
+    \newline\textit{Considered Alternative: PostgreSQL.} A relational database was considered for its data integrity features, but the need for schema flexibility was deemed more critical for this project.
     \textgap
-
-    \item \textbf{Docker:} Docker and Docker Compose are utilized to containerize the backend services. This practice is a key enabler of modern Continuous Delivery pipelines, as it eliminates environmental discrepancies and simplifies the deployment process \cite{Humble2010ContinuousDelivery}. This ensures a consistent, reproducible, and isolated development environment, eliminating "it works on my machine" problems and simplifying the setup process for any developer working on the project.
+    \item \textbf{Docker:} Docker and Docker Compose are utilized to containerize the backend services. This practice is a key enabler of modern Continuous Delivery pipelines, as it eliminates environmental discrepancies and simplifies the deployment process \cite{Humble2010ContinuousDelivery}.
 \end{itemize}
 
 \section{Architectural considerations for external integrations}
 
-While the current version of the application operates as a self-contained system, the Zenith Release vision requires integration with several third-party services. The architecture is designed with this future extensibility in mind. The primary external integrations required are:
-
-\begin{itemize}
-    \item \textbf{Mapping and Routing Services:} To calculate trip distances and potentially offer turn-by-turn navigation.
-    \item \textbf{Low Emission Zone (ZBE) Data Services:} To fetch real-time, geo-located data on ZBE boundaries and access rules.
-    \item \textbf{Fuel Price Data Services:} To provide real-time local fuel prices for accurate cost calculations.
-\end{itemize}
-
-\textgap
-
-To manage these future integrations without creating tight coupling, the backend architecture will employ the \textbf{Adapter Pattern}. For each type of external service, a dedicated "adapter" or "connector" module will be created. This module will serve as an intermediary, translating the application's internal requests into the specific format required by the external API and translating the external API's response back into a standardized format for the application. This abstraction ensures that if a provider (e.g., for fuel price data) needs to be changed in the future, only the corresponding adapter module needs to be rewritten; the core business logic of the application remains untouched. This design promotes modularity, testability, and long-term maintainability.
+While the current proof-of-concept uses simplified, hardcoded data for features like ZBE detection, the Zenith Release vision requires integration with several third-party services. To manage these future integrations without creating tight coupling, the backend architecture will employ the \textbf{Adapter Pattern}. For each external service (e.g., ZBE data, fuel prices, mapping), a dedicated "adapter" module will be created. This module will act as an intermediary, translating the application's internal requests into the specific format required by the external API and translating the response back into a standardized format. This abstraction ensures that if a data provider changes in the future, only the corresponding adapter module needs to be rewritten, leaving the core business logic of the application untouched.
