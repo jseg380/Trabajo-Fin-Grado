@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
+import { Tabs, Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import { API_URL } from '@/constants/config';
 import { ActivityIndicator } from 'react-native-paper';
 import { showInfoAlert } from '@/utils/CrossPlatformAlert';
+import CustomHeaderBackButton from '@/components/CustomHeaderBackButton';
 
 // This is a simplified edit screen. It doesn't re-fetch external specs.
 export default function EditVehicleScreen() {
@@ -44,7 +45,13 @@ export default function EditVehicleScreen() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: `Edit ${make} ${model}` }} />
+      <Tabs.Screen options={{ tabBarStyle: { display: 'none' } }} />
+      <Stack.Screen 
+        options={{
+          title: `Edit ${make} ${model}`,
+          headerLeft: () => <CustomHeaderBackButton route='/vehicles' />,
+        }}
+      />
       <Text style={styles.title}>Edit Vehicle</Text>
       
       <TextInput

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
-import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
+import { Tabs, Stack, useRouter, useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import { API_URL } from '@/constants/config';
 import { ActivityIndicator } from 'react-native-paper';
 import { showInfoAlert } from '@/utils/CrossPlatformAlert';
+import CustomHeaderBackButton from '@/components/CustomHeaderBackButton';
 
 // We only need a subset of the vehicle data for this form
 type MaintenanceData = {
@@ -69,7 +70,13 @@ export default function MaintenanceLogScreen() {
   
   return (
     <ScrollView style={styles.container}>
-      <Stack.Screen options={{ title: `Mantenimiento de ${vehicleName}` }} />
+      <Tabs.Screen options={{ tabBarStyle: { display: 'none' } }} />
+      <Stack.Screen 
+        options={{
+          title: `Maintenance: ${vehicleName}`,
+          headerLeft: () => <CustomHeaderBackButton route='/vehicles' />,
+        }}
+      />
       <Text style={styles.title}>Log Maintenance</Text>
       <Text style={styles.subtitle}>Enter the new date or remaining distance for each task.</Text>
       

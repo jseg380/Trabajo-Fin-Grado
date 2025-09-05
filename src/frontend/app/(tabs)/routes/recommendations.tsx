@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Linking } from 'react-native';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Tabs, Stack, useLocalSearchParams } from 'expo-router';
 import { Card, Title, Paragraph, Button, Modal, Portal } from 'react-native-paper';
 import axios from 'axios';
 import { API_URL } from '@/constants/config';
+import CustomHeaderBackButton from '@/components/CustomHeaderBackButton';
 
 interface Recommendation {
   _id: string;
@@ -60,7 +61,13 @@ export default function RecommendationsScreen() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: 'Vehicle Recommendations' }} />
+      <Tabs.Screen options={{ tabBarStyle: { display: 'none' } }} />
+      <Stack.Screen
+        options={{
+          title: 'Vehicle Recommendations',
+          headerLeft: () => <CustomHeaderBackButton route='/routes' />,
+        }}
+      />
       <Portal>
         <Modal visible={modalVisible} onDismiss={() => setModalVisible(false)} contentContainerStyle={styles.modalContainer}>
           <Title>Ready to drive?</Title>

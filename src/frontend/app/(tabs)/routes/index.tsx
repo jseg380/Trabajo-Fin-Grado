@@ -7,8 +7,8 @@ import { showInfoAlert } from '@/utils/CrossPlatformAlert';
 
 // Hardcoded locations for the demo
 const LOCATIONS = {
-  "Plaza Nueva (ZBE)": { lat: 37.1773, lng: -3.5986, distance: 5 }, // 5 km trip
-  "Alhambra (Outside ZBE)": { lat: 37.1761, lng: -3.5881, distance: 8 }, // 8 km trip
+  "Plaza Nueva (ZBE)": { lat: 37.1773, lng: -3.5986, distance: 5 },
+  "Alhambra (Outside ZBE)": { lat: 37.1761, lng: -3.5881, distance: 5 },
 };
 type LocationKey = keyof typeof LOCATIONS;
 

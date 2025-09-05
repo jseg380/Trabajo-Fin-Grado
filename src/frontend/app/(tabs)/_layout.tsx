@@ -59,6 +59,7 @@ function TabsLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#2196F3',
+        tabBarActiveBackgroundColor: '#F4F4F8',
         headerRight: () => ProfileButton()
       }}
     >

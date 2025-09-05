@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, Alert } from 'react-native';
-import { Stack, useRouter } from 'expo-router';
+import { Tabs, Stack, useRouter } from 'expo-router';
 import { ActivityIndicator, Menu, Button as PaperButton } from 'react-native-paper';
 import axios from 'axios';
 import { API_URL, SPECS_API_URL } from '@/constants/config';
 import { withAuth } from '@/utils/withAuth';
 import { showInfoAlert } from '@/utils/CrossPlatformAlert';
+import CustomHeaderBackButton from '@/components/CustomHeaderBackButton';
 
 // --- This function simulates a call to an external API ---
 // In a real app, this would be a fetch call to a service like 'Auto-data'
@@ -86,7 +87,13 @@ function AddVehicleScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Stack.Screen options={{ title: 'Add New Vehicle' }} />
+      <Tabs.Screen options={{ tabBarStyle: { display: 'none' } }} />
+      <Stack.Screen
+        options={{
+          title: 'Add New Vehicle',
+          headerLeft: () => <CustomHeaderBackButton route='/vehicles' />,
+       }}
+      />
       <Text style={styles.title}>Add Your Vehicle</Text>
       <Text style={styles.subtitle}>Enter basic details to get started.</Text>
 
