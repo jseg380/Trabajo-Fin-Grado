@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, useWindowDimensions, StyleProp, ViewStyle } from 'react-native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import axios from 'axios';
@@ -22,7 +22,11 @@ interface StatsData {
   tripCount: number;
   vehicleCount: number;
   averageEmissions: number;
-}
+};
+
+interface UserProfile {
+  achievements: string[]
+};
 
 function StatCard({
     icon,
@@ -42,8 +46,8 @@ function StatCard({
   return (
     <View style={[styles.statCard, extraStyles]}>
       {fontAwesomeIcon
-        ? <FontAwesome name={icon} size={32} color='#007AFF' />
-        : <Ionicons name={icon} size={32} color='#007AFF' />}
+        ? <FontAwesome name={icon} size={32} color='#2196F3' />
+        : <Ionicons name={icon} size={32} color='#2196F3' />}
       
       <Text style={styles.statValue}>{value} <Text style={styles.statUnit}>{unit}</Text></Text>
       <Text style={styles.statLabel}>{label}</Text>
@@ -74,22 +78,30 @@ function StatsScreen() {
   const { user } = useAuth();
   const { t } = useTranslation();
   const [stats, setStats] = useState<StatsData | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const isWideScreen = useWindowDimensions().width > 600;
 
-  useFocusEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await axios.get(new URL('stats', API_URL).href, { withCredentials: true });
-        setStats(response.data);
-      } catch (err) {
-        console.error('Failed to fetch stats:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStats();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const [statsResponse, profileResponse] = await Promise.all([
+            axios.get(new URL('stats', API_URL).href, { withCredentials: true }),
+            axios.get(new URL('users/profile', API_URL).href, { withCredentials: true })
+          ]);
+          setStats(statsResponse.data);
+          setUserProfile(profileResponse.data);
+        } catch (err) {
+          console.error('Failed to fetch stats or profile:', err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
+    }, [])
+  );
 
   if (loading) {
     return <ActivityIndicator size='large' style={styles.centered} />;
@@ -114,10 +126,9 @@ function StatsScreen() {
         {Object.entries(ALL_ACHIEVEMENTS).map(([key, config]) => (
           <Achievement
             key={key}
-            icon={config.icon}
+            icon={config.icon as any}
             title={t(config.key)}
-            // Check if the user's achievement array includes this key
-            unlocked={user?.achievements?.includes(key)}
+            unlocked={userProfile?.achievements?.includes(key) ?? false}
           />
         ))}
       </View>
