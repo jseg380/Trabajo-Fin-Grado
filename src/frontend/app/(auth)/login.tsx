@@ -1,10 +1,11 @@
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Image } from 'react-native';
 import { useAuth } from '@/context/AuthContext';
 import { Link, router, Stack } from 'expo-router';
 import { useState } from 'react';
 import TitleSetterWebPage from '@/components/TitleSetter';
 import { useTranslation } from 'react-i18next';
 import { SimpleLineIcons } from '@expo/vector-icons';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -40,10 +41,15 @@ export default function LoginScreen() {
                 {t('pages.login.title')}
               </Text>
             </View>
-          )
+          ),
+          headerRight: () => <LanguageSwitcher />,
         }}
       />
       <TitleSetterWebPage title={t('pages.login.title')} />
+      <Image
+        source={require('@/assets/images/aldiacar-logo-text.png')}
+        style={styles.logo}
+      />
       <Text style={styles.title}>{t('pages.login.header-title')}</Text>
       
       {error ? <Text style={styles.error}>{error}</Text> : null}
@@ -110,7 +116,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   link: {
-    color: 'blue',
+    color: '#2196F3',
     marginTop: 15,
     textAlign: 'center'
   },
@@ -118,5 +124,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
     marginTop: 10
-  }
+  },
+  logo: {
+    width: 200,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
 });
