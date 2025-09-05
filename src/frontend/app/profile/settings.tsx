@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   },
   pictureButton: {
     paddingVertical: 4,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#2196F3',
   }
 });
 
