@@ -53,6 +53,7 @@ import tripRoutes from './routes/tripRoutes.js';
 import recommendationRoutes from './routes/recommendationRoutes.js';
 import statsRoutes from './routes/statsRoutes.js';
 import maintenanceRoutes from './routes/maintenanceRoutes.js';
+import householdRoutes from './routes/householdRoutes.js';
 
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
@@ -62,6 +63,7 @@ app.use('/api/trips', tripRoutes);
 app.use('/api/recommendations', recommendationRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
+app.use('/api/households', householdRoutes);
 
 // Fallback route for undefined API endpoints
 app.use((req, res) => {
