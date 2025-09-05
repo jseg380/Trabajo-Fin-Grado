@@ -85,6 +85,16 @@ export default function LoginScreen() {
       >
         <Text style={styles.link}>{t('pages.login.register-link')}</Text>
       </Link>
+      <Link
+        href='/(auth)/register'
+        onPress={(e) => {
+          e.preventDefault();
+          router.replace('/(auth)/register');
+        }}
+        asChild
+      >
+        <Text style={styles.link}>{t('pages.login.forgotten-password')}</Text>
+      </Link>
     </View>
   );
 }
