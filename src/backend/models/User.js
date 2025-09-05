@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema(
       required: true,
       select: false, // Never return password in queries
     },
+    household: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Household',
+    },
     avatar: {
       type: String,
       default: 'images/generic-avatar.png',
