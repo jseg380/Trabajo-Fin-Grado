@@ -154,3 +154,78 @@ Security is implemented through several mechanisms:
     \item \textbf{Route protection:} The \texttt{authMiddleware} ensures that only authenticated users can access protected endpoints.
     \item \textbf{Environment variables:} Sensitive information like database connection strings and JWT secrets are managed via \texttt{.env} files and are not committed to version control.
 \end{itemize}
+
+
+
+\section{Development effort and cost analysis}
+
+While this project was undertaken within an academic context, it is valuable to perform a cost analysis to estimate the resources required to develop a market-ready product based on the AlDiaCAR concept. This section provides a high-level budget estimation, breaking down the costs associated with the development of the "Thesis-Grade Beta" (the scope implemented for this project) and projecting the additional investment needed to achieve the full Zenith release.
+
+\subsection{Methodology and assumptions}
+
+The budget is calculated based on a team of freelance professionals based in Spain, with standard market rates for software development roles. The estimation is based on the hours required for each key phase of the project: design, development, and project management.
+
+The following roles and hourly rates are assumed:
+\begin{itemize}
+\item \textbf{Project manager / Product owner:} Responsible for requirements, planning, and oversight. Rate: €50/hour.
+\item \textbf{UI/UX Designer:} Responsible for visual identity, wireframing, and creating high-fidelity mockups. Rate: €35/hour.
+\item \textbf{Backend developer:} Responsible for the server, API, and database architecture. Rate: €40/hour.
+\item \textbf{Frontend (Mobile) developer:} Responsible for the React Native application. Rate: €40/hour.
+\end{itemize}
+
+\subsection{Estimated development costs}
+
+Table \ref{tab:development_costs} outlines the estimated hours and costs for the development of the Thesis-Grade Beta (representing the completed Alpha and Beta phases) and the projected additional effort required to complete the Zenith release.
+
+\begin{table}[H]
+\small
+\centering
+\caption{Estimated development costs by phase}
+\label{tab:development_costs}
+\begin{tabular}{>{\raggedright\arraybackslash}p{3cm} | >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.5cm} | >{\centering\arraybackslash}p{1.5cm} |  >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.5cm}}
+\hline
+\textbf{Role} & \textbf{Hours (Beta)} & \textbf{Hours (Zenith add-on)} & \textbf{Rate (€/hr)} & \textbf{Subtotal (Beta)} & \textbf{Subtotal (Zenith add-on)} \\[2pt]
+\hline
+Project manager & 40 hrs & 60 hrs & €50 & €2,000 & €3,000 \\[0.9cm]
+UI/UX Designer & 30 hrs & 40 hrs & €35 & €1,050 & €1,400 \\[0.9cm]
+Backend developer & 120 hrs & 100 hrs & €40 & €4,800 & €4,000 \\[0.9cm]
+Frontend developer & 120 hrs & 100 hrs & €40 & €4,800 & €4,000 \\[0.9cm]
+\hline
+\textbf{Total person-hours} & \textbf{310 hrs} & \textbf{300 hrs} & --- & --- & --- \\[2pt]
+\textbf{Subtotal labor costs} & --- & --- & --- & \textbf{€12,650} & \textbf{€12,400} \\[2pt]
+\hline
+\multicolumn{5}{r}{\textbf{Projected total for Zenith release:}} & \textbf{€25,050} \\
+\hline
+\end{tabular}
+\end{table}
+
+The development of the Thesis-Grade Beta, which includes the critical household data model, the reservation system, and the full multi-factor recommendation engine, is estimated to require approximately 310 person-hours, resulting in a cost of €12,650.
+
+\textgap
+
+To complete the Zenith release, which would involve integrating live third-party APIs, building the full graphical analytics dashboard, and implementing the collaborative gamification layer, an additional 300 person-hours are projected. This would represent a further investment of €12,400, bringing the total estimated development cost for a market-ready Zenith version to €25,050.
+
+\subsection{Other associated costs}
+
+Beyond direct development labor, a production-grade application would incur other initial and ongoing costs. These are summarized in Table \ref{tab:other_costs}.
+
+\begin{table}[H]
+\normalsize
+\centering
+\caption{Other costs annual estimation}
+\label{tab:other_costs}
+\begin{tabular}{l|p{6.6cm}|r}
+\hline
+\textbf{Category} & \textbf{Description} & \textbf{Est. cost (p.a.)} \\
+\hline
+Infrastructure & Server hosting (PaaS), managed database (MongoDB atlas) & €600 \\
+Third-Party APIs & Google Maps API, ZBE data provider, fuel price API & €500 - €1,500 \\
+App store fees & Apple developer program, Google Play developer account & €125 \\
+Contingency (15\%) & For unforeseen development challenges and scope changes & €3,757 (initial) \\
+\hline
+\textbf{Total (First year)} & & \textbf{€4,982 - €5,982} \\
+\hline
+\end{tabular}
+\end{table}
+
+\textgap

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { AuthProvider } from '@/context/AuthContext';
 import { i18nInitPromise } from '@/localization';
 import '@/localization';
+import { theme } from '@/constants/theme';
 
 export default function RootLayout() {
   const [isI18nReady, setIsI18nReady] = useState(false);
@@ -34,7 +35,7 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <PaperProvider>
+      <PaperProvider theme={theme}>
         {/* Fallback title */}
         <TitleSetterWebPage />
         <Stack>
