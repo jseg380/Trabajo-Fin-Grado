@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import Household from '../models/Household.js';
 import jwt from 'jsonwebtoken';
 
 // --- DEFINE COOKIE OPTIONS IN ONE PLACE ---
@@ -30,6 +31,15 @@ export const registerUser = async (req, res) => {
     }
 
     const user = await User.create({ name, email, password });
+    const household = await Household.create({
+      name: `${name}'s Household`,
+      owner: user._id,
+      members: [user._id],
+    });
+
+    user.household = household._id;
+    await user.save();
+
     const token = generateToken(user._id);
 
     // Set the cookie using the new options
