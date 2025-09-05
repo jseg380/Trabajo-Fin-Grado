@@ -1,0 +1,59 @@
+\chapter{Project management and planning}
+
+This chapter details the project management framework, planning methodology, and execution strategy employed throughout the development of the \textit{AlDiaCAR} thesis project. It outlines the processes used for task identification, scheduling, and resource management, and provides a transparent account of the strategic decisions made to navigate the challenges inherent in a research-oriented software development endeavor.
+
+\section{Methodology}
+
+The project was executed following an exploratory and iterative methodology. This approach was deliberately chosen over a more traditional, rigid waterfall model. A waterfall methodology, with its sequential and inflexible phases, was deemed fundamentally unsuitable for this project, where the process of writing the thesis and developing the software artifact were deeply intertwined. Requirements and architectural insights often emerged during the implementation process itself, necessitating a flexible approach that allowed for continuous refinement.
+
+\textgap
+
+This iterative methodology provided the necessary adaptability. By developing the system in progressive cycles, it was possible to build and validate components incrementally, with the writing of the thesis and the coding of the application informing each other. This progressive development and validation strategy was crucial for ensuring that the final research artifact was both robust and directly aligned with the project's central academic hypotheses, even as the understanding of the problem space deepened over time.
+
+\section{Project phases and task organization}
+
+To structure the project and ensure comprehensive coverage of all necessary activities, the work was logically deconstructed into five primary phases. This approach, analogous to a Work Breakdown Structure (WBS) \footnote{\href{https://www.projectmanager.com/guides/work-breakdown-structure}{A Guide to Work Breakdown Structure (WBS)}}, provided a clear sequence for the project's execution, grouping activities from initial research to final documentation.
+
+\begin{itemize}
+\item \textbf{Phase 1: Research and state-of-the-art analysis.} This initial and foundational phase involved a comprehensive review of academic literature and existing market solutions. It included a detailed analysis of competing applications, research into the theoretical foundations of persuasive technology and Green IT, and the formal identification of the market gap that this thesis aims to address. The outputs of this work are detailed in Chapter 2.
+\textgap
+\item \textbf{Phase 2: System design and architecture.} This phase encompassed all high-level planning and design activities. Responsibilities included the definition of the client-server architecture, the selection of the technology stack, the formal modeling of the application's data structures, and the conceptual design of the user interface and user experience (UI/UX)\footnote{\href{https://flatironschool.com/blog/what-is-ux-ui-design/}{What is UX / UI Design? }} through the creation of wireframes and a visual style guide. This work corresponds to the material presented in Chapters 3 and 4.
+\textgap
+\item \textbf{Phase 3: Proof-of-concept implementation.} This phase represented the core software development effort. The primary goal was the implementation of a focused prototype to validate the most novel and complex aspects of the system. This included building the backend API, the frontend mobile application, and the necessary database schemas. The technical details of this implementation are documented in Chapter 5.
+\textgap
+\item \textbf{Phase 4: Testing and validation.} This phase focused on ensuring the quality, correctness, and robustness of the software artifact. It included the implementation of automated tests for backend modules and comprehensive manual validation of the core user workflows to ensure they functioned as designed and met the project's requirements. The results of this work are presented in Chapter 6.
+\textgap
+\item \textbf{Phase 5: Documentation and thesis writing.} This was a continuous, overarching activity that ran in parallel with all other phases. It involved the diligent and ongoing process of documenting all research findings, architectural decisions, implementation details, and validation results, culminating in the production of this final thesis report.
+\end{itemize}
+
+\section{Project timeline and execution}
+
+The development and research cycle for this project concluded in September 2024. Given the exploratory nature of the work, where research and implementation were concurrent activities, a formal, detailed Gantt chart with rigid deadlines was not employed. Such a tool would have imposed an artificial linearity on a process that was, by necessity, non-linear and required flexibility.
+
+\textgap
+
+Instead, the execution strictly followed the logical sequence of the major project phases. This ensured a structured and methodical progression. A significant emphasis was placed on the initial phases of research, design, and architecture. This front-loading of planning activities was a deliberate risk mitigation strategy. By ensuring that a robust theoretical and technical foundation was established before any significant code was written, the project minimized the risk of costly refactoring or architectural changes during the later implementation phase.
+
+\section{Scope management and proof-of-concept focus}
+
+The primary goal of a software engineering thesis is not to deliver a feature-complete commercial product, but to design, build, and validate a proof-of-concept (PoC) that effectively demonstrates a novel solution to a well-defined problem. In line with this academic objective, the scope of the implementation was strategically focused on creating a "vertical slice" that validates the most innovative component of the AlDiaCAR architecture: the recommendation engine.
+
+\textgap
+
+Rather than implementing a wide array of standard CRUD (Create, Read, Update, Delete) features superficially, the development effort was concentrated on proving the viability of the core hypothesis. The implemented PoC successfully demonstrates the system's ability to take a user's destination, check it against a geographically defined rule (in this case, a simplified ZBE boundary), and filter the user's available vehicles based on this constraint. The use of hardcoded points for demonstration purposes allows for a controlled, repeatable, and clear validation of this core logical flow, from the user interface through the backend API to the database and back.
+
+\textgap
+
+This focused approach, while a simplification of the full Zenith vision, is a deliberate and strategic choice. It provides a robust and tangible validation of the system's most complex and innovative concept. By proving that the architecture can support this core functionality, the project successfully meets its primary research objective and establishes a strong foundation upon which the full feature set can be built in future work.
+
+\section{Resource management}
+
+The resources required for the completion of this project were primarily managed in terms of time and technology.
+
+\textgap
+
+The single most critical resource was developer time. As a solo academic project, all work phases, from research to implementation and documentation, were executed by the author. The project scope and implementation goals were defined and managed with this significant constraint in mind.
+
+\textgap
+
+No significant financial budget was required for the development of the AlDiaCAR prototype. This economic efficiency was achieved by exclusively adopting a technology stack based on free and open-source software (FOSS). The use of technologies such as React Native, Node.js, Express.js, MongoDB Community Edition, and Docker allowed for the development of a complete, full-stack application without any licensing fees or software acquisition costs. Furthermore, deployment and infrastructure costs were avoided by utilizing a local, containerized development environment for building and testing the prototype. This is a standard and pragmatic approach for an academic proof-of-concept, as it avoids the unnecessary costs and operational complexities associated with deploying to live, cloud-hosted infrastructure, which was outside the scope of this research.
