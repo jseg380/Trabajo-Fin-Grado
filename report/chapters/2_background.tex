@@ -4,31 +4,31 @@ To adequately contextualize the novel contribution of this thesis, this chapter 
 
 \textgap
 
-Furthermore, this review delves into the theoretical foundations that provide the intellectual scaffolding for this project's design philosophy. Specifically, we explore the principles of gamification as a mechanism for behavior change and the broader paradigm of Green Information Technology (Green IT), particularly the concept of "Green through IT" or Sustainable Human-Computer Interaction (HCI). By grounding our practical design choices in established academic theory, we aim to enhance the project's robustness and potential for real-world impact. The chapter will culminate in a detailed gap analysis, synthesizing the findings from our market and literature review to precisely identify the unoccupied technological and conceptual niche that the \textit{AlDiaCAR} project is designed to fill. This final section serves as the definitive justification for the thesis, articulating its unique value proposition and contribution to the field.
+Furthermore, this review delves into the theoretical foundations that provide the intellectual scaffolding for this project's design philosophy. Specifically, we explore the principles of gamification as a mechanism for behavior change and the broader paradigm of Green Information Technology (Green IT), particularly the concept of "Green through IT"\footnote{\href{https://conf.researchr.org/home/ict4s-2026}{ICT4S 2026: International Conference on ICT for Sustainability}} or Sustainable Human-Computer Interaction (HCI). By grounding our practical design choices in established academic theory, we aim to enhance the project's robustness and potential for real-world impact. The chapter will culminate in a detailed gap analysis, synthesizing the findings from our market and literature review to precisely identify the unoccupied technological and conceptual niche that the \textit{AlDiaCAR} project is designed to fill. This final section serves as the definitive justification for the thesis, articulating its unique value proposition and contribution to the field.
 
 \section{State of the art in vehicle management applications}
 
 The contemporary market for vehicle-related software is both mature and extensive, yet it remains conspicuously fragmented. Existing solutions are typically characterized by a high degree of specialization, with software platforms meticulously engineered to target either large-scale commercial enterprises or individual users. This segmentation has resulted in a landscape where tools are powerful within their intended vertical but fundamentally ill-equipped to address the hybrid challenges faced by a modern household managing a small, private fleet of vehicles. The following subsections dissect each major category, highlighting their capabilities and, more importantly, their shortcomings in relation to the problem statement of this thesis.
 
 \subsection{Commercial fleet management systems}
-The Business-to-Business (B2B) sector of fleet management is dominated by powerful, data-intensive software-as-a-service (SaaS) platforms such as \textit{Fleetio} and \textit{Samsara}. These systems are engineered to provide corporations with granular control and comprehensive oversight over large, complex, and geographically dispersed vehicle fleets. Their core value proposition lies in optimizing operational efficiency, ensuring regulatory compliance, and minimizing costs at scale.
+The Business-to-Business (B2B) sector of fleet management is dominated by powerful, data-intensive software-as-a-service (SaaS) platforms such as \textit{Fleetio}\footnote{\href{https://www.fleetio.com/}{Fleetio}} and \textit{Samsara}\footnote{\href{https://www.samsara.com/}{Samsara}}. These systems are engineered to provide corporations with granular control and comprehensive oversight over large, complex, and geographically dispersed vehicle fleets. Their core value proposition lies in optimizing operational efficiency, ensuring regulatory compliance, and minimizing costs at scale.
 
 \textgap
 
 The feature set of these platforms is consequently vast and sophisticated. Key functionalities typically include:
 \begin{itemize}
     \item \textbf{Real-time GPS tracking and geofencing:} Constant monitoring of vehicle location, speed, and heading, coupled with the ability to define virtual perimeters (geofences) that trigger alerts when crossed.
-    \item \textbf{Advanced telematics:} Integration with onboard vehicle hardware (often via the OBD-II port) to capture a rich stream of diagnostic data, including engine RPM, fuel consumption, fault codes (DTCs), and harsh braking or acceleration events.
+    \item \textbf{Advanced telematics:} Integration with onboard vehicle hardware (often via the \gls{obd-ii}) to capture a rich stream of diagnostic data, including engine RPM, fuel consumption, fault codes (Diagnostic Trouble Codes, \gls{dtc}), and harsh braking or acceleration events.
     \item \textbf{Comprehensive maintenance scheduling:} Automated workflows for preventative maintenance based on mileage, engine hours, or calendar intervals, including work order generation and service history logging.
     \item \textbf{Fuel management:} Detailed tracking of fuel purchases, consumption analysis, and integration with fuel card providers to detect fraud or inefficiency.
     \item \textbf{Driver behavior monitoring:} Scoring and reporting on driver performance to identify unsafe or inefficient habits, often used for training and safety programs.
-    \item \textbf{Regulatory compliance:} Features designed to automate compliance with regulations such as the Electronic Logging Device (ELD) mandate for hours of service and International Fuel Tax Agreement (IFTA) reporting.
+    \item \textbf{Regulatory compliance:} Features designed to automate compliance with regulations such as the \gls{eld} mandate for hours of service and \gls{ifta} reporting.
 \end{itemize}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.9\textwidth]{images/background/fleetio.png}
-    \caption{Illustrative example of a typical commercial fleet management dashboard (Fleetio), showcasing the complexity and data-density designed for professional logistics managers.}
+    \caption{Illustrative example of a typical commercial fleet management dashboard (Fleetio), showcasing the complexity and data-density designed for professional logistics managers. Source: \href{https://www.fleetio.com/}{Fleetio}.}
 \end{figure}
 
 \textgap
@@ -41,7 +41,7 @@ While these systems represent the pinnacle of vehicle management technology, the
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.7\textwidth]{images/background/fleetio-pricing.png}
-        \caption{Cost of Fleetio starts at 5\$ per vehicle per month if billed monthly, 4\$ if billed annually. Totalling at about 96\$ for a 2 vehicle fleet in the best of the cases.}
+        \caption{Cost of Fleetio starts at 5\$ per vehicle per month if billed monthly, 4\$ if billed annually. Totalling at about 96\$ for a 2 vehicle fleet in the best of the cases. Source: \href{https://www.fleetio.com/pricing}{Fleetio Pricing}.}
     \end{figure}
     
     \textgap
@@ -55,7 +55,7 @@ While these systems represent the pinnacle of vehicle management technology, the
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.45\textwidth]{images/background/samsara-mobile.png}
-        \caption{Example of a mobile interface for a commercial fleet application (Samsara). The focus remains on asset tracking and driver logs, which is misaligned with the needs of a family.}
+        \caption{Example of a mobile interface for a commercial fleet application (Samsara). The focus remains on asset tracking and driver logs, which is misaligned with the needs of a family. Source: \href{https://youtu.be/8CWL3REai9E}{Samsara}.}
     \end{figure}
 
     \textgap
@@ -65,13 +65,13 @@ While these systems represent the pinnacle of vehicle management technology, the
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.7\textwidth]{images/background/samsara-privacy-issue.png}
-        \caption{Every action of the driver is monitored and analysed. In this demo video from Samsara we can see that the driver reaction was stored and analysed}
+        \caption{Every action of the driver is monitored and analysed. In this demo video from Samsara we can see that the driver reaction was stored and analysed. Source: \href{https://www.samsara.com/}{Samsara}.}
     \end{figure}
 
 \end{itemize}
 
 \subsection{Personal car maintenance applications}
-On the other end of the spectrum are applications developed for the individual car owner. This category includes popular apps like \textit{Drivvo}, \textit{Fuelly}, and \textit{aCar}. These tools are designed to serve as digital logbooks, empowering a single user to meticulously track the health, expenses, and history of their personal vehicle.
+On the other end of the spectrum are applications developed for the individual car owner. This category includes popular apps like \textit{Drivvo}\footnote{\href{https://www.drivvo.com/en}{Drivvo}}, \textit{Fuelly}\footnote{\href{https://www.fuelly.com/}{Fuelly}}, and \textit{aCar}\footnote{\href{https://play.google.com/store/apps/details?id=com.zonewalker.acar&pcampaignid=web_share}{aCar: Play Store}}. These tools are designed to serve as digital logbooks, empowering a single user to meticulously track the health, expenses, and history of their personal vehicle.
 
 \textgap
 
@@ -80,7 +80,7 @@ Their core competency lies in the detailed logging of specific data points. User
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.45\textwidth]{images/background/drivvo-dashboard.png}
-    \caption{Typical user interface for a personal car maintenance app like Drivvo, centered on logging fuel, services, and expenses for a single vehicle.}
+    \caption{Typical user interface for a personal car maintenance app like Drivvo, centered on logging fuel, services, and expenses for a single vehicle. Source: \href{https://play.google.com/store/apps/details?id=br.com.ctncardoso.ctncar&pcampaignid=web_share}{Drivvo}.}
 \end{figure}
 
 \textgap
@@ -109,7 +109,7 @@ A third category of relevant software has emerged within mainstream navigation a
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.3\textwidth]{images/background/google-maps-ecorouting.png}
-    \caption{An illustration of the eco-friendly routing feature in Google Maps.}
+    \caption{An illustration of the eco-friendly routing feature in Google Maps. Source: \href{https://maps.google.com}{Google Maps}.}
     \label{fig:google-maps-ecorouting}
 \end{figure}
 
@@ -214,7 +214,7 @@ The comprehensive review of the state of the art in both commercial and personal
     \node[font=\bfseries\Large, fill=yellow!30, circle, minimum size=2cm, draw, thick] at (0,0) {AlDiaCAR};
 
     \end{tikzpicture}
-    \caption{Visual representation of the market gap. AlDiaCAR is positioned at the intersection of Personal Fleet Management, Sustainable Recommendations, and Collaborative Tools, a niche not currently occupied by existing solutions.}
+    \caption{Visual representation of the market gap. AlDiaCAR is positioned at the intersection of Personal Fleet Management, Sustainable Recommendations, and Collaborative Tools, a niche not currently occupied by existing solutions. Source: Author's own work.}
     \label{fig:gap-analysis-diagram}
 \end{figure}
 
