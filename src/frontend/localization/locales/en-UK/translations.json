@@ -87,6 +87,7 @@
       "email": "Email",
       "password": "Password",
       "login-button": "Login",
+      "forgotten-password": "Forgot password?",
       "register-link": "Don't have an account? Register",
       "invalid-credentials": "Invalid credentials"
     },

@@ -87,6 +87,7 @@
       "email": "Correo electrónico",
       "password": "Contraseña",
       "login-button": "Iniciar sesión",
+      "forgotten-password": "¿Olvidaste tu contraseña?",
       "register-link": "¿No tienes una cuenta? Regístrate",
       "invalid-credentials": "Credenciales incorrectas"
     },
