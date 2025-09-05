@@ -56,31 +56,50 @@
 
 % --- GLOBAL TIKZ STYLES for the entire thesis ---
 \tikzset{
-  % Style for component boxes (frontend, backend)
-  comp/.style={
-    rectangle, draw, very thick, fill=blue!10, rounded corners,
-    minimum width=3cm, minimum height=1cm, text centered,
-    text width=3.5cm, drop shadow
-  },
-  % Style for database cylinders
-  db/.style={
-    cylinder, shape border rotate=90, aspect=0.25, draw, very thick,
-    fill=orange!20, minimum height=1.5cm, minimum width=1.2cm,
-    text centered, drop shadow
-  },
-  % Style for the user circle
-  user/.style={
-    circle, draw, very thick, fill=green!20, minimum size=1.5cm
-  },
-  % Style for dashed environment boxes
-  env/.style={
-    rectangle, draw, dashed, thick, rounded corners,
-    label={[yshift=0.2cm]north:#1}
-  },
-  % Style for arrows
-  arrow/.style={
-    -{Latex[length=3mm]}, very thick
-  }
+    % Style for main components (frontend, backend)
+    comp/.style={
+        rectangle, 
+        rounded corners, 
+        draw=black, 
+        fill=blue!20,
+        text width=4cm, 
+        align=center, 
+        minimum height=2cm,
+        font=\small
+    },
+    % Style for the user node
+    user/.style={
+        ellipse, 
+        draw=black, 
+        fill=green!20, 
+        minimum height=1cm
+    },
+    % Style for the database (cylinder shape)
+    db/.style={
+        cylinder, 
+        shape border rotate=90, 
+        draw=black, 
+        fill=orange!30, 
+        aspect=0.25, 
+        minimum height=1.5cm,
+        text width=2.5cm,
+        align=center,
+        font=\small
+    },
+    % Style for the background environment box
+    env/.style={
+        rectangle,
+        draw=gray,
+        fill=gray!10,
+        rounded corners,
+        dashed,
+        label={[gray]north east:#1} % Use the argument as a label
+    },
+    % Style for the arrows
+    arrow/.style={
+        thick, 
+        -{Stealth[]} % Requires arrows.meta library
+    }
 }
 
 
@@ -209,19 +228,13 @@
 
     % Appendices {{{
 
-    % \appendix
+    \appendix
 
-    % % API reference
-    % \input{appendices/api-reference}
+    % API reference
+    \input{appendices/api-reference}
 
-    % % MongoDB schemas (sort of table definition for NoSQL)
-    % \input{appendices/db-schemas}
-
-    % % Mock API
-    % \input{appendices/mock-api}
-
-    % % Test plans
-    % \input{appendices/test-plans}
+    % MongoDB schemas (sort of table definition for NoSQL)
+    \input{appendices/db-schemas}
 
     % }}}
 	
