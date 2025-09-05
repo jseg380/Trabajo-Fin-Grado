@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { FAB } from 'react-native-paper';
+import { FAB, Modal, Portal, Card, Title, Paragraph } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { API_URL } from '@/constants/config';
@@ -15,28 +15,24 @@ interface Vehicle {
   year: number;
   fuelType: string;
   emissions: number;
+  upcomingMaintenance?: {
+    tires?: { date?: string; distance?: number };
+    brakes?: { distance?: number };
+    oilChange?: { distance?: number };
+    itv?: string;
+  }
 }
 
-// Pass router and a refresh function down to the item
-function VehicleItem({ vehicle, onDelete, router }: { vehicle: Vehicle, onDelete: (id: string) => void, router: any }) {
+function VehicleItem({ vehicle, onDelete, onEdit, onMaintenance, onViewDetails }: { 
+    vehicle: Vehicle, 
+    onDelete: (id: string) => void, 
+    onEdit: () => void,
+    onMaintenance: () => void,
+    onViewDetails: () => void
+}) {
   const handleDelete = async () => {
-    // --- Use crossplatform confirmation alert ---
-    const confirmed = await showConfirmationAlert(
-      'Delete Vehicle',
-      `Are you sure you want to delete the ${vehicle.make} ${vehicle.model}?`,
-      'Delete'
-    );
-
-    if (confirmed) {
-      onDelete(vehicle._id);
-    }
-  };
-
-  const handleEdit = () => {
-    router.push({
-      pathname: `/(tabs)/vehicles/${vehicle._id}/edit`,
-      params: { ...vehicle }
-    });
+    const confirmed = await showConfirmationAlert('Delete Vehicle', `Delete ${vehicle.make} ${vehicle.model}?`, 'Delete');
+    if (confirmed) onDelete(vehicle._id);
   };
 
   return (
@@ -45,15 +41,12 @@ function VehicleItem({ vehicle, onDelete, router }: { vehicle: Vehicle, onDelete
       <View style={styles.cardContent}>
         <Text style={styles.cardTitle}>{vehicle.make} {vehicle.model}</Text>
         <Text style={styles.cardSubtitle}>Year: {vehicle.year} - Fuel: {vehicle.fuelType}</Text>
-        <Text style={styles.cardEmissions}>Emissions: {vehicle.emissions} gCO₂/km</Text>
       </View>
       <View style={styles.actionsContainer}>
-        <TouchableOpacity onPress={handleEdit} style={styles.actionButton} accessibilityLabel='Edit'>
-          <Ionicons name='pencil' size={24} color='#007AFF' />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleDelete} style={styles.actionButton} accessibilityLabel='Delete'>
-          <Ionicons name='trash' size={24} color='#FF3B30' />
-        </TouchableOpacity>
+        <TouchableOpacity onPress={onViewDetails} style={styles.actionButton}><Ionicons name='eye' size={24} color='#555' /></TouchableOpacity>
+        <TouchableOpacity onPress={onMaintenance} style={styles.actionButton}><Ionicons name='build' size={24} color='#f57c00' /></TouchableOpacity>
+        <TouchableOpacity onPress={onEdit} style={styles.actionButton}><Ionicons name='pencil' size={24} color='#2196F3' /></TouchableOpacity>
+        <TouchableOpacity onPress={handleDelete} style={styles.actionButton}><Ionicons name='trash' size={24} color='#FF3B30' /></TouchableOpacity>
       </View>
     </View>
   );
@@ -63,66 +56,71 @@ function VehiclesScreen() {
   const router = useRouter();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
 
   const fetchVehicles = async () => {
     try {
       setLoading(true);
       const response = await axios.get(new URL('vehicles', API_URL).href, { withCredentials: true });
       setVehicles(response.data);
-    } catch (err) {
-      console.error('Failed to fetch vehicles:', err);
-      setError('Could not load your vehicles. Please try again later.');
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { console.error('Failed to fetch vehicles:', err); } 
+    finally { setLoading(false); }
   };
 
-  // useFocusEffect will re-fetch data every time the screen comes into view.
-  // This is crucial for seeing updates after adding or editing a vehicle.
-  useFocusEffect(
-    useCallback(() => {
-      fetchVehicles();
-    }, [])
-  );
+  useFocusEffect(useCallback(() => { fetchVehicles(); }, []));
 
   const handleDeleteVehicle = async (id: string) => {
     try {
       await axios.delete(new URL(`vehicles/${id}`, API_URL).href, { withCredentials: true });
-      // Remove the vehicle from the local state for an instant UI update
       setVehicles(currentVehicles => currentVehicles.filter(v => v._id !== id));
       showInfoAlert('Success', 'Vehicle deleted.');
-    } catch (err) {
-      showInfoAlert('Error', 'Could not delete vehicle.');
-      console.error(err);
-    }
+    } catch (err) { showInfoAlert('Error', 'Could not delete vehicle.'); }
+  };
+
+  const showModal = (vehicle: Vehicle) => {
+    setSelectedVehicle(vehicle);
+    setIsModalVisible(true);
+  };
+  const hideModal = () => {
+    setIsModalVisible(false);
+    setSelectedVehicle(null);
   };
 
   if (loading) return <ActivityIndicator size='large' style={styles.centered} />;
-  if (error) return <View style={styles.centered}><Text style={styles.errorText}>{error}</Text></View>;
 
   return (
     <View style={styles.container}>
-      {vehicles.length === 0 ? (
-        <View style={styles.centered}>
-          <Text style={styles.emptyText}>No vehicles yet.</Text>
-          <Text style={styles.emptySubText}>Press '+' to add your first one!</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={vehicles}
-          renderItem={({ item }) => <VehicleItem vehicle={item} onDelete={handleDeleteVehicle} router={router} />}
-          keyExtractor={(item) => item._id}
-          contentContainerStyle={styles.list}
-        />
-      )}
+      <Portal>
+        <Modal visible={isModalVisible} onDismiss={hideModal} contentContainerStyle={styles.modalContainer}>
+          <Card>
+            <Card.Content>
+              <Title>{selectedVehicle?.make} {selectedVehicle?.model} - Maintenance</Title>
+              <Paragraph>ITV Date: {selectedVehicle?.upcomingMaintenance?.itv ? new Date(selectedVehicle.upcomingMaintenance.itv).toLocaleDateString() : 'N/A'}</Paragraph>
+              <Paragraph>Tire Date: {selectedVehicle?.upcomingMaintenance?.tires?.date ? new Date(selectedVehicle.upcomingMaintenance.tires.date).toLocaleDateString() : 'N/A'}</Paragraph>
+              <Paragraph>Tire Distance: {selectedVehicle?.upcomingMaintenance?.tires?.distance ?? 'N/A'} km</Paragraph>
+              <Paragraph>Brake Distance: {selectedVehicle?.upcomingMaintenance?.brakes?.distance ?? 'N/A'} km</Paragraph>
+              <Paragraph>Oil Change: {selectedVehicle?.upcomingMaintenance?.oilChange?.distance ?? 'N/A'} km</Paragraph>
+            </Card.Content>
+          </Card>
+        </Modal>
+      </Portal>
 
-      <FAB
-        style={styles.fab}
-        icon='plus'
-        onPress={() => router.push('/(tabs)/vehicles/add')}
-        accessibilityLabel='Add'
+      <FlatList
+        data={vehicles}
+        renderItem={({ item }) => 
+            <VehicleItem 
+                vehicle={item} 
+                onDelete={handleDeleteVehicle} 
+                onViewDetails={() => showModal(item)}
+                onEdit={() => router.push({ pathname: `/(tabs)/vehicles/${item._id}/edit`, params: { ...item }})}
+                onMaintenance={() => router.push({ pathname: `/(tabs)/vehicles/${item._id}/maintenance`, params: { vehicleName: `${item.make} ${item.model}` }})}
+            />
+        }
+        keyExtractor={(item) => item._id}
+        contentContainerStyle={styles.list}
       />
+      <FAB style={styles.fab} icon='plus' onPress={() => router.push('/(tabs)/vehicles/add')} />
     </View>
   );
 };
@@ -139,21 +137,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 16
-  },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#555'
-  },
-  emptySubText: {
-    fontSize: 14,
-    color: '#777',
-    marginTop: 8
+    padding: 20
   },
   card: {
     backgroundColor: 'white',
@@ -162,7 +146,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    elevation: 3,
+    elevation: 3
   },
   cardIcon: {
     marginRight: 16
@@ -179,12 +163,6 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 4
   },
-  cardEmissions: {
-    fontSize: 12,
-    color: '#007A7A',
-    marginTop: 8,
-    fontWeight: '500',
-  },
   actionsContainer: {
     flexDirection: 'row'
   },
@@ -196,8 +174,14 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#2196F3'
   },
-})
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    margin: 20,
+    borderRadius: 12
+  },
+});
 
 export default withAuth(VehiclesScreen);
