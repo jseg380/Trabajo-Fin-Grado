@@ -1,14 +1,14 @@
 \chapter{Background and related work}
 
-To adequately contextualize the novel contribution of this thesis, this chapter undertakes a comprehensive review of the existing landscape of software solutions, theoretical frameworks, and academic literature pertinent to vehicle management and sustainable mobility. The primary objective of this chapter is to meticulously map the state of the art, thereby establishing a clear and defensible rationale for the development of the \textit{AlDiaCAR} system. We will systematically examine the current technological offerings across three distinct and highly segmented categories of applications: enterprise-grade commercial fleet management systems, consumer-focused personal car maintenance trackers, and specialized eco-routing navigation tools. This analysis will not only detail the functionalities of existing systems but also critically evaluate their inherent limitations when applied to the specific problem domain of a multi-vehicle, multi-driver household.
+To adequately contextualize the novel contribution of this thesis, this chapter undertakes a comprehensive review of the existing landscape of software solutions, theoretical frameworks, and academic literature pertinent to vehicle management and sustainable mobility. The primary objective of this chapter is to meticulously map the state of the art, thereby establishing a clear and defensible rationale for the development of the \textit{AlDiaCAR} system. We systematically examine the current technological offerings across three distinct and highly segmented categories of applications: enterprise-grade commercial fleet management systems, consumer-focused personal car maintenance trackers, and specialized eco-routing navigation tools. This analysis not only details the functionalities of existing systems but also critically evaluates their inherent limitations when applied to the specific problem domain of a multi-vehicle, multi-driver household.
 
 \textgap
 
-Furthermore, this review will delve into the theoretical foundations that provide the intellectual scaffolding for this project's design philosophy. Specifically, we will explore the principles of gamification as a mechanism for behavior change and the broader paradigm of Green Information Technology (Green IT), particularly the concept of "Green through IT" or Sustainable Human-Computer Interaction (HCI). By grounding our practical design choices in established academic theory, we aim to enhance the project's robustness and potential for real-world impact. The chapter will culminate in a detailed gap analysis, synthesizing the findings from our market and literature review to precisely identify the unoccupied technological and conceptual niche that the \textit{AlDiaCAR} project is designed to fill. This final section will serve as the definitive justification for the thesis, articulating its unique value proposition and contribution to the field.
+Furthermore, this review delves into the theoretical foundations that provide the intellectual scaffolding for this project's design philosophy. Specifically, we explore the principles of gamification as a mechanism for behavior change and the broader paradigm of Green Information Technology (Green IT), particularly the concept of "Green through IT" or Sustainable Human-Computer Interaction (HCI). By grounding our practical design choices in established academic theory, we aim to enhance the project's robustness and potential for real-world impact. The chapter will culminate in a detailed gap analysis, synthesizing the findings from our market and literature review to precisely identify the unoccupied technological and conceptual niche that the \textit{AlDiaCAR} project is designed to fill. This final section serves as the definitive justification for the thesis, articulating its unique value proposition and contribution to the field.
 
 \section{State of the art in vehicle management applications}
 
-The contemporary market for vehicle-related software is both mature and extensive, yet it remains conspicuously fragmented. Existing solutions are typically characterized by a high degree of specialization, with software platforms meticulously engineered to target either large-scale commercial enterprises or individual users. This segmentation has resulted in a landscape where tools are powerful within their intended vertical but fundamentally ill-equipped to address the hybrid challenges faced by a modern household managing a small, private fleet of vehicles. The following subsections will dissect each major category, highlighting their capabilities and, more importantly, their shortcomings in relation to the problem statement of this thesis.
+The contemporary market for vehicle-related software is both mature and extensive, yet it remains conspicuously fragmented. Existing solutions are typically characterized by a high degree of specialization, with software platforms meticulously engineered to target either large-scale commercial enterprises or individual users. This segmentation has resulted in a landscape where tools are powerful within their intended vertical but fundamentally ill-equipped to address the hybrid challenges faced by a modern household managing a small, private fleet of vehicles. The following subsections dissect each major category, highlighting their capabilities and, more importantly, their shortcomings in relation to the problem statement of this thesis.
 
 \subsection{Commercial fleet management systems}
 The Business-to-Business (B2B) sector of fleet management is dominated by powerful, data-intensive software-as-a-service (SaaS) platforms such as \textit{Fleetio} and \textit{Samsara}. These systems are engineered to provide corporations with granular control and comprehensive oversight over large, complex, and geographically dispersed vehicle fleets. Their core value proposition lies in optimizing operational efficiency, ensuring regulatory compliance, and minimizing costs at scale.
@@ -33,7 +33,7 @@ The feature set of these platforms is consequently vast and sophisticated. Key f
 
 \textgap
 
-While these systems represent the pinnacle of vehicle management technology, their direct application to the context of a private household, such as the Martínez family persona, is fundamentally unviable for a confluence of reasons:
+While these systems represent the pinnacle of vehicle management technology, their direct application to the context of a private household, such as the Martínez family \textit{persona}, is fundamentally unviable for a confluence of reasons:
 
 \begin{itemize}
     \item \textbf{Prohibitive complexity and cost:} These are enterprise-grade platforms. Their pricing models are typically structured on a per-vehicle, per-month basis, often with substantial setup fees. For a family managing three cars, the cost would be unjustifiable. Moreover, the feature set is overwhelmingly complex, presenting a steep learning curve and a significant cognitive burden for non-technical users.
@@ -88,7 +88,7 @@ Their core competency lies in the detailed logging of specific data points. User
 However, despite their utility for the dedicated single-car enthusiast, their effectiveness rapidly diminishes when applied to the multi-vehicle, multi-driver scenario that this project specifically addresses. Their primary drawbacks include:
 
 \begin{itemize}
-    \item \textbf{Inherent single-user, single-vehicle focus:} These applications are architected around the mental model of one person managing one primary vehicle. While some may allow the user to add multiple vehicle profiles, the interface is rarely optimized for comparing them or managing them as a collective "fleet." They lack a centralized dashboard that provides an at-a-glance overview of the entire household's automotive assets.
+    \item \textbf{Inherent single-user, single-vehicle focus:} These applications are architected around the mental model of one person managing one primary vehicle. While some may allow the user to add multiple vehicle profiles, the interface is rarely optimized for comparing them or managing them as a collective "fleet". They lack a centralized dashboard that provides an at-a-glance overview of the entire household's automotive assets.
     
     \textgap
     
@@ -104,12 +104,13 @@ However, despite their utility for the dedicated single-car enthusiast, their ef
 \end{itemize}
 
 \subsection{Eco-routing and navigation tools}
-A third category of relevant software has emerged within mainstream navigation applications. In response to growing environmental awareness, technology giants have begun to integrate sustainability-focused features into their platforms. The most prominent example is \textit{Google Maps}, which introduced an "eco-friendly routing" option. This feature's algorithm analyzes various factors, including road incline, traffic congestion, and the number of stops, to suggest a route that is optimized for the lowest possible fuel or energy consumption, often presenting it alongside the fastest route.
+A third category of relevant software has emerged within mainstream navigation applications. In response to growing environmental awareness, technology giants have begun to integrate sustainability-focused features into their platforms. The most prominent example is \textit{Google Maps}, which introduced an "eco-friendly routing" option (see Figure \ref{fig:google-maps-ecorouting}) . This feature's algorithm analyzes various factors, including road incline, traffic congestion, and the number of stops, to suggest a route that is optimized for the lowest possible fuel or energy consumption, often presenting it alongside the fastest route.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.3\textwidth]{images/background/google-maps-ecorouting.png}
     \caption{An illustration of the eco-friendly routing feature in Google Maps.}
+    \label{fig:google-maps-ecorouting}
 \end{figure}
 
 \textgap
@@ -136,7 +137,8 @@ The decision-making process for a multi-vehicle household is a complex tree of i
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{images/background/simplified-decision-flow.png}
+    \includegraphics[width=0.6\textwidth]{images/background/simplified-decision-flow.png}
+    \caption{A simplified decision flow for selecting the optimal vehicle for a given trip, illustrating the multi-factor considerations that current eco-routing tools cannot address. Source: Author's own work.}
 \end{figure}
 
 \section{Theoretical foundations}
@@ -156,7 +158,7 @@ In the context of \textit{AlDiaCAR}, gamification is not a superficial addition 
 
 \textgap
 
-This approach is supported by a large body of empirical research. A comprehensive meta-analysis by Hamari et al. concluded that gamification is effective in a variety of domains, with significant positive outcomes for user engagement and behavior change, provided it is thoughtfully implemented and aligned with user motivations \cite{hamari2014does}. The following diagram illustrates the intended motivational loop within \textit{AlDiaCAR}.
+This approach is supported by a large body of empirical research. A comprehensive meta-analysis by Hamari et al. \cite{hamari2014does} concluded that gamification is effective in a variety of domains, with significant positive outcomes for user engagement and behavior change, provided it is thoughtfully implemented and aligned with user motivations. The following diagram illustrates the intended motivational loop within \textit{AlDiaCAR}.
 
 \begin{figure}[H]
     \centering
@@ -243,7 +245,7 @@ Therefore, this thesis project, \textit{AlDiaCAR}, is strategically positioned t
 
 \textgap
 
-First, it provides robust \textbf{Personal fleet management} capabilities. This goes beyond the single-vehicle logbook model by offering a centralized, collaborative dashboard where all family members can view the real-time status, location, and maintenance needs of every vehicle in the household fleet. This directly addresses the critical pain point of "shared maintenance blindness" and reduces "coordination friction."
+First, it provides robust \textbf{Personal fleet management} capabilities. This goes beyond the single-vehicle logbook model by offering a centralized, collaborative dashboard where all family members can view the real-time status, location, and maintenance needs of every vehicle in the household fleet. This directly addresses the critical pain point of "shared maintenance blindness" and reduces "coordination friction".
 
 \textgap
 
