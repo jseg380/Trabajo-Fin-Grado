@@ -1,10 +1,10 @@
 \chapter{Implementation details}
 
-This chapter transitions from the abstract design of Chapter 3 to the concrete technical implementation of the \textit{AlDiaCAR} system. It provides a detailed walkthrough of the project's source code, explaining the structure, key modules, and programming patterns used in both the backend and frontend.
+This chapter transitions from the abstract architectural design of Chapter 4 to the concrete technical implementation of the \textit{AlDiaCAR} system. The objective is to provide a detailed walkthrough of the project's source code, explaining the organizational structure, key software modules, and the programming patterns employed to bring the conceptual design to life. This chapter serves as a bridge between the system's architecture and its validation, detailing not only *what* was built but also the quality assurance strategy designed to verify its correctness and robustness.
 
 \section{Project structure overview}
 
-The project is organized as a monorepo, a single repository containing all the code for the system. This approach simplifies dependency management and streamlines development across the different parts of the application. The high-level directory structure is shown in Figure \ref{fig:dirtree}.
+The project is organized as a monorepo, a single repository containing all the code for the system. This approach simplifies dependency management and streamlines development across the different parts of the application, which is particularly advantageous for a full-stack project with tightly coupled frontend and backend components. The high-level directory structure, which promotes a clear separation of concerns, is shown in Figure \ref{fig:dirtree}.
 
 \begin{figure}[h!]
 \dirtree{%
@@ -34,128 +34,185 @@ The project is organized as a monorepo, a single repository containing all the c
 \label{fig:dirtree}
 \end{figure}
 
-The \texttt{src} directory cleanly separates the \texttt{backend} and \texttt{frontend} concerns. The \texttt{docker} directory ensures a reproducible development environment, while the \texttt{tests} directory houses the quality assurance framework.
+The \texttt{src} directory cleanly separates the \texttt{backend} and \texttt{frontend} codebases. The \texttt{docker} directory contains the Docker Compose configuration, ensuring a reproducible development environment for all services. Finally, the \texttt{tests} directory houses the automated quality assurance framework, with distinct subdirectories for backend and frontend testing.
 
 \section{Backend implementation (Node.js)}
 
-The backend is a RESTful API built with Node.js and the Express.js framework. It is responsible for all business logic, data persistence, and security.
+The backend is a RESTful API built with Node.js and the Express.js framework. It is the authoritative core of the system, responsible for all business logic, data persistence, and security enforcement.
 
-\subsection{Data models (Mongoose)}
-Data schemas are defined in \texttt{src/backend/models/} using Mongoose. The principal models are \texttt{User.js}, \texttt{Vehicle.js}, and \texttt{Trip.js}. A key feature is the use of Mongoose's \texttt{timestamps} option in the User schema to automatically manage \texttt{createdAt} and \texttt{updatedAt} fields. The password field uses \texttt{select: false} to prevent it from ever being sent in an API response. The full schema definitions are detailed in Appendix B.
+\subsection{Data models and persistence (Mongoose)}
+Data schemas are defined in the \texttt{src/backend/models/} directory using Mongoose, an Object Data Modeling (ODM) library that provides a robust abstraction layer for interacting with the MongoDB database. The principal models implemented are \texttt{Household.js}, \texttt{User.js}, \texttt{Vehicle.js}, and \texttt{Trip.js}.
+
+\textgap
+
+The collaborative nature of the application is enabled by the \texttt{Household} model. A key feature of this schema is the automatic generation of a unique, human-readable `joinCode` upon creation, facilitated by the `nanoid` library. This code serves as a simple and secure mechanism for users to join existing households. A snippet of this implementation is shown below.
+
+\begin{lstlisting}[language=JavaScript, caption={Join Code Generation in \texttt{models/Household.js}}]
+import mongoose from 'mongoose';
+import { customAlphabet } from 'nanoid';
+
+// Using a dictionary-based alphabet for memorable codes
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const nanoid = customAlphabet(alphabet, 8);
+
+const HouseholdSchema = new mongoose.Schema({
+  // ... other fields
+  joinCode: {
+    type: String,
+    required: true,
+    unique: true,
+    // Automatically generate code on creation
+    default: () => nanoid(),
+  },
+  // ... other fields
+});
+\end{lstlisting}
+The full, detailed Mongoose schemas for all data models are provided in Appendix B for comprehensive review.
 
 \subsection{Controllers and business logic}
-Controllers, located in \texttt{src/backend/controllers/}, contain the core logic for each API endpoint. While many controllers perform standard CRUD operations, some, like \texttt{tripController.js}, encapsulate more complex business logic. The \texttt{logSimulatedTrip} function demonstrates how a single API call can trigger multiple state changes across the system.
+The core business logic of the application resides within the controller files in the \texttt{src/backend/controllers/} directory. These modules orchestrate the interactions between incoming API requests, the data models, and the final response sent to the client.
 
-\begin{lstlisting}[language=JavaScript, caption={Core logic from \texttt{tripController.js}}]
-// 1. UPDATE VEHICLE MAINTENANCE METRICS
-if (vehicle.upcomingMaintenance) {
-  if (vehicle.upcomingMaintenance.brakes?.distance) {
-    vehicle.upcomingMaintenance.brakes.distance -= distance;
-  }
-  // ... other distance-based counters are reduced
-}
+\textgap
 
-// 2. CREATE THE TRIP RECORD
-const calculatedEmissions = distance * (vehicle.emissions || 150);
-await Trip.create({ driver: userId, vehicle: vehicleId, distance, ... });
+A prime example of this orchestration is the user registration flow within \\\texttt{authController.js}. When a new user registers, the system not only creates a new \texttt{User} document but also atomically creates a new, personal \texttt{Household} for that user, establishing the foundational link for all collaborative features from the moment of inception.
 
-// 3. UPDATE USER STATS & GRANT ACHIEVEMENTS
-user.stats.distanceTraveled += distance;
-const achievementsToGrant = [];
-if (!user.achievements.includes('FIRST_TRIP')) {
-  achievementsToGrant.push('FIRST_TRIP');
-}
-if (oldDistance < 1000 && user.stats.distanceTraveled >= 1000) {
-  achievementsToGrant.push('DIST_1000');
-}
-if (achievementsToGrant.length > 0) {
-  user.achievements.push(...achievementsToGrant);
-}
+\textgap
 
-// 4. SAVE ALL CHANGES ATOMICALLY
-await Promise.all([vehicle.save(), user.save()]);
-\end{lstlisting}
+The logic for managing collaborative groups is encapsulated in \\\texttt{householdController.js}. The \texttt{joinHousehold} function handles the complex state changes required when a user moves from one household to another. This includes adding the user to the new household's member list, updating the user's own household reference, removing them from their previous household, and, critically, deleting the old household if the departing user was its last member. This logic, illustrated in Figure \ref{fig:join-household-flow}, ensures data integrity and prevents orphaned household documents in the database.
 
-This function shows how logging a trip correctly decrements maintenance counters on the vehicle, creates a new trip record, and updates the user's statistics and achievements, all within a single transaction. Figure \ref{fig:data-flow-trip} illustrates this interaction.
-
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}[
-        node distance=2cm and 3.2cm, 
-        font=\sffamily,
-        proc/.style={
-            rectangle, rounded corners, draw, dashed, fill=gray!10,
-            text width=4cm, align=center, minimum height=1.5cm
+        node distance = 1cm and 0.8cm,
+        process/.style={
+            rectangle, 
+            draw, 
+            fill=blue!10, 
+            text width=6em, 
+            align=center, 
+            rounded corners, 
+            minimum height=2em
+        },
+        decision/.style={
+            diamond, 
+            draw, 
+            fill=green!10, 
+            text width=6em, 
+            align=center, 
+            aspect=2
+        },
+        arrow/.style={
+            thick,
+            -{Stealth[]}
+        },
+        line/.style={ % For edges with labels
+            draw, 
+            thick,
+            -{Stealth[]}
         }
     ]
-        \node (client) [comp, minimum width=2.5cm, text width=2.3cm] {Frontend Client};
-        \node (backend) [comp, right=of client, text width=4cm] {Backend API \\ (\texttt{tripController.js})};
-        \node (db) [db, right=of backend] {MongoDB};
+        % Initial top-down flow
+        \node (A) [process] {User clicks 'Join'};
+        \node (B) [decision, below=of A] {Find Target Household?};
+        \node (C) [decision, below=of B] {User exists in Target?};
+        
+        % "Yes" branch goes to the right
+        \node (D) [process, right=of C] {End: Already a member};
+        
+        % Main flow continues down
+        \node (E) [process, below=of C] {Add user to Target members};
+        \node (F) [process, below=of E] {Update user's reference};
+        \node (G) [process, below=of F] {Remove user from Old members};
+        
+        % The flow now "turns" to the right
+        \node (H) [decision, right=of G] {Old Household empty?};
+        
+        % Final branches go above and below this new horizontal axis
+        \node (I) [process, above=of H] {Delete Old Household};
+        \node (J) [process, below=of H] {Save Old Household};
+        \node (K) [process, right=of H] {Save all \& respond};
 
-        \draw[arrow, bend left=30] (client.east) to node[midway, above, sloped] {\texttt{POST /api/trips/log}} (backend.west);
-        \draw[arrow, bend left=30] (backend.west) to node[midway, below, sloped] {201 Created} (client.east);
-        
-        \draw[arrow, bend left=30] (backend.east) to node[midway, above, sloped] {Find User, Vehicle} (db.west);
-        \draw[arrow, bend left=30] (db.west) to node[midway, below, sloped] {Return documents} (backend.east);
-        
-        \node[proc, below=of backend, node distance=2cm] (logic) {Update stats \& achievements. \\ Decrement maintenance km.};
-        \draw[arrow] (backend) -- (logic);
-        
-        \draw[arrow, bend right=40] (logic.south) to node[midway, below, sloped] {Save User, Vehicle, Trip} (db.south);
-
+        % Draw arrows with labels
+        \draw [arrow] (A) -- (B);
+        \draw [arrow] (B) -- (C);
+        \draw [line] (C) -- node[above] {Yes} (D);
+        \draw [line] (C) -- node[left] {No} (E);
+        \draw [arrow] (E) -- (F);
+        \draw [arrow] (F) -- (G);
+        \draw [arrow] (G) -- (H);
+        \draw [line] (H) -- node[left] {Yes} (I);
+        \draw [line] (H) -- node[left] {No} (J);
+        \draw [arrow] (I) -- (K);
+        \draw [arrow] (J) -- (K);
     \end{tikzpicture}
-    \caption{Sequence diagram for the trip logging data flow.}
-    \label{fig:data-flow-trip}
+    \caption{Logical flow diagram for the `joinHousehold` controller function.}
+    \label{fig:join-household-flow}
 \end{figure}
 
-\subsection{API routes and middleware}
-Routes defined in \texttt{src/backend/routes/} map the API endpoints to controller functions. The most critical middleware, \texttt{authMiddleware.js}, protects these routes. It extracts the JWT from an \texttt{HttpOnly} cookie, verifies it, and attaches the user's ID to the request object. This makes the user's identity available to any protected controller.
+\subsection{API routes and security middleware}
+API endpoints are defined in the \texttt{src/backend/routes/} directory. These files map URL paths and HTTP methods to their corresponding controller functions. Security is enforced at this layer through custom middleware. The most critical of these is the \texttt{protect} function in \texttt{authMiddleware.js}, which is applied to all sensitive routes. This middleware extracts the JWT from an \texttt{HttpOnly} cookie sent with the client's request, verifies its signature against the server's secret key, and, if valid, decodes the user's ID from the token payload. This ID is then attached to the Express request object, making the authenticated user's identity securely available to all subsequent controller logic without needing to pass it in the request body.
+
+\textgap
+
+A complete specification of all API endpoints, including their routes, required HTTP methods, expected payloads, and required authentication level, is available in Appendix A.
 
 \section{Frontend implementation (React Native)}
 
-The frontend is a cross-platform mobile application developed using React Native with the Expo framework and TypeScript for static typing.
+The frontend is a cross-platform mobile application developed using React Native with the Expo framework and TypeScript for static typing. It provides the user interface and manages all interactions with the backend API.
 
-\subsection{Navigation and screen structure}
-The application uses Expo's file-based router. Directories and files within \texttt{src/frontend/app/} automatically become routes.
-\begin{itemize}
-    \item \textbf{Layouts (`\_layout.tsx`):} These files define the shell UI, such as the main tab bar defined in \texttt{app/(tabs)/\_layout.tsx}.
-    \item \textbf{Authentication flow (`app/(auth)`):} A route group for the login and register screens, active when a user is not authenticated.
-    \item \textbf{Main screens (`app/(tabs)`):} Represent the core features. A key pattern used is \texttt{useFocusEffect} from Expo Router to re-fetch data whenever a screen comes into view, ensuring data is always fresh after an update (e.g., after adding a new vehicle).
-\end{itemize}
+\subsection{Navigation and screen architecture}
+The application's navigation is managed by Expo's file-based router. The directory structure within \texttt{src/frontend/app/} directly translates into the app's navigational routes. The main user interface is structured around a tab bar, defined in \texttt{app/(tabs)/\_layout.tsx}, which provides access to the primary sections: Home, Vehicles, Routes, and Stats.
+
+\textgap
+
+A key programming pattern employed across the main screens is the \\\texttt{useFocusEffect} hook from Expo Router. This hook is used to re-fetch data from the backend whenever a screen comes into focus. This ensures that the data displayed to the user is always fresh and reflects any changes made on other screens (e.g., refreshing the vehicle list after a new vehicle has been added), providing a seamless and intuitive user experience.
 
 \subsection{State management and API communication}
-Global state for user authentication is managed via React's Context API in \texttt{context/AuthContext.tsx}. This provider stores the user's authentication status and profile information. Communication with the backend is handled using the \texttt{axios} library, which is configured with \texttt{withCredentials: true} to automatically handle the sending and receiving of authentication cookies.
-
-\section{Integration and deployment}
-
-\subsection{Local development with Docker}
-To ensure a consistent development environment, the project utilizes Docker and Docker Compose. The \texttt{docker/docker-compose.yaml} file defines all services required to run the application stack locally, including the backend, frontend, database, and the Mongo Express GUI. A developer can start the entire stack with a single command: \texttt{docker-compose up}.
-
-\subsection{Deployment strategy}
-While the current focus is a robust prototype, a potential production deployment strategy would involve:
+The frontend employs a hybrid state management strategy.
 \begin{itemize}
-    \item \textbf{Backend:} Containerizing the Node.js application and deploying it to a Platform-as-a-Service (PaaS) like Heroku or a container orchestrator.
-    \item \textbf{Database:} Using a managed database service like MongoDB Atlas.
-    \item \textbf{Frontend:} Building the mobile application for production using Expo Application Services (EAS) and submitting the binaries to the app stores.
+    \item \textbf{Global State:} Application-wide state, specifically the user's authentication status and profile information, is managed via React's Context API. The implementation in \texttt{context/AuthContext.tsx} creates a provider that wraps the entire application, making the user's identity and authentication status accessible to any component without the need for prop drilling.
+    \item \textbf{Local State:} Screen-specific state, such as the list of vehicles on the vehicle management screen, is managed locally within each component using React's native \texttt{useState} and \texttt{useEffect} hooks.
 \end{itemize}
+All communication with the backend API is handled by the \texttt{axios} library. A global instance of axios is configured with the \texttt{withCredentials: true} option. This crucial setting instructs the library to automatically include the secure, \texttt{HttpOnly} authentication cookie with every request sent to the backend, seamlessly managing user sessions.
 
-\section{Testing strategy and implementation}
-The \texttt{tests/} directory houses a multi-layered testing strategy. For full details on the specific test cases, see Appendix D.
+\section{Quality assurance and test planning}
+To ensure the correctness and reliability of the implemented proof-of-concept, a multi-layered testing strategy was designed, adopting principles from the classic software testing pyramid. This strategy combines low-level unit and integration tests with high-level end-to-end tests to validate the system's functionality from different perspectives.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        pyramid/.style={
+            trapezium,
+            trapezium left angle=70,
+            trapezium right angle=70,
+            minimum height=1.5cm,
+            draw, thick,
+            text width=4cm,
+            align=center
+        },
+        font=\sffamily
+    ]
+
+    \node[pyramid, text width=6cm, fill=red!20] (e2e) {End-to-End Tests \\ (Playwright)};
+    \node[pyramid, text width=5cm, fill=yellow!20, above=1cm of e2e] (integration) {Integration Tests \\ (Jest + Supertest)};
+    \node[pyramid, text width=4cm, fill=green!20, above=1cm of integration] (unit) {Unit Tests \\ (Jest)};
+    
+    \node[right=0.5cm of e2e, text width=5cm, anchor=west] {\textbf{Validates:} Full user journeys through the UI. \\ \textbf{Example:} User registers, logs in, adds a vehicle, and makes a reservation.};
+    \node[right=0.5cm of integration, text width=6cm, anchor=west] {\textbf{Validates:} Interaction between backend components. \\ \textbf{Example:} API endpoint correctly calls controller, which updates the database.};
+    \node[right=0.5cm of unit, text width=7cm, anchor=west] {\textbf{Validates:} Individual functions or modules in isolation. \\ \textbf{Example:} A utility function correctly formats a date string.};
+
+    \end{tikzpicture}
+    \caption{The software testing pyramid as applied to the AlDiaCAR project.}
+    \label{fig:testing-pyramid}
+\end{figure}
+
+As illustrated in Figure \ref{fig:testing-pyramid}, the strategy is composed of the following layers:
 \begin{itemize}
-    \item \textbf{Backend unit \& Integration tests:} The \texttt{tests/backend/} directory uses Jest to test modules in isolation and Supertest to test API endpoint integration.
-    \item \textbf{Frontend E2E tests:} The \texttt{tests/frontend/} directory is configured for Playwright, which runs automated tests that simulate key user journeys in a real browser environment.
+    \item \textbf{Backend testing (Jest \& Supertest):} The backend test suite, located in \texttt{tests/backend/}, uses the Jest framework. Unit tests are planned for individual utility functions and complex business logic modules in isolation. Integration tests, using the Supertest library, are designed to validate the complete request-response cycle of the API endpoints. The implemented test suite for this thesis focuses on the most critical endpoints, such as user authentication and the vehicle recommendation logic, to validate the core "vertical slice" of the application.
+    \textgap
+    \item \textbf{Frontend testing (Playwright):} End-to-End (E2E) tests are designed to simulate a real user's journey through the application from start to finish. The test plan for this proof-of-concept, located in \texttt{tests/frontend/}, utilizes the Playwright framework to create automated scripts for the most critical user flows: (1) successful user registration and login, (2) adding a new vehicle to a household, and (3) making a reservation for an available vehicle.
 \end{itemize}
-
-\section{Security and privacy considerations}
-Security is implemented through several mechanisms:
-\begin{itemize}
-    \item \textbf{Password hashing:} The \texttt{bcryptjs} library is used to securely hash and salt user passwords.
-    \item \textbf{Authentication:} JWTs are stored in secure, \texttt{HttpOnly} cookies, which helps mitigate cross-site scripting (XSS) attacks.
-    \item \textbf{Route protection:} The \texttt{authMiddleware} ensures that only authenticated users can access protected endpoints.
-    \item \textbf{Environment variables:} Sensitive information like database connection strings and JWT secrets are managed via \texttt{.env} files and are not committed to version control.
-\end{itemize}
-
-
+This testing strategy ensures that the most critical path of the application is validated at multiple levels of abstraction. The results of these tests are presented in Chapter 6.
 
 \section{Development effort and cost analysis}
 
@@ -227,5 +284,3 @@ Contingency (15\%) & For unforeseen development challenges and scope changes & â
 \hline
 \end{tabular}
 \end{table}
-
-\textgap
